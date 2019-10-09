@@ -2,7 +2,7 @@ package beans;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public static class Employee{
+public class Employee{
 
     private final SimpleStringProperty role;
 
@@ -13,5 +13,5 @@ public static class Employee{
     public String getRole(){
         return role.get();
     }
-    
+
 }
