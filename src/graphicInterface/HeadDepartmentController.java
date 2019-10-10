@@ -14,35 +14,35 @@ import javafx.scene.layout.AnchorPane;
 
 public class HeadDepartmentController {
 
-    private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList();
-    private static ObservableList<Product> productTable = FXCollections.observableArrayList();
-    private static TableView<Employee> employeeTableView;
-    private static TableView<Product> productTableView;
+    private static ObservableList<Employee> teamsTable = FXCollections.observableArrayList();
+    private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
+    private static TableView<Employee> teamsTableView;
+    private static TableView<Product> productsTableView;
     private static TextField searchInput;
     private static MenuButton tablesMenu;
 
     HeadDepartmentController( Scene app ){
 
-        String[] fields = { "nome" , "cognome" , "email" };
+        String[] fields = { "Team" , "#Members" , "Project" };
         String[] fields2 = { "name" , "model" , "price" };
         TableColumn column;
 
         searchInput = (TextField)app.lookup( "#DEP_HEADSearch" );
         tablesMenu = (MenuButton)app.lookup( "#DEP_HEADMenu" );
 
-        employeeTableView =  new TableView<>();
-        productTableView = new TableView<>();
+        teamsTableView =  new TableView<>();
+        productsTableView = new TableView<>();
 
-        employeeTable = FXCollections.observableArrayList();
-        productTable = FXCollections.observableArrayList();
+        teamsTable = FXCollections.observableArrayList();
+        productsTable = FXCollections.observableArrayList();
 
-        employeeTableView.setMinWidth( 498 );
-        productTableView.setMinWidth( 498 );
-        employeeTableView.setMinHeight( 233 );
-        productTableView.setMinHeight( 233 );
+        teamsTableView.setMinWidth( 498 );
+        productsTableView.setMinWidth( 498 );
+        teamsTableView.setMinHeight( 233 );
+        productsTableView.setMinHeight( 233 );
 
-        employeeTableView.setItems( employeeTable );
-        productTableView.setItems( productTable );
+        teamsTableView.setItems( teamsTable );
+        productsTableView.setItems( productsTable );
 
         for( int a = 0; a<fields.length; a++ ){
 
@@ -50,7 +50,7 @@ public class HeadDepartmentController {
             column.setCellValueFactory( new PropertyValueFactory<>( fields[a]) );
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
-            employeeTableView.getColumns().add( column );
+            teamsTableView.getColumns().add( column );
 
         }
 
@@ -60,12 +60,12 @@ public class HeadDepartmentController {
             column.setCellValueFactory( new PropertyValueFactory<>( fields2[a]) );
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
-            productTableView.getColumns().add( column );
+            productsTableView.getColumns().add( column );
 
         }
 
-        ((AnchorPane)app.lookup( "#DEP_HEADEmployeesTable" )).getChildren().add( employeeTableView );
-        ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productTableView );
+        ((AnchorPane)app.lookup( "#DEP_HEADTeamsTable" )).getChildren().add( teamsTableView );
+        ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productsTableView );
 
     }
 }

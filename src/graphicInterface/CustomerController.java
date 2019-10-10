@@ -1,6 +1,7 @@
 package graphicInterface;
 
 import beans.Employee;
+import beans.Order;
 import beans.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,35 +15,36 @@ import javafx.scene.layout.AnchorPane;
 
 public class CustomerController {
 
-    private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList();
-    private static ObservableList<Product> productTable = FXCollections.observableArrayList();
-    private static TableView<Employee> employeeTableView;
-    private static TableView<Product> productTableView;
+    private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
+    private static ObservableList<Order> ordersTable = FXCollections.observableArrayList();
+    private static TableView<Product> productsTableView;
+    private static TableView<Order> ordersTableView;
     private static TextField searchInput;
     private static MenuButton tablesMenu;
 
+
     CustomerController( Scene app ){
 
-        String[] fields = { "nome" , "cognome" , "email" };
+        String[] fields = { "name" , "date" , "state" , "price" };
         String[] fields2 = { "name" , "model" , "price" };
         TableColumn column;
 
         searchInput = (TextField)app.lookup( "#CUSTOMERSearch" );
         tablesMenu = (MenuButton)app.lookup( "#CUSTOMERMenu" );
 
-        employeeTableView =  new TableView<>();
-        productTableView = new TableView<>();
+        ordersTableView =  new TableView<>();
+        productsTableView = new TableView<>();
 
-        employeeTable = FXCollections.observableArrayList();
-        productTable = FXCollections.observableArrayList();
+        ordersTable = FXCollections.observableArrayList();
+        productsTable = FXCollections.observableArrayList();
 
-        employeeTableView.setMinWidth( 498 );
-        productTableView.setMinWidth( 498 );
-        employeeTableView.setMinHeight( 233 );
-        productTableView.setMinHeight( 233 );
+        ordersTableView.setMinWidth( 498 );
+        productsTableView.setMinWidth( 498 );
+        ordersTableView.setMinHeight( 233 );
+        productsTableView.setMinHeight( 233 );
 
-        employeeTableView.setItems( employeeTable );
-        productTableView.setItems( productTable );
+        ordersTableView.setItems( ordersTable );
+        productsTableView.setItems( productsTable );
 
         for( int a = 0; a<fields.length; a++ ){
 
@@ -50,7 +52,7 @@ public class CustomerController {
             column.setCellValueFactory( new PropertyValueFactory<>( fields[a]) );
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
-            employeeTableView.getColumns().add( column );
+            ordersTableView.getColumns().add( column );
 
         }
 
@@ -60,12 +62,12 @@ public class CustomerController {
             column.setCellValueFactory( new PropertyValueFactory<>( fields2[a]) );
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
-            productTableView.getColumns().add( column );
+            productsTableView.getColumns().add( column );
 
         }
 
-        ((AnchorPane)app.lookup( "#CUSTOMEREmployeesTable" )).getChildren().add( employeeTableView );
-        ((AnchorPane)app.lookup( "#CUSTOMERProductsTable" )).getChildren().add( productTableView );
+        ((AnchorPane)app.lookup( "#CUSTOMEROrdersTable" )).getChildren().add( ordersTableView );
+        ((AnchorPane)app.lookup( "#CUSTOMERProductsTable" )).getChildren().add( productsTableView );
 
     }
 }

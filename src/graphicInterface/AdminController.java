@@ -1,7 +1,6 @@
 package graphicInterface;
 
 import beans.Employee;
-import beans.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -9,37 +8,27 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
-public class AdminController {
+public class AdminController{
 
     private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList();
-    private static ObservableList<Product> productTable = FXCollections.observableArrayList();
     private static TableView<Employee> employeeTableView;
-    private static TableView<Product> productTableView;
     private static TextField searchInput;
-    private static MenuButton tablesMenu;
 
+    //  THE FUNCION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
     AdminController( Scene app ){
 
-        String[] fields = { "nome" , "cognome" , "email" };
-        String[] fields2 = { "name" , "model" , "price" };
+        String[] fields = { "name" , "surname" , "email" };  //  FIELDS OF TABLE EMPLOYEE
         TableColumn column;
 
-        searchInput = (TextField)app.lookup( "#ADMINSearch" );
-        tablesMenu = (MenuButton)app.lookup( "#ADMINMenu" );
+        searchInput = (TextField)app.lookup( "#ADMINSearch" );  //  TEXT INPUT FOR SEARCH INFORMATION
 
-        employeeTableView =  new TableView<>();
-        productTableView = new TableView<>();
-
-        employeeTable = FXCollections.observableArrayList();
-        productTable = FXCollections.observableArrayList();
+        employeeTableView =  new TableView<>();               //  TABLE EMPLOYEE
+        employeeTable = FXCollections.observableArrayList();  //  COLLECTION OF BEANS-CLASS LINKED TO THE TABLE EMPLOYEE
 
         employeeTableView.setMinWidth( 498 );
-        productTableView.setMinWidth( 498 );
         employeeTableView.setMinHeight( 233 );
-        productTableView.setMinHeight( 233 );
 
         employeeTableView.setItems( employeeTable );
-        productTableView.setItems( productTable );
 
         for( int a = 0; a<fields.length; a++ ){
 
@@ -50,19 +39,10 @@ public class AdminController {
             employeeTableView.getColumns().add( column );
 
         }
-
-        for( int a = 0; a<fields2.length; a++ ){
-
-            column = new TableColumn( fields[a] );
-            column.setCellValueFactory( new PropertyValueFactory<>( fields2[a]) );
-            column.setMinWidth( 160 );
-            column.setMaxWidth( 200 );
-            productTableView.getColumns().add( column );
-
-        }
-
+        // INSERTION OF THE TABLE IN THE ANCHORPANE
         ((AnchorPane)app.lookup( "#ADMINEmployeesTable" )).getChildren().add( employeeTableView );
-        ((AnchorPane)app.lookup( "#ADMINProductsTable" )).getChildren().add( productTableView );
+
+        //  LOAD VALUES INTO TABLES
 
     }
 
