@@ -1,31 +1,33 @@
 package graphicInterface;
 
+import beans.Employee;
 import com.sun.istack.internal.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import jdk.nashorn.internal.runtime.options.LoggingOption;
+
 
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.ResourceBundle;
-import java.util.logging.Level;
+import java.util.concurrent.atomic.AtomicLong;
+
 
 public class GraphicInterface extends Application implements Initializable {
 
@@ -33,32 +35,30 @@ public class GraphicInterface extends Application implements Initializable {
     private static String currentSection;
     private static String userType = "DEP_HEAD";
     private static HashMap<String , String[]> sections;
-    private static Logger LOG = Logger.getLogger( GraphicInterface.class);
     private static HashMap<String,ObservableList<Object>> tablesValues;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         Parent root = FXMLLoader.load(getClass().getResource("interface.fxml"));
-
-        primaryStage.setTitle("Innovation Solutions");
-        myApplication = new Scene( root , 590 , 390 );
-        primaryStage.setScene(myApplication);
-        primaryStage.setResizable( false );
-
-       // System.out.println(base.getChildren().get( base.getChildren().indexOf("FormName")));
-        sections = new HashMap<>();
         String[] depHeadSections = { "Employees" , "Products"};
         String[] customerSections = { "Orders" , "Products"};
         String[] adminSections = { "Employees" };
+        tablesValues = new HashMap<>();
+
+        primaryStage.setTitle("Innovation Solutions");
+        myApplication = new Scene( root , 590 , 390 );
+        primaryStage.setScene( myApplication );
+        primaryStage.setResizable( false );
+
+        sections = new HashMap<>();
         sections.put( "ADMIN" , adminSections );
         sections.put( "CUSTOMER" , customerSections );
         sections.put( "DEP_HEAD" , depHeadSections );
+
         System.out.println( "Hard Coded Data Uploaded");
-        tablesValues = new HashMap<>();
 
         primaryStage.show();
-       // System.out.println("Contenuto: " + p.getCharacters().toString());
 
     }
 
@@ -67,13 +67,6 @@ public class GraphicInterface extends Application implements Initializable {
     {
     }
 
-    public static void startInterface( String[] args ){
-
-
-
-        launch(args);
-
-    }
 
     @FXML
     private void accessRequest( ActionEvent event ){
@@ -129,6 +122,16 @@ public class GraphicInterface extends Application implements Initializable {
         System.out.println( "Ricerca: " + value +"\n");
     }
 
+    @FXML
+    private void changeTable( ActionEvent event ){
+        String section = ((MenuItem)event.getSource()).getText();
+
+        if( currentSection.compareTo( section) == 0 ) return;
+        myApplication.lookup("#" + userType + currentSection ).setVisible( false );
+        myApplication.lookup( "#" + userType + section ).setVisible( true );
+        currentSection = section;
+        
+    }
     private void loadTables(){
 
         String[] mySections;
@@ -155,9 +158,55 @@ public class GraphicInterface extends Application implements Initializable {
 
     }
 
-    void createTable( String section , ObservableList<Object> tuples ){
+    private void createTable( String section , ObservableList<Object> tuples ){
+
+        String[] fields = { "nome" , "cognome" , "email"};
+        TableView<Employee> table = new TableView<>();
+
+        TableColumn col;
+        ObservableList<Employee> values = FXCollections.observableArrayList();
+        testLoad( values );
+        table.setMinWidth(485);
+        table.setMinHeight(233);
+        for( int a = 0; a<fields.length; a++ ){
+            col = new TableColumn( fields[a]);
+            col.setCellValueFactory(new PropertyValueFactory<>(fields[a]));
+            col.setMinWidth(160);
+            col.setMaxWidth(200);
+            table.getColumns().add(col);
+        }
+        table.setItems( values );
+
+        ((AnchorPane)myApplication.lookup( "#" + userType + section + "Table")).getChildren().add(table);
+        System.out.println("Width " + table.getWidth() + " Height: " + table.getHeight());
+        System.out.println("#" + userType + section + "Table" );
+        System.out.println("Table loaded");
+
+        //  fields = getFields( userType , section );
 
 
+    }
+
+    public void customResize(TableView<?> view) {
+
+        AtomicLong width = new AtomicLong();
+        view.getColumns().forEach(col -> {
+            width.addAndGet((long) col.getWidth());
+        });
+        double tableWidth = view.getWidth();
+
+        if (tableWidth > width.get()) {
+            view.getColumns().forEach(col -> {
+                col.setPrefWidth(col.getWidth()+((tableWidth-width.get())/view.getColumns().size()));
+            });
+        }
+    }
+
+    private void testLoad( ObservableList<Employee> values ){
+
+        values.add( new Employee( "Nicola" , "Barsanti" , "n.barsanti@unipi.it"));
+        values.add( new Employee( "Marco" , "Ponziani" , "prova@unipi.it"));
+        values.add( new Employee( "Federico" , "Mirco" , "miaemail@unipi.it"));
     }
 
 }

@@ -12,50 +12,48 @@
   <children>
     <StackPane layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
       <children>
-        <AnchorPane id="HeadPage" prefHeight="200.0" prefWidth="200.0" visible="false">
+        <AnchorPane id="HeadPage" minWidth="617.0" prefHeight="400.0" prefWidth="617.0" visible="false">
           <children>
-            <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="-2.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
               <image>
                 <Image url="file:../../data/main_background.jpg" />
               </image>
             </ImageView>
-            <TextField id="DEP_HEADSearch" layoutX="75.0" layoutY="54.0" prefWidth="168.0" text="" />
-            <RadioButton layoutX="300.0" layoutY="57.0" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
+            <TextField id="DEP_HEADSearch" layoutX="74.0" layoutY="56.0" prefWidth="168.0" text="" />
+            <RadioButton layoutX="285.0" layoutY="59.0" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
               <font>
                 <Font name="System Bold" size="12.0" fx:id="x1" />
               </font>
             </RadioButton>
-            <Button layoutX="201.0" layoutY="54.0" mnemonicParsing="false" onAction="#searchValue" text="Search" />
-            <MenuButton font="$x1" layoutX="443.0" layoutY="53.0" mnemonicParsing="false" prefWidth="115.0" text="Sections">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Employees" />
-                <MenuItem mnemonicParsing="false" text="Products" />
-              </items>
-            </MenuButton>
-            <StackPane layoutX="75.0" layoutY="125.0" prefHeight="249.0" prefWidth="493.0">
+            <Button layoutX="194.0" layoutY="56.0" mnemonicParsing="false" onAction="#searchValue" text="Search" />
+            <StackPane layoutX="72.0" layoutY="103.0" prefHeight="150.0" prefWidth="200.0">
               <children>
-                <SplitPane dividerPositions="0.9938900203665988" focusTraversable="true" prefHeight="235.0" prefWidth="498.0">
-                  <items>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="285.0" prefWidth="341.0">
-                      <children>
-                        <TableView layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="281.0" prefWidth="490.0" />
-                      </children>
-                    </AnchorPane>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                  </items>
-                </SplitPane>
-                <SplitPane dividerPositions="0.9938900203665988" focusTraversable="true" prefHeight="235.0" prefWidth="498.0" visible="false">
-                  <items>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="285.0" prefWidth="341.0">
-                      <children>
-                        <TableView layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="281.0" prefWidth="490.0" />
-                      </children>
-                    </AnchorPane>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                  </items>
-                </SplitPane>
+                <AnchorPane id="DEP_HEADEmployees" focusTraversable="false" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0">
+                  <children>
+                    <ScrollPane layoutX="0.0" layoutY="0.0" prefHeight="235.0" prefWidth="498.0">
+                      <content>
+                        <AnchorPane id="DEP_HEADEmployeesTable" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
+                      </content>
+                    </ScrollPane>
+                  </children>
+                </AnchorPane>
+                <AnchorPane id="DEP_HEADProducts" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0" visible="false">
+                  <children>
+                    <ScrollPane layoutX="0.0" layoutY="0.0" maxWidth="-1.0" prefHeight="235.0" prefWidth="498.0">
+                      <content>
+                        <AnchorPane id="DEP_HEADProductsTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
+                      </content>
+                    </ScrollPane>
+                  </children>
+                </AnchorPane>
               </children>
             </StackPane>
+            <MenuButton layoutX="412.0" layoutY="56.0" mnemonicParsing="false" text="Table">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#changeTable" text="Employees" />
+                <MenuItem mnemonicParsing="false" onAction="#changeTable" text="Products" />
+              </items>
+            </MenuButton>
           </children>
         </AnchorPane>
         <AnchorPane id="CustomerPage" prefHeight="200.0" prefWidth="200.0" visible="false">
@@ -72,7 +70,16 @@
                     <TableView layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="281.0" prefWidth="490.0" />
                   </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                  <children>
+                    <TableView layoutX="0.0" layoutY="141.0" prefHeight="200.0" prefWidth="200.0">
+                      <columns>
+                        <TableColumn prefWidth="75.0" text="Column X" />
+                        <TableColumn prefWidth="75.0" text="Column X" />
+                      </columns>
+                    </TableView>
+                  </children>
+                </AnchorPane>
               </items>
             </SplitPane>
             <TextField fx:id="CUSTOMERSearch" layoutX="75.0" layoutY="54.0" prefWidth="175.0" text="" />

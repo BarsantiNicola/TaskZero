@@ -4,14 +4,26 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Employee{
 
-    private final SimpleStringProperty role;
+    private final SimpleStringProperty nome;
+    private final SimpleStringProperty cognome;
+    private final SimpleStringProperty email;
 
-    private Employee( String r ){
-        role = new SimpleStringProperty( r );
+    public Employee( String n , String c , String e ){
+        nome = new SimpleStringProperty( n );
+        cognome = new SimpleStringProperty( c );
+        email = new SimpleStringProperty( e );
     }
 
-    public String getRole(){
-        return role.get();
+    public String getNome(){
+        return nome.get();
+    }
+
+    public String getCognome(){
+        return cognome.get();
+    }
+
+    public String getEmail(){
+        return email.get();
     }
 
 }
