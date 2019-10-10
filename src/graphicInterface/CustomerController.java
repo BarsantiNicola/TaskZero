@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
-public class CustomerController {
+public class CustomerController extends InterfaceController{
 
     private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
     private static ObservableList<Order> ordersTable = FXCollections.observableArrayList();

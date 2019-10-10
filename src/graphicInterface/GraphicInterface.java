@@ -28,19 +28,25 @@ import java.util.HashMap;
 
 import java.util.ResourceBundle;
 
-
+enum UserType{
+    ADMINISTRATOR,
+    HEAD_DEPARTMENT,
+    CUSTOMER,
+    NOUSER
+};
 
 public class GraphicInterface extends Application implements Initializable {
 
-    private static Scene myApplication;
-    private static String currentSection;
-    private static String userType = "DEP_HEAD";
-    private static HashMap<String , String[]> sections;
-    private static HashMap<String,ObservableList<Object>> tablesValues;
-    private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList();
-    private static ObservableList<Product> productTable = FXCollections.observableArrayList();
-    private static TableView<Employee> employeeTableView;
-    private static TableView<Product> productTableView;
+    private static Scene myApplication;  //  TO BE REMOVED
+    private static String currentSection;  //  PROTOTYPE TO BE REMOVED
+    private static UserType userType = UserType.HEAD_DEPARTMENT;
+    private static HashMap<String , String[]> sections;  //  PROTOTYPE TO BE REMOVED
+    private static HashMap<String,ObservableList<Object>> tablesValues;  //  PROTOTYPE TO BE REMOVED
+    private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList(); //  PROTOTYPE TO BE REMOVED
+    private static ObservableList<Product> productTable = FXCollections.observableArrayList();  //  PROTOTYPE TO BE REMOVED
+    private static TableView<Employee> employeeTableView;   // PROTOTYPE TO BE REMOVED
+    private static TableView<Product> productTableView;  //  PROTOTYPE TO BE REMOVED
+    private static InterfaceController myInterface;  //  AFTER LOGIN AN INTERFACE WILL BE SELECTED BASED ON THE USER'ROLE
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -95,25 +101,37 @@ public class GraphicInterface extends Application implements Initializable {
         System.out.println( "Nome: " + name + "\tPassword: " + password );
         myApplication.lookup("#AlertMessage" ).setVisible( false );
 
-        // userType = getAccess( name , password );
-        // sections = getSection( userType );
-        // if( sections == NULL || sections.length() == 0 ) System.exit( 1 );
-        // else currentSection = sections[0];
+        /* userType = getAccess( name , password );
+            if( userType
+        /*
+         */
 
-        if( userType == null ){
 
-            myApplication.lookup("#AlertMessage" ).setVisible( true );
-            return;
+        switch( userType ) {
+            case CUSTOMER:
+
+                myInterface = new CustomerController( myApplication );
+                myApplication.lookup( "#CustomerPage" ).setVisible( true );
+                break;
+
+            case ADMINISTRATOR:
+
+                myInterface = new AdminController( myApplication );
+                myApplication.lookup( "#AdminPage" ).setVisible( true );
+                break;
+
+            case HEAD_DEPARTMENT:
+
+                myInterface = new HeadDepartmentController( myApplication );
+                myApplication.lookup( "#HeadPage" ).setVisible( true );
+                break;
+
+            default:
+
+                myApplication.lookup("#AlertMessage").setVisible(true);
+                return;
 
         }
-
-        if( userType.compareTo( "CUSTOMER" ) == 0 ) myApplication.lookup( "#CustomerPage" ).setVisible( true );
-
-        if( userType.compareTo( "ADMIN" ) == 0 ) myApplication.lookup( "#AdminPage" ).setVisible( true );
-
-        if( userType.compareTo( "DEP_HEAD" ) == 0 ) myApplication.lookup( "#HeadPage" ).setVisible( true );
-
-        loadTables();
 
         myApplication.lookup( "#AccessPage" ).setVisible( false );
 

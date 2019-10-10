@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
-public class AdminController{
+public class AdminController extends InterfaceController{
 
     private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList();
     private static TableView<Employee> employeeTableView;

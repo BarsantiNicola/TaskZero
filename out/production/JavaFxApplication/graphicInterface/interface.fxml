@@ -28,11 +28,11 @@
             <Button layoutX="194.0" layoutY="56.0" mnemonicParsing="false" onAction="#searchValue" text="Search" />
             <StackPane layoutX="72.0" layoutY="103.0" prefHeight="150.0" prefWidth="200.0">
               <children>
-                <AnchorPane id="DEP_HEADEmployees" focusTraversable="false" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0">
+                <AnchorPane id="DEP_HEADTeams" focusTraversable="false" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0">
                   <children>
                     <ScrollPane layoutX="0.0" layoutY="0.0" prefHeight="235.0" prefWidth="498.0">
                       <content>
-                        <AnchorPane id="DEP_HEADEmployeesTable" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
+                        <AnchorPane id="DEP_HEADTeamsTable" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
                       </content>
                     </ScrollPane>
                   </children>
@@ -48,7 +48,7 @@
                 </AnchorPane>
               </children>
             </StackPane>
-            <MenuButton layoutX="412.0" layoutY="56.0" mnemonicParsing="false" text="Table">
+            <MenuButton id="DEP_HEADMenu" layoutX="412.0" layoutY="56.0" mnemonicParsing="false" text="Table">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#changeTable" text="Employees" />
                 <MenuItem mnemonicParsing="false" onAction="#changeTable" text="Products" />

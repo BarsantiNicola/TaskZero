@@ -1,4 +1,4 @@
 package graphicInterface;
 
-public class InterfaceController {
+class InterfaceController {
 }

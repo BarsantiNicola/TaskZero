@@ -12,14 +12,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
-public class HeadDepartmentController {
+public class HeadDepartmentController extends InterfaceController{
 
     private static ObservableList<Employee> teamsTable = FXCollections.observableArrayList();
     private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
     private static TableView<Employee> teamsTableView;
     private static TableView<Product> productsTableView;
+    private static AnchorPane teamsSection;
+    private static AnchorPane productsSection;
     private static TextField searchInput;
     private static MenuButton tablesMenu;
+    private static String currentSection;
+    private static String[] sections;
 
     HeadDepartmentController( Scene app ){
 
@@ -29,6 +33,8 @@ public class HeadDepartmentController {
 
         searchInput = (TextField)app.lookup( "#DEP_HEADSearch" );
         tablesMenu = (MenuButton)app.lookup( "#DEP_HEADMenu" );
+        teamsSection = (AnchorPane)app.lookup( "#DEP_HEADTeams" );
+        teamsSection = (AnchorPane)app.lookup( "#DEP_HEADProducts" );
 
         teamsTableView =  new TableView<>();
         productsTableView = new TableView<>();
@@ -66,6 +72,24 @@ public class HeadDepartmentController {
 
         ((AnchorPane)app.lookup( "#DEP_HEADTeamsTable" )).getChildren().add( teamsTableView );
         ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productsTableView );
+
+    }
+
+    void setVisible( String section ){
+
+        if( currentSection.compareTo( section ) == 0 ) return;
+
+        currentSection = section;
+        if( currentSection.compareTo( "Teams" ) == 0 ) {
+
+            teamsSection.setVisible( true );
+            productsSection.setVisible( false );
+
+        }else{
+
+            productsSection.setVisible( true );
+            teamsSection.setVisible( false );
+        }
 
     }
 }
