@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicLong;
+
 
 
 public class GraphicInterface extends Application implements Initializable {
