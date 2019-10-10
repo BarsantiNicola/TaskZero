@@ -1,6 +1,7 @@
 package graphicInterface;
 
 import beans.Employee;
+import beans.Product;
 import com.sun.istack.internal.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -36,6 +37,10 @@ public class GraphicInterface extends Application implements Initializable {
     private static String userType = "DEP_HEAD";
     private static HashMap<String , String[]> sections;
     private static HashMap<String,ObservableList<Object>> tablesValues;
+    private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList();
+    private static ObservableList<Product> productTable = FXCollections.observableArrayList();
+    private static TableView<Employee> employeeTableView;
+    private static TableView<Product> productTableView;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -130,13 +135,12 @@ public class GraphicInterface extends Application implements Initializable {
         myApplication.lookup("#" + userType + currentSection ).setVisible( false );
         myApplication.lookup( "#" + userType + section ).setVisible( true );
         currentSection = section;
-        
+
     }
     private void loadTables(){
 
         String[] mySections;
         ObservableList<Object> tuples = FXCollections.observableArrayList();
-
 
         mySections = sections.get( userType );
         if( mySections == null || userType == null ){
@@ -161,23 +165,48 @@ public class GraphicInterface extends Application implements Initializable {
     private void createTable( String section , ObservableList<Object> tuples ){
 
         String[] fields = { "nome" , "cognome" , "email"};
-        TableView<Employee> table = new TableView<>();
-
+        String[] fields2 = { "name" , "model" , "price"};
+        TableView<Object> table = new TableView<>();
         TableColumn col;
-        ObservableList<Employee> values = FXCollections.observableArrayList();
-        testLoad( values );
-        table.setMinWidth(485);
-        table.setMinHeight(233);
-        for( int a = 0; a<fields.length; a++ ){
-            col = new TableColumn( fields[a]);
-            col.setCellValueFactory(new PropertyValueFactory<>(fields[a]));
-            col.setMinWidth(160);
-            col.setMaxWidth(200);
-            table.getColumns().add(col);
-        }
-        table.setItems( values );
 
-        ((AnchorPane)myApplication.lookup( "#" + userType + section + "Table")).getChildren().add(table);
+        if( section.compareTo("Employees") == 0 ) {
+
+            employeeTableView = new TableView<>();
+            testEmployee(employeeTable, (int) (Math.random() * 100) % 6);
+            employeeTableView.setItems(employeeTable);
+            employeeTableView.setMinWidth(498);
+            employeeTableView.setMinHeight(233);
+            for( int a = 0; a<fields.length; a++ ){
+                col = new TableColumn( fields[a]);
+                col.setCellValueFactory(new PropertyValueFactory<>(fields[a]));
+                col.setMinWidth(160);
+                col.setMaxWidth(200);
+                employeeTableView.getColumns().add(col);
+            }
+            ((AnchorPane)myApplication.lookup( "#" + userType + section + "Table")).getChildren().add(employeeTableView);
+
+        }else{
+
+            productTableView = new TableView<>();
+            testProduct( productTable , (int)(Math.random()*100)%6);
+            productTableView.setItems(productTable);
+            productTableView.setMinWidth(498);
+            productTableView.setMinHeight(233);
+            for( int a = 0; a<fields2.length; a++ ){
+                col = new TableColumn( fields2[a]);
+                col.setCellValueFactory(new PropertyValueFactory<>(fields2[a]));
+                col.setMinWidth(160);
+                col.setMaxWidth(200);
+                productTableView.getColumns().add(col);
+            }
+            ((AnchorPane)myApplication.lookup( "#" + userType + section + "Table")).getChildren().add(productTableView);
+
+        }
+
+
+
+
+
         System.out.println("Width " + table.getWidth() + " Height: " + table.getHeight());
         System.out.println("#" + userType + section + "Table" );
         System.out.println("Table loaded");
@@ -187,26 +216,34 @@ public class GraphicInterface extends Application implements Initializable {
 
     }
 
-    public void customResize(TableView<?> view) {
 
-        AtomicLong width = new AtomicLong();
-        view.getColumns().forEach(col -> {
-            width.addAndGet((long) col.getWidth());
-        });
-        double tableWidth = view.getWidth();
+    private void testEmployee( ObservableList<Employee> values , int value ){
 
-        if (tableWidth > width.get()) {
-            view.getColumns().forEach(col -> {
-                col.setPrefWidth(col.getWidth()+((tableWidth-width.get())/view.getColumns().size()));
-            });
+        switch( value ){
+
+            case 5:  values.add( new Employee( "Luca" , "Cardelli" , "prova5@unipi.it"));
+            case 4:  values.add( new Employee( "Marco" , "Ponziani" , "prova4@unipi.it"));
+            case 3:  values.add( new Employee( "Mirco" , "Quintavalla" , "prova3@unipi.it"));
+            case 2:  values.add( new Employee( "Riccardo" , "Bertini" , "prova2@unipi.it"));
+            case 1:  values.add( new Employee( "Lorenzo" , "Quintavalla" , "prova1@unipi.it"));
+            default: values.add( new Employee( "Nicola" , "Barsanti" , "prova0@unipi.it"));
+
         }
+
     }
 
-    private void testLoad( ObservableList<Employee> values ){
+    private void testProduct( ObservableList<Product> values , int value ){
 
-        values.add( new Employee( "Nicola" , "Barsanti" , "n.barsanti@unipi.it"));
-        values.add( new Employee( "Marco" , "Ponziani" , "prova@unipi.it"));
-        values.add( new Employee( "Federico" , "Mirco" , "miaemail@unipi.it"));
+        switch( value ){
+
+            case 5:  values.add( new Product( "PlayStation2" , "1.0" , 30));
+            case 4:  values.add( new Product( "Google Nest" , "2.1" , 50));
+            case 3:  values.add( new Product( "Ferrari" , "Gallardo" , 300000));
+            case 2:  values.add( new Product( "Shuttle" , "PS5823-1" , 20000000));
+            case 1:  values.add( new Product( "Acer Aspire" , "5951g" , 1000));
+            default: values.add( new Product( "Iphone" , "4" , 800));
+
+        }
+
     }
-
 }
