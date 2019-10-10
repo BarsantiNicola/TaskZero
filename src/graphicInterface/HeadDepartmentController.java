@@ -1,5 +1,6 @@
 package graphicInterface;
 
+import beans.Component;
 import beans.Employee;
 import beans.Product;
 import javafx.collections.FXCollections;
@@ -14,11 +15,11 @@ import javafx.scene.layout.AnchorPane;
 
 public class HeadDepartmentController extends InterfaceController{
 
-    private static ObservableList<Employee> teamsTable = FXCollections.observableArrayList();
+    private static ObservableList<Component> componentsTable = FXCollections.observableArrayList();
     private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
-    private static TableView<Employee> teamsTableView;
+    private static TableView<Component> componentsTableView;
     private static TableView<Product> productsTableView;
-    private static AnchorPane teamsSection;
+    private static AnchorPane componentsSection;
     private static AnchorPane productsSection;
     private static TextField searchInput;
     private static MenuButton tablesMenu;
@@ -33,21 +34,21 @@ public class HeadDepartmentController extends InterfaceController{
 
         searchInput = (TextField)app.lookup( "#DEP_HEADSearch" );
         tablesMenu = (MenuButton)app.lookup( "#DEP_HEADMenu" );
-        teamsSection = (AnchorPane)app.lookup( "#DEP_HEADTeams" );
-        teamsSection = (AnchorPane)app.lookup( "#DEP_HEADProducts" );
-        //  COMMENTO DI PROVA
-        teamsTableView =  new TableView<>();
+        componentsSection = (AnchorPane)app.lookup( "#DEP_HEADTeams" );
+        productsSection = (AnchorPane)app.lookup( "#DEP_HEADProducts" );
+
+        componentsTableView =  new TableView<>();
         productsTableView = new TableView<>();
 
-        teamsTable = FXCollections.observableArrayList();
+        componentsTable = FXCollections.observableArrayList();
         productsTable = FXCollections.observableArrayList();
 
-        teamsTableView.setMinWidth( 498 );
+        componentsTableView.setMinWidth( 498 );
         productsTableView.setMinWidth( 498 );
-        teamsTableView.setMinHeight( 233 );
+        componentsTableView.setMinHeight( 233 );
         productsTableView.setMinHeight( 233 );
 
-        teamsTableView.setItems( teamsTable );
+        componentsTableView.setItems( componentsTable );
         productsTableView.setItems( productsTable );
 
         for( int a = 0; a<fields.length; a++ ){
@@ -56,7 +57,7 @@ public class HeadDepartmentController extends InterfaceController{
             column.setCellValueFactory( new PropertyValueFactory<>( fields[a]) );
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
-            teamsTableView.getColumns().add( column );
+            componentsTableView.getColumns().add( column );
 
         }
 
@@ -70,7 +71,7 @@ public class HeadDepartmentController extends InterfaceController{
 
         }
 
-        ((AnchorPane)app.lookup( "#DEP_HEADTeamsTable" )).getChildren().add( teamsTableView );
+        ((AnchorPane)app.lookup( "#DEP_HEADTeamsTable" )).getChildren().add( componentsTableView );
         ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productsTableView );
 
     }
@@ -82,14 +83,20 @@ public class HeadDepartmentController extends InterfaceController{
         currentSection = section;
         if( currentSection.compareTo( "Teams" ) == 0 ) {
 
-            teamsSection.setVisible( true );
+            componentsSection.setVisible( true );
             productsSection.setVisible( false );
 
         }else{
 
             productsSection.setVisible( true );
-            teamsSection.setVisible( false );
+            componentsSection.setVisible( false );
         }
 
     }
+
+    void searchValue(){}
+
+    void loadValues(){}
+
+    void changeTable(){}
 }

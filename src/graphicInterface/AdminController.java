@@ -48,12 +48,8 @@ public class AdminController extends InterfaceController{
 
     void searchValue(){}
 
-    void changeTable(){}
+    void loadValues(){}
 
-    void loadTables(){}
-
-    private void hideTable( String section ){}
-
-    void showTable( String section ){}
+    void showTable( String table ){}
 
 }

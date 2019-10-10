@@ -9,9 +9,11 @@ public class Employee{
     private final SimpleStringProperty email;
 
     public Employee( String n , String c , String e ){
+
         nome = new SimpleStringProperty( n );
         cognome = new SimpleStringProperty( c );
         email = new SimpleStringProperty( e );
+
     }
 
     public String getNome(){

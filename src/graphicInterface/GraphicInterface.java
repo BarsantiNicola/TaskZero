@@ -37,37 +37,20 @@ enum UserType{
 
 public class GraphicInterface extends Application implements Initializable {
 
-    private static Scene myApplication;  //  TO BE REMOVED
-    private static String currentSection;  //  PROTOTYPE TO BE REMOVED
+    private static Scene myApplication;
     private static UserType userType = UserType.HEAD_DEPARTMENT;
-    private static HashMap<String , String[]> sections;  //  PROTOTYPE TO BE REMOVED
-    private static HashMap<String,ObservableList<Object>> tablesValues;  //  PROTOTYPE TO BE REMOVED
-    private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList(); //  PROTOTYPE TO BE REMOVED
-    private static ObservableList<Product> productTable = FXCollections.observableArrayList();  //  PROTOTYPE TO BE REMOVED
-    private static TableView<Employee> employeeTableView;   // PROTOTYPE TO BE REMOVED
-    private static TableView<Product> productTableView;  //  PROTOTYPE TO BE REMOVED
-    private static InterfaceController myInterface;  //  AFTER LOGIN AN INTERFACE WILL BE SELECTED BASED ON THE USER'ROLE
+    private static InterfaceController myInterface;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         Parent root = FXMLLoader.load(getClass().getResource("interface.fxml"));
-        String[] depHeadSections = { "Employees" , "Products"};
-        String[] customerSections = { "Orders" , "Products"};
-        String[] adminSections = { "Employees" };
-        tablesValues = new HashMap<>();
 
         primaryStage.setTitle("Innovation Solutions");
         myApplication = new Scene( root , 590 , 390 );
         primaryStage.setScene( myApplication );
         primaryStage.setResizable( false );
 
-        sections = new HashMap<>();
-        sections.put( "ADMIN" , adminSections );
-        sections.put( "CUSTOMER" , customerSections );
-        sections.put( "DEP_HEAD" , depHeadSections );
-
-        System.out.println( "Hard Coded Data Uploaded");
 
         primaryStage.show();
 
@@ -100,11 +83,6 @@ public class GraphicInterface extends Application implements Initializable {
         password = new String( md.digest(password.getBytes() ));
         System.out.println( "Nome: " + name + "\tPassword: " + password );
         myApplication.lookup("#AlertMessage" ).setVisible( false );
-
-        /* userType = getAccess( name , password );
-            if( userType
-        /*
-         */
 
 
         switch( userType ) {
@@ -141,98 +119,37 @@ public class GraphicInterface extends Application implements Initializable {
     @FXML
     private void searchValue( ActionEvent event ){
 
-        String value = ((TextField)myApplication.lookup( "#" + userType + "Search")).getCharacters().toString();
-        System.out.println( "Ricerca: " + value +"\n");
+        if( myInterface instanceof AdminController ) {
+            ((AdminController) myInterface).searchValue();
+            return;
+        }
+
+        if( myInterface instanceof  CustomerController ) {
+            ((CustomerController) myInterface).searchValue();
+            return;
+        }
+        if( myInterface instanceof HeadDepartmentController ) {
+            ((HeadDepartmentController) myInterface).searchValue();
+            return;
+        }
     }
 
     @FXML
     private void changeTable( ActionEvent event ){
+
         String section = ((MenuItem)event.getSource()).getText();
 
-        if( currentSection.compareTo( section) == 0 ) return;
-        myApplication.lookup("#" + userType + currentSection ).setVisible( false );
-        myApplication.lookup( "#" + userType + section ).setVisible( true );
-        currentSection = section;
-
-    }
-    private void loadTables(){
-
-        String[] mySections;
-        ObservableList<Object> tuples = FXCollections.observableArrayList();
-
-        mySections = sections.get( userType );
-        if( mySections == null || userType == null ){
-
-            System.out.println("Error in loadTables for userType: " + userType );
+        if( myInterface instanceof  CustomerController ) {
+            ((CustomerController) myInterface).changeTable();
             return;
-
         }
-
-        currentSection = mySections[0];
-
-        for( String section: mySections ){
-
-          //  tuples = getTableValues( section );
-            tablesValues.put( section , tuples );
-            createTable( section , tuples );
-
+        if( myInterface instanceof HeadDepartmentController ) {
+            ((HeadDepartmentController) myInterface).changeTable();
+            return;
         }
 
     }
 
-    private void createTable( String section , ObservableList<Object> tuples ){
-
-        String[] fields = { "nome" , "cognome" , "email"};
-        String[] fields2 = { "name" , "model" , "price"};
-        TableView<Object> table = new TableView<>();
-        TableColumn col;
-
-        if( section.compareTo("Employees") == 0 ) {
-
-            employeeTableView = new TableView<>();
-            testEmployee(employeeTable, (int) (Math.random() * 100) % 6);
-            employeeTableView.setItems(employeeTable);
-            employeeTableView.setMinWidth(498);
-            employeeTableView.setMinHeight(233);
-            for( int a = 0; a<fields.length; a++ ){
-                col = new TableColumn( fields[a]);
-                col.setCellValueFactory(new PropertyValueFactory<>(fields[a]));
-                col.setMinWidth(160);
-                col.setMaxWidth(200);
-                employeeTableView.getColumns().add(col);
-            }
-            ((AnchorPane)myApplication.lookup( "#" + userType + section + "Table")).getChildren().add(employeeTableView);
-
-        }else{
-
-            productTableView = new TableView<>();
-            testProduct( productTable , (int)(Math.random()*100)%6);
-            productTableView.setItems(productTable);
-            productTableView.setMinWidth(498);
-            productTableView.setMinHeight(233);
-            for( int a = 0; a<fields2.length; a++ ){
-                col = new TableColumn( fields2[a]);
-                col.setCellValueFactory(new PropertyValueFactory<>(fields2[a]));
-                col.setMinWidth(160);
-                col.setMaxWidth(200);
-                productTableView.getColumns().add(col);
-            }
-            ((AnchorPane)myApplication.lookup( "#" + userType + section + "Table")).getChildren().add(productTableView);
-
-        }
-
-
-
-
-
-        System.out.println("Width " + table.getWidth() + " Height: " + table.getHeight());
-        System.out.println("#" + userType + section + "Table" );
-        System.out.println("Table loaded");
-
-        //  fields = getFields( userType , section );
-
-
-    }
 
 
     private void testEmployee( ObservableList<Employee> values , int value ){

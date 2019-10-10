@@ -70,4 +70,10 @@ public class CustomerController extends InterfaceController{
         ((AnchorPane)app.lookup( "#CUSTOMERProductsTable" )).getChildren().add( productsTableView );
 
     }
+
+    void searchValue(){};
+
+    void changeTable(){};
+
+    void loadValues(){};
 }
