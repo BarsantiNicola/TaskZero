@@ -35,7 +35,7 @@ public class HeadDepartmentController extends InterfaceController{
         tablesMenu = (MenuButton)app.lookup( "#DEP_HEADMenu" );
         teamsSection = (AnchorPane)app.lookup( "#DEP_HEADTeams" );
         teamsSection = (AnchorPane)app.lookup( "#DEP_HEADProducts" );
-
+        //  COMMENTO DI PROVA
         teamsTableView =  new TableView<>();
         productsTableView = new TableView<>();
 
