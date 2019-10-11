@@ -1,30 +1,49 @@
+
 package beans;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 
 public class Product {
-    private final SimpleStringProperty name;
-    private final SimpleStringProperty model;
-    private final SimpleIntegerProperty price;
-
-    public Product( String n , String m , Integer p ){
-
-        name = new SimpleStringProperty(n);
-        model = new SimpleStringProperty(m);
-        price = new SimpleIntegerProperty(p);
-
-    }
-
-    public String getName(){
-        return name.get();
-    }
-
-    public String getModel(){
-        return model.get();
-    }
-
-    public int getPrice(){
-        return price.get();
-    }
+	
+	private final SimpleIntegerProperty IDproduct;
+	private final SimpleStringProperty productName;
+	private final SimpleIntegerProperty price;
+	private final SimpleStringProperty productDescription;
+	private final SimpleBooleanProperty productAvailability;
+	
+	public Product( int id, String name, int cost, String description, boolean availability ) {
+		
+		IDproduct = new SimpleIntegerProperty(id);
+		productName = new SimpleStringProperty(name);
+		price = new SimpleIntegerProperty(cost);
+		productDescription = new SimpleStringProperty(description);
+		productAvailability = new SimpleBooleanProperty(availability);
+	}
+	
+	public int getIDproduct() {
+		
+		return IDproduct.get();
+	}
+	
+	public String getproductName() {
+		
+		return productName.get();
+	}
+	
+	public int getprice() {
+		
+		return price.get();
+	}
+	
+	public String getproductDescription() {
+		
+		return productDescription.get();
+	}
+	
+	public boolean getproductAvailability() {
+		
+		return productAvailability.get();
+	}
+	
+	
 }

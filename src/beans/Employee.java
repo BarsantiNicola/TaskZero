@@ -1,31 +1,41 @@
+
 package beans;
 
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 
-public class Employee{
+public class Employee {
+	
+	private final SimpleStringProperty IDemployee;
+	private final SimpleIntegerProperty salary;
+	private final SimpleStringProperty role;
+	private final SimpleIntegerProperty team;
+	
+	public Employee( String id, int money, String job, int group ) {
+		
+		IDemployee = new SimpleStringProperty(id);
+		salary = new SimpleIntegerProperty(money);
+		role = new SimpleStringProperty(job);
+		team = new SimpleIntegerProperty(group);
 
-    private final SimpleStringProperty nome;
-    private final SimpleStringProperty cognome;
-    private final SimpleStringProperty email;
+	}
+	
+	public String getIDemployee() {
+		
+		return IDemployee.get();
+	}
+	
+	public int getsalary() {
+		
+		return salary.get();
+	}
 
-    public Employee( String n , String c , String e ){
+	public String getrole() {
+	
+		return role.get();
+	}
 
-        nome = new SimpleStringProperty( n );
-        cognome = new SimpleStringProperty( c );
-        email = new SimpleStringProperty( e );
-
-    }
-
-    public String getNome(){
-        return nome.get();
-    }
-
-    public String getCognome(){
-        return cognome.get();
-    }
-
-    public String getEmail(){
-        return email.get();
-    }
-
+	public int getteam() {
+	
+		return team.get();
+	}
 }

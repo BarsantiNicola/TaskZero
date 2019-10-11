@@ -261,7 +261,10 @@ DROP TABLE IF EXISTS `team`;
 CREATE TABLE `team` (
   `IDteam` int(11) NOT NULL AUTO_INCREMENT,
   `location` varchar(45) NOT NULL,
-  PRIMARY KEY (`IDteam`)
+  `teamLeader` varchar(45) NOT NULL,
+  PRIMARY KEY (`IDteam`),
+  KEY `leaderCostraint_idx` (`teamLeader`),
+  CONSTRAINT `leaderCostraint` FOREIGN KEY (`teamLeader`) REFERENCES `employee` (`IDemployee`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -271,7 +274,6 @@ CREATE TABLE `team` (
 
 LOCK TABLES `team` WRITE;
 /*!40000 ALTER TABLE `team` DISABLE KEYS */;
-INSERT INTO `team` VALUES (1,'Room4'),(2,'Room1'),(3,'Room9');
 /*!40000 ALTER TABLE `team` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-11  8:32:50
+-- Dump completed on 2019-10-11 12:57:21
