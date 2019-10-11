@@ -23,7 +23,7 @@ public class HeadDepartmentController extends InterfaceController{
     private static AnchorPane productsSection;
     private static TextField searchInput;
     private static MenuButton tablesMenu;
-    private static String currentSection;
+    private static boolean currentSection;
     private static String[] sections;
 
     HeadDepartmentController( Scene app ){
@@ -34,7 +34,7 @@ public class HeadDepartmentController extends InterfaceController{
 
         searchInput = (TextField)app.lookup( "#DEP_HEADSearch" );
         tablesMenu = (MenuButton)app.lookup( "#DEP_HEADMenu" );
-        componentsSection = (AnchorPane)app.lookup( "#DEP_HEADTeams" );
+        componentsSection = (AnchorPane)app.lookup( "#DEP_HEADComponents" );
         productsSection = (AnchorPane)app.lookup( "#DEP_HEADProducts" );
 
         componentsTableView =  new TableView<>();
@@ -51,6 +51,8 @@ public class HeadDepartmentController extends InterfaceController{
         componentsTableView.setItems( componentsTable );
         productsTableView.setItems( productsTable );
 
+        currentSection = false; //  set the table to  team products table
+
         for( int a = 0; a<fields.length; a++ ){
 
             column = new TableColumn( fields[a] );
@@ -63,7 +65,7 @@ public class HeadDepartmentController extends InterfaceController{
 
         for( int a = 0; a<fields2.length; a++ ){
 
-            column = new TableColumn( fields[a] );
+            column = new TableColumn( fields2[a] );
             column.setCellValueFactory( new PropertyValueFactory<>( fields2[a]) );
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
@@ -71,32 +73,34 @@ public class HeadDepartmentController extends InterfaceController{
 
         }
 
-        ((AnchorPane)app.lookup( "#DEP_HEADTeamsTable" )).getChildren().add( componentsTableView );
+        ((AnchorPane)app.lookup( "#DEP_HEADComponentsTable" )).getChildren().add( componentsTableView );
         ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productsTableView );
 
     }
 
-    void setVisible( String section ){
-
-        if( currentSection.compareTo( section ) == 0 ) return;
-
-        currentSection = section;
-        if( currentSection.compareTo( "Teams" ) == 0 ) {
-
-            componentsSection.setVisible( true );
-            productsSection.setVisible( false );
-
-        }else{
-
-            productsSection.setVisible( true );
-            componentsSection.setVisible( false );
-        }
-
-    }
 
     void searchValue(){}
 
     void loadValues(){}
 
-    void changeTable(){}
+    void changeTable( String table ){
+
+        if( table.compareTo( "Products") == 0 ){
+
+            if( currentSection == false ) return;
+            currentSection = false;
+            productsSection.setVisible( false );
+            componentsSection.setVisible( true );
+
+        }else{
+
+            if( currentSection == true ) return;
+            currentSection = true;
+            componentsSection.setVisible( false );
+            productsSection.setVisible( true );
+
+        }
+    }
+
+    void undoSearch(){}
 }

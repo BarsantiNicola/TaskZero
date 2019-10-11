@@ -46,10 +46,39 @@ public class AdminController extends InterfaceController{
 
     }
 
-    void searchValue(){}
+    void searchValue(){
 
-    void loadValues(){}
+        String value = searchInput.getText();
+        ObservableList<Employee> results;
+
+        //  results = MYSQLConnector.searchEmployee( String value );
+        results = FXCollections.observableArrayList();
+
+        employeeTable.removeAll();
+        employeeTable.addAll( results );
+
+    }
+
+    void undoSearch(){
+
+        loadValues();
+
+    }
+
+    void loadValues(){
+
+        ObservableList<Employee> results;
+
+        //  results = MYSQLConnector.getEmployees() );
+        results = FXCollections.observableArrayList();
+
+        employeeTable.removeAll();
+        employeeTable.addAll( results );
+
+    }
 
     void showTable( String table ){}
+
+
 
 }

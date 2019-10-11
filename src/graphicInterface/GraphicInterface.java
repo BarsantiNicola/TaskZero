@@ -38,7 +38,7 @@ enum UserType{
 public class GraphicInterface extends Application implements Initializable {
 
     private static Scene myApplication;
-    private static UserType userType = UserType.HEAD_DEPARTMENT;
+    private static UserType userType = UserType.CUSTOMER;
     private static InterfaceController myInterface;
 
     @Override
@@ -137,19 +137,36 @@ public class GraphicInterface extends Application implements Initializable {
     @FXML
     private void changeTable( ActionEvent event ){
 
-        String section = ((MenuItem)event.getSource()).getText();
+        String section = ((MenuItem)event.getSource()).getText();  //  name of the table selected
 
         if( myInterface instanceof  CustomerController ) {
-            ((CustomerController) myInterface).changeTable();
+            ((CustomerController) myInterface).changeTable( section );
             return;
         }
         if( myInterface instanceof HeadDepartmentController ) {
-            ((HeadDepartmentController) myInterface).changeTable();
+            ((HeadDepartmentController) myInterface).changeTable( section );
             return;
         }
 
     }
 
+    @FXML
+    private void undoSearch( ActionEvent event ){
+
+        if( myInterface instanceof AdminController ) {
+            ((AdminController) myInterface).undoSearch();
+            return;
+        }
+
+        if( myInterface instanceof  CustomerController ) {
+            ((CustomerController) myInterface).undoSearch();
+            return;
+        }
+        if( myInterface instanceof HeadDepartmentController ) {
+            ((HeadDepartmentController) myInterface).undoSearch();
+            return;
+        }
+    }
 
 
     private void testEmployee( ObservableList<Employee> values , int value ){

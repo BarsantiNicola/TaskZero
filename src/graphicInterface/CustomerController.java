@@ -1,6 +1,5 @@
 package graphicInterface;
 
-import beans.Employee;
 import beans.Order;
 import beans.Product;
 import javafx.collections.FXCollections;
@@ -19,8 +18,10 @@ public class CustomerController extends InterfaceController{
     private static ObservableList<Order> ordersTable = FXCollections.observableArrayList();
     private static TableView<Product> productsTableView;
     private static TableView<Order> ordersTableView;
+    private static AnchorPane productsSection;
+    private static AnchorPane ordersSection;
     private static TextField searchInput;
-    private static MenuButton tablesMenu;
+    boolean currentSection;
 
 
     CustomerController( Scene app ){
@@ -30,7 +31,8 @@ public class CustomerController extends InterfaceController{
         TableColumn column;
 
         searchInput = (TextField)app.lookup( "#CUSTOMERSearch" );
-        tablesMenu = (MenuButton)app.lookup( "#CUSTOMERMenu" );
+        ordersSection = (AnchorPane)app.lookup( "#CUSTOMEROrders" );
+        productsSection = (AnchorPane)app.lookup( "#CUSTOMERProducts" );
 
         ordersTableView =  new TableView<>();
         productsTableView = new TableView<>();
@@ -46,6 +48,8 @@ public class CustomerController extends InterfaceController{
         ordersTableView.setItems( ordersTable );
         productsTableView.setItems( productsTable );
 
+        currentSection = false;  //  set productTable for initial table showed
+
         for( int a = 0; a<fields.length; a++ ){
 
             column = new TableColumn( fields[a] );
@@ -58,7 +62,7 @@ public class CustomerController extends InterfaceController{
 
         for( int a = 0; a<fields2.length; a++ ){
 
-            column = new TableColumn( fields[a] );
+            column = new TableColumn( fields2[a] );
             column.setCellValueFactory( new PropertyValueFactory<>( fields2[a]) );
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
@@ -73,7 +77,28 @@ public class CustomerController extends InterfaceController{
 
     void searchValue(){};
 
-    void changeTable(){};
+    void changeTable( String table ){
+
+        System.out.println("Changing table" + table );
+        if( table.compareTo( "Products") == 0 ){
+
+            if( currentSection == false ) return;
+            currentSection = false;
+            ordersSection.setVisible( false );
+            productsSection.setVisible( true );
+
+        }else{
+
+            if( currentSection == true ) return;
+            currentSection = true;
+            productsSection.setVisible( false );
+            ordersSection.setVisible( true );
+
+
+        }
+    }
 
     void loadValues(){};
+
+    void undoSearch(){};
 }
