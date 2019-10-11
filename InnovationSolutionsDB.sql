@@ -52,7 +52,7 @@ CREATE TABLE `component` (
   `IDcomponent` int(11) NOT NULL AUTO_INCREMENT,
   `componentName` varchar(45) NOT NULL,
   `componentDescription` varchar(45) NOT NULL,
-  `componentAvailability` int(11) NOT NULL,
+  `componentAvailability` tinyint(1) NOT NULL,
   PRIMARY KEY (`IDcomponent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -100,10 +100,10 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
-  `IDcustomer` int(11) NOT NULL AUTO_INCREMENT,
+  `IDcustomer` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
   PRIMARY KEY (`IDcustomer`),
-  CONSTRAINT `userCostraintCustomer` FOREIGN KEY (`IDcustomer`) REFERENCES `user` (`IDuser`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `customerCostraintUser` FOREIGN KEY (`IDcustomer`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -124,14 +124,14 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employee` (
-  `IDemployee` int(11) NOT NULL AUTO_INCREMENT,
+  `IDemployee` varchar(45) NOT NULL,
   `salary` int(11) NOT NULL,
   `role` varchar(45) NOT NULL,
   `team` int(11) DEFAULT NULL,
   PRIMARY KEY (`IDemployee`),
   KEY `teamCostraint_idx` (`team`),
   CONSTRAINT `teamCostraint` FOREIGN KEY (`team`) REFERENCES `team` (`IDteam`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `userCostraintEmployee` FOREIGN KEY (`IDemployee`) REFERENCES `user` (`IDuser`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `usernameCostraint` FOREIGN KEY (`IDemployee`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -152,14 +152,13 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
-  `customer` int(11) NOT NULL,
+  `customer` varchar(45) NOT NULL,
   `product` int(11) NOT NULL,
   `purchaseDate` datetime NOT NULL,
-  `quantity` int(11) NOT NULL,
   `status` varchar(45) NOT NULL,
   PRIMARY KEY (`customer`,`product`),
   KEY `productCustomer_idx` (`product`),
-  CONSTRAINT `customerConstraint` FOREIGN KEY (`customer`) REFERENCES `customer` (`IDcustomer`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `customerCostraint` FOREIGN KEY (`customer`) REFERENCES `customer` (`IDcustomer`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `productCustomer` FOREIGN KEY (`product`) REFERENCES `product` (`IDproduct`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -185,7 +184,7 @@ CREATE TABLE `product` (
   `productName` varchar(45) NOT NULL,
   `productPrice` int(11) NOT NULL,
   `productDescription` varchar(200) NOT NULL,
-  `productAvailability` int(11) NOT NULL,
+  `productAvailability` tinyint(1) NOT NULL,
   PRIMARY KEY (`IDproduct`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -211,7 +210,7 @@ CREATE TABLE `supplier` (
   `companyName` varchar(45) NOT NULL,
   `supplierMail` varchar(45) NOT NULL,
   PRIMARY KEY (`IDsupplier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,6 +219,7 @@ CREATE TABLE `supplier` (
 
 LOCK TABLES `supplier` WRITE;
 /*!40000 ALTER TABLE `supplier` DISABLE KEYS */;
+INSERT INTO `supplier` VALUES (1,'InnovativeElectric','innovativeelectric@example.com'),(2,'InnovativeLogic','innovativelogic@example.com'),(3,'InnovativeMaterials','innovativematerials@example.com');
 /*!40000 ALTER TABLE `supplier` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +233,6 @@ DROP TABLE IF EXISTS `supplies`;
 CREATE TABLE `supplies` (
   `component` int(11) NOT NULL,
   `supplier` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
   `purchaseDate` datetime NOT NULL,
   `price` int(11) NOT NULL,
   PRIMARY KEY (`component`,`supplier`),
@@ -263,7 +262,7 @@ CREATE TABLE `team` (
   `IDteam` int(11) NOT NULL AUTO_INCREMENT,
   `location` varchar(45) NOT NULL,
   PRIMARY KEY (`IDteam`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -272,6 +271,7 @@ CREATE TABLE `team` (
 
 LOCK TABLES `team` WRITE;
 /*!40000 ALTER TABLE `team` DISABLE KEYS */;
+INSERT INTO `team` VALUES (1,'Room4'),(2,'Room1'),(3,'Room9');
 /*!40000 ALTER TABLE `team` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,13 +283,12 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `IDuser` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
-  `username` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   `mail` varchar(45) NOT NULL,
-  PRIMARY KEY (`IDuser`)
+  PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -299,6 +298,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('alice','Alice','Norton','alicePassword','alice@example.com'),('imanne','Anne','Taylor','imannePassword','anne@example.com'),('james96','James','Parker','james96Password','james@example.com'),('lisaa','Lisa','Smith','lisaaPassword','lisa@example.com'),('magicBob','Bob','White','magicBobPassword','bob@example.com'),('PaulPaul','Paul','Scott','PaulPaulPassword','paul@example.com'),('soJenny','Jenny','Lingard','soJennyPassword','jenny@example.com'),('timJ','Tim','Jones','timJPassword','tim@example.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -311,4 +311,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-08 22:06:52
+-- Dump completed on 2019-10-11  8:32:50
