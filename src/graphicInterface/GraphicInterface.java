@@ -1,12 +1,8 @@
 package graphicInterface;
 
-import beans.Employee;
-import beans.Product;
-import com.sun.istack.internal.logging.Logger;
+import DatabaseManagement.DatabaseInnovativeSolutions;
+import DatabaseManagement.UserType;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,29 +12,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 
 import java.util.ResourceBundle;
 
-enum UserType{
-    ADMINISTRATOR,
-    HEAD_DEPARTMENT,
-    CUSTOMER,
-    NOUSER
-};
+
 
 public class GraphicInterface extends Application implements Initializable {
 
     private static Scene myApplication;
-    private static UserType userType = UserType.CUSTOMER;
+    private static UserType userType = UserType.HEAD_DEPARTMENT;
     private static InterfaceController myInterface;
 
     @Override
@@ -46,6 +34,7 @@ public class GraphicInterface extends Application implements Initializable {
 
         Parent root = FXMLLoader.load(getClass().getResource("interface.fxml"));
 
+        new DatabaseInnovativeSolutions();
         primaryStage.setTitle("Innovation Solutions");
         myApplication = new Scene( root , 590 , 390 );
         primaryStage.setScene( myApplication );
@@ -81,7 +70,7 @@ public class GraphicInterface extends Application implements Initializable {
         }
 
         password = new String( md.digest(password.getBytes() ));
-        System.out.println( "Nome: " + name + "\tPassword: " + password );
+        userType = DatabaseInnovativeSolutions.login( name , password );
         myApplication.lookup("#AlertMessage" ).setVisible( false );
 
 
@@ -169,33 +158,6 @@ public class GraphicInterface extends Application implements Initializable {
     }
 
 
-    private void testEmployee( ObservableList<Employee> values , int value ){
 
-        switch( value ){
 
-            case 5:  values.add( new Employee( "Luca" , "Cardelli" , "prova5@unipi.it"));
-            case 4:  values.add( new Employee( "Marco" , "Ponziani" , "prova4@unipi.it"));
-            case 3:  values.add( new Employee( "Mirco" , "Quintavalla" , "prova3@unipi.it"));
-            case 2:  values.add( new Employee( "Riccardo" , "Bertini" , "prova2@unipi.it"));
-            case 1:  values.add( new Employee( "Lorenzo" , "Quintavalla" , "prova1@unipi.it"));
-            default: values.add( new Employee( "Nicola" , "Barsanti" , "prova0@unipi.it"));
-
-        }
-
-    }
-
-    private void testProduct( ObservableList<Product> values , int value ){
-
-        switch( value ){
-
-            case 5:  values.add( new Product( "PlayStation2" , "1.0" , 30));
-            case 4:  values.add( new Product( "Google Nest" , "2.1" , 50));
-            case 3:  values.add( new Product( "Ferrari" , "Gallardo" , 300000));
-            case 2:  values.add( new Product( "Shuttle" , "PS5823-1" , 20000000));
-            case 1:  values.add( new Product( "Acer Aspire" , "5951g" , 1000));
-            default: values.add( new Product( "Iphone" , "4" , 800));
-
-        }
-
-    }
 }

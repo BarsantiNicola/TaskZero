@@ -1,11 +1,10 @@
 package graphicInterface;
 
-import beans.Order;
+import beans.Orders;
 import beans.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -15,9 +14,9 @@ import javafx.scene.layout.AnchorPane;
 public class CustomerController extends InterfaceController{
 
     private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
-    private static ObservableList<Order> ordersTable = FXCollections.observableArrayList();
+    private static ObservableList<Orders> ordersTable = FXCollections.observableArrayList();
     private static TableView<Product> productsTableView;
-    private static TableView<Order> ordersTableView;
+    private static TableView<Orders> ordersTableView;
     private static AnchorPane productsSection;
     private static AnchorPane ordersSection;
     private static TextField searchInput;
@@ -79,7 +78,6 @@ public class CustomerController extends InterfaceController{
 
     void changeTable( String table ){
 
-        System.out.println("Changing table" + table );
         if( table.compareTo( "Products") == 0 ){
 
             if( currentSection == false ) return;

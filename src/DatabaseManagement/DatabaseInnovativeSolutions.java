@@ -1,13 +1,18 @@
+package DatabaseManagement;
+
+import beans.Employee;
+import beans.Orders;
+import beans.Product;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.*;
 
-public class Task0Class {
+public class DatabaseInnovativeSolutions{
 
 	private static String connectionString;
 	private static Connection myConnection;
@@ -35,58 +40,58 @@ public class Task0Class {
 			
 			getOrderStatusStatement = myConnection.prepareStatement(
 					"SELECT product,purchaseDate,status "
-				  + "FROM orders"
-				  + "WHERE id=?");
+				  + " FROM orders"
+				  + " WHERE id=?");
 			
 		    getAvailableProductsStatement = myConnection.prepareStatement(
 		    	    "SELECT productName,price, "
-		    	  + "FROM product "
-		    	  + "WHERE productAvailability=1");
+		    	  + " FROM product "
+		    	  + " WHERE productAvailability=1");
 		    
 		    updateSalaryStatement = myConnection.prepareStatement(
 		    		"UPDATE employee"
-		    	  + "SET salary=?"
-		    	  + "WHERE id=?");
+		    	  + " SET salary=?"
+		    	  + " WHERE id=?");
 		    
 		    updateTeamLeaderStatement = myConnection.prepareStatement(
 		    		"UPDATE team"
-		    	  + "SET IDleader=?"
-		    	  + "WHERE IDteam=?");
+		    	  + " SET IDleader=?"
+		    	  + " WHERE IDteam=?");
 		    
 		    deleteUserStatement = myConnection.prepareStatement(
 		    		"DELETE FROM user"
-		    	  + "WHERE nickname=?");
+		    	  + " WHERE nickname=?");
 		    
 		    getTeamEmployeeStatement = myConnection.prepareStatement(
 		    		"SELECT IDemployee,salary,role"
-		    	  + "FROM employee"
-		    	  + "WHERE team=?");
+		    	  + " FROM employee"
+		    	  + " WHERE team=?");
 		    
 		    insertProductStatement = myConnection.prepareStatement(
 		    		"INSERT INTO product VALUES (?,?,?,?,1");
 		    
 		    updatePriceStatement = myConnection.prepareStatement(
 		    		"UPDATE product"
-		    	  + "SET price=?"
-		    	  + "WHERE IDproduct=?"
+		    	  + " SET price=?"
+		    	  + " WHERE IDproduct=?"
 		    		);
 		    
 		    loginStatement = myConnection.prepareStatement(
 		    		"SELECT COUNT(*) AS numberOfUsers"
-		    	  + "FROM user"
-		    	  + "WHERE username=? AND password=?"
+		    	  + " FROM user"
+		    	  + " WHERE username=? AND password=?"
 		    		);
 		    
 		    isEmployeeStatement = myConnection.prepareStatement(
 		    		"SELECT COUNT(*) AS isEmployee"
-		    		+ "FROM team"
-		    		+ "WHERE teamLeader=?"
+		    		+ " FROM team"
+		    		+ " WHERE teamLeader=?"
 		    		);
 		    
 		    isCustomerStatement = myConnection.prepareStatement(
 		    		"SELECT COUNT(*) AS isCustomer"
-		    	  + "FROM customer"
-		    	  + "WHERE IDcustomer=?"
+		    	  + " FROM customer"
+		    	  + " WHERE IDcustomer=?"
 		    		);
 		    		
 		    System.out.println("Statements Created Correctly");
@@ -296,28 +301,30 @@ public class Task0Class {
 			loginStatement.setString( 2, psw );
 			
 			loginStatement.execute();
-			
+
 			ResultSet loginResult = loginStatement.getResultSet();
-			
+
+			loginResult.next();
 			int loginConclusion = loginResult.getInt("numberOfUsers");
-			
+
 			if( loginConclusion == 1 ) {
-				
+
 				isEmployeeStatement.setString(1,user);
 				isEmployeeStatement.execute();
 				
 				ResultSet isEmployeeResult = isEmployeeStatement.getResultSet();
-				
+				isEmployeeResult.next();
 				int isEmployeeConclusion = isEmployeeResult.getInt("isEmployee");
-				
+
 				if( isEmployeeConclusion == 1 )
-					return UserType.HEAD_DEPARTEMENT;
+					return UserType.HEAD_DEPARTMENT;
 							
 				isCustomerStatement.setString(1,user);
 				isCustomerStatement.execute();
 				
 				ResultSet isCustomerResult = isCustomerStatement.getResultSet();
-				
+
+				isCustomerResult.next();
 				int isCustomerConclusion = isCustomerResult.getInt("isCustomer");
 				
 				if( isCustomerConclusion == 1 )

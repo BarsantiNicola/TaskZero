@@ -43,6 +43,7 @@ public class HeadDepartmentController extends InterfaceController{
         componentsTable = FXCollections.observableArrayList();
         productsTable = FXCollections.observableArrayList();
 
+
         componentsTableView.setMinWidth( 498 );
         productsTableView.setMinWidth( 498 );
         componentsTableView.setMinHeight( 233 );
@@ -103,4 +104,6 @@ public class HeadDepartmentController extends InterfaceController{
     }
 
     void undoSearch(){}
+
+
 }
