@@ -300,7 +300,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('alice','Alice','Norton','alicePassword','alice@example.com'),('imanne','Anne','Taylor','imannePassword','anne@example.com'),('james96','James','Parker','james96Password','james@example.com'),('lisaa','Lisa','Smith','lisaaPassword','lisa@example.com'),('magicBob','Bob','White','magicBobPassword','bob@example.com'),('PaulPaul','Paul','Scott','PaulPaulPassword','paul@example.com'),('soJenny','Jenny','Lingard','soJennyPassword','jenny@example.com'),('timJ','Tim','Jones','timJPassword','tim@example.com');
+INSERT INTO `user` VALUES ('alice','Alice','Norton','password','alice@example.com'),('imanne','Anne','Taylor','password','anne@example.com'),('james96','James','Parker','password','james@example.com'),('lisaa','Lisa','Smith','password','lisa@example.com'),('magicBob','Bob','White','password','bob@example.com'),('PaulPaul','Paul','Scott','password','paul@example.com'),('soJenny','Jenny','Lingard','password','jenny@example.com'),('timJ','Tim','Jones','password','tim@example.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -313,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-11 12:57:21
+-- Dump completed on 2019-10-12 11:19:05
