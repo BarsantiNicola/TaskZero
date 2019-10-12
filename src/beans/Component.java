@@ -23,17 +23,17 @@ public class Component {
 		return IDcomponent.get();
 	}
 	
-	public String getproductName() {
+	public String getProductName() {
 		
 		return componentName.get();
 	}
 	
-	public String getproductDescription() {
+	public String getProductDescription() {
 		
 		return componentDescription.get();
 	}
 	
-	public boolean getproductAvailability() {
+	public boolean getProductAvailability() {
 		
 		return componentAvailability.get();
 	}

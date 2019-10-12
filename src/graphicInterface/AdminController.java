@@ -1,84 +1,73 @@
 package graphicInterface;
 
-import beans.Employee;
+import DatabaseManagement.DatabaseInnovativeSolutions;
+import beans.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-public class AdminController extends InterfaceController{
+class AdminController extends InterfaceController{
 
-    private static ObservableList<Employee> employeeTable = FXCollections.observableArrayList();
-    private static TableView<Employee> employeeTableView;
+    private static ObservableList<User> userTable = FXCollections.observableArrayList();
+    private static TableView<User> userTableView;
     private static TextField searchInput;
+    private static ImageView undoButton;
 
     //  THE FUNCION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
     AdminController( Scene app ){
 
-        String[][] employeeFields = { { "Name" , "IDEmployee" } , { "Salary" ,"salary" } , { "Role" , "role" } , { "Team" ,"team" } };  //  FIELDS OF TABLE EMPLOYEE
+        String[][] userFields = { { "Username" , "username" } , { "Password" ,"password" } , { "Name" , "name" } , { "Surname" ,"surname" } , { "Email" , "mail"} };  //  FIELDS OF TABLE EMPLOYEE
         TableColumn column;
 
         searchInput = (TextField)app.lookup( "#ADMINSearch" );  //  TEXT INPUT FOR SEARCH INFORMATION
+        undoButton = (ImageView)app.lookup( "#ADMINUndo" );
 
-        employeeTableView =  new TableView<>();               //  TABLE EMPLOYEE
-        employeeTable = FXCollections.observableArrayList();  //  COLLECTION OF BEANS-CLASS LINKED TO THE TABLE EMPLOYEE
+        userTableView =  new TableView<>();               //  TABLE EMPLOYEE
+        userTableView.setEditable(true);
+        userTable = FXCollections.observableArrayList();  //  COLLECTION OF BEANS-CLASS LINKED TO THE TABLE EMPLOYEE
 
-        employeeTableView.setMinWidth( 498 );
-        employeeTableView.setMinHeight( 233 );
+        userTableView.setMinWidth( 498 );
+        userTableView.setMinHeight( 233 );
 
-        employeeTableView.setItems( employeeTable );
+        userTableView.setItems( userTable );
 
-        for( int a = 0; a<employeeFields.length; a++ ){
+        for( int a = 0; a<userFields.length; a++ ){
 
-            column = new TableColumn( employeeFields[a][0] );
-            column.setCellValueFactory( new PropertyValueFactory<>( employeeFields[a][1] ));
-            column.setMinWidth( 160 );
+            column = new TableColumn( userFields[a][0] );
+            column.setCellValueFactory( new PropertyValueFactory<>( userFields[a][1] ));
+            column.setMinWidth( 53 );
             column.setMaxWidth( 200 );
-            employeeTableView.getColumns().add( column );
+            userTableView.getColumns().add( column );
 
         }
         // INSERTION OF THE TABLE IN THE ANCHORPANE
-        ((AnchorPane)app.lookup( "#ADMINEmployeesTable" )).getChildren().add( employeeTableView );
 
-        //  LOAD VALUES INTO TABLES
+         userTable.addAll(DatabaseInnovativeSolutions.getUsers());
 
+        ((AnchorPane)app.lookup( "#ADMINUsersTable" )).getChildren().add( userTableView );
     }
 
-    void searchValue(){
+    void searchValue() {
 
         String value = searchInput.getText();
-        ObservableList<Employee> results;
+        userTable.removeAll(userTable);
+        userTable.addAll( DatabaseInnovativeSolutions.searchUsers( value ));
+        undoButton.setVisible( true );
 
-        //  results = MYSQLConnector.searchEmployee( String value );
-        results = FXCollections.observableArrayList();
-
-        employeeTable.removeAll();
-        employeeTable.addAll( results );
 
     }
 
     void undoSearch(){
 
-        loadValues();
+        undoButton.setVisible( false );
+        userTable.removeAll( userTable );
+        userTable.addAll( DatabaseInnovativeSolutions.getUsers());
+
 
     }
-
-    void loadValues(){
-
-        ObservableList<Employee> results;
-
-        //  results = MYSQLConnector.getEmployees() );
-        results = FXCollections.observableArrayList();
-
-        employeeTable.removeAll();
-        employeeTable.addAll( results );
-
-    }
-
-    void showTable( String table ){}
-
-
 
 }

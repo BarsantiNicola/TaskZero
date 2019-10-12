@@ -1,8 +1,6 @@
 package DatabaseManagement;
 
-import beans.Employee;
-import beans.Orders;
-import beans.Product;
+import beans.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,6 +27,9 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement loginStatement;
 	private static PreparedStatement isEmployeeStatement;
 	private static PreparedStatement isCustomerStatement;
+	private static PreparedStatement getManagedTeam;
+	private static PreparedStatement getUsers;
+	private static PreparedStatement searchUsers;
 	
 	static {
 		
@@ -95,6 +96,23 @@ public class DatabaseInnovativeSolutions {
 		    	  + " FROM customer"
 		    	  + " WHERE IDcustomer=?"
 		    		);
+			getManagedTeam = myConnection.prepareStatement(
+					"SELECT IDTeam "
+							+ " FROM Team"
+							+ " WHERE teamLeader=?"
+			);
+
+			getUsers = myConnection.prepareStatement(
+					"SELECT username , name, surname, password , mail"
+							+ " FROM User"
+			);
+
+			searchUsers = myConnection.prepareStatement(
+
+					"SELECT username, name, surname , password , mail"
+						+ " FROM User"
+						+ " WHERE username = ? OR name = ? OR surname = ? OR mail = ?"
+			);
 		    		
 		    System.out.println("Statements Created Correctly");
 			
@@ -105,13 +123,13 @@ public class DatabaseInnovativeSolutions {
 		}
 	}
 	
-	public static List<Orders> getOrderStatus( int idCustomer ) {
+	public static List<Orders> getOrderStatus( String idCustomer ) {
 		
 		List<Orders> ordersList = new ArrayList<>();
 		
 		try {
 			
-			getOrderStatusStatement.setString(1, Integer.toString(idCustomer) );
+			getOrderStatusStatement.setString(1, idCustomer );
 			getOrderStatusStatement.execute();
 			
 			ResultSet orderStatusResult = getOrderStatusStatement.getResultSet();
@@ -134,8 +152,8 @@ public class DatabaseInnovativeSolutions {
 		
 		return ordersList;
 	}
-	
-	static List<Product> getAvailableProducts() {
+
+	public static List<Product> getAvailableProducts() {
 		
 		List<Product> productList = new ArrayList<>();
 		
@@ -166,7 +184,7 @@ public class DatabaseInnovativeSolutions {
 		return productList;
 	}
 	
-	static int updateSalary( int salary, int employee ) {
+	public static int updateSalary( int salary, int employee ) {
 		
 		int updatedRows=0;
 		
@@ -186,7 +204,7 @@ public class DatabaseInnovativeSolutions {
 		return updatedRows;
 	}
 	
-	static int updateTeamLeader( int leader, int team ) {
+	public static int updateTeamLeader( int leader, int team ) {
 		
 		int updatedRows=0;
 		
@@ -206,7 +224,7 @@ public class DatabaseInnovativeSolutions {
 		return updatedRows;
 	}
 	
-	static int deleteUser( String username ) {
+	public static int deleteUser( String username ) {
 		
 		int deletedRows=0;
 		
@@ -225,7 +243,7 @@ public class DatabaseInnovativeSolutions {
 		return deletedRows;
 	}
 	
-	static List<Employee> getTeamEmployees( int team ){
+	public static List<Employee> getTeamEmployees( int team ){
 		
 		List<Employee> employeeList = new ArrayList<>();
 		
@@ -294,7 +312,86 @@ public class DatabaseInnovativeSolutions {
 		
 		return updatedRows;
 	}
-	
+
+	public static List<Component> getComponents(){
+		return null;
+	}
+
+	public static int getTeam( String name ){
+
+		try{
+
+
+			getManagedTeam.setString( 1 , name );
+			getManagedTeam.execute();
+
+			ResultSet myTeam = getManagedTeam.getResultSet();
+			myTeam.next();
+
+			return myTeam.getInt( "IDTeam" );
+
+		} catch (SQLException caughtException){
+
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+			return -1;
+
+		}
+
+	}
+
+	public static List<User> getUsers(){
+
+		List<User> list = new ArrayList<>();
+
+		try{
+
+			getUsers.execute();
+			ResultSet users = getUsers.getResultSet();
+
+			while( users.next() )
+				list.add( new User( users.getString("username") , users.getString("name") ,  users.getString("surname") ,  users.getString("password") ,  users.getString("mail") ));
+
+		} catch (SQLException caughtException){
+
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+
+		}
+
+		return list;
+
+	}
+
+	public static List<User> searchUsers( String value ){
+
+		List<User> list = new ArrayList<>();
+
+		try {
+			searchUsers.setString(1, value);
+			searchUsers.setString(2, value);
+			searchUsers.setString(3, value);
+			searchUsers.setString(4, value);
+
+			searchUsers.execute();
+			ResultSet users = searchUsers.getResultSet();
+
+			while( users.next() )
+				list.add( new User( users.getString("username") , users.getString("name") ,  users.getString("surname") ,  users.getString("password") ,  users.getString("mail") ));
+
+		} catch (SQLException caughtException){
+
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+
+		}
+
+		return list;
+	}
+
 	public static UserType login( String user , String psw ) {
 		
 		try {

@@ -24,17 +24,17 @@ public class Employee {
 		return IDemployee.get();
 	}
 	
-	public int getsalary() {
+	public int getSalary() {
 		
 		return salary.get();
 	}
 
-	public String getrole() {
+	public String getRole() {
 	
 		return role.get();
 	}
 
-	public int getteam() {
+	public int getTeam() {
 	
 		return team.get();
 	}

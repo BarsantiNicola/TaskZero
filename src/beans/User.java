@@ -21,28 +21,53 @@ public class User {
 
 	}
 	
-	public String getusername() {
+	public String getUsername() {
 		
 		return username.get();
 	}
 	
-	public String getname() {
+	public String getName() {
 		
 		return name.get();
 	}
 
-	public String getsurname() {
+	public String getSurname() {
 	
 		return surname.get();
 	}
 
-	public String getpassword() {
+	public String getPassword() {
 	
 		return password.get();
 	}
 	
-	public String getmail() {
+	public String getMail() {
 		
 		return mail.get();
+	}
+
+	public void setUsername( String u ) {
+
+		username.set(u);
+	}
+
+	public void setName( String n ) {
+
+		name.set(n);
+	}
+
+	public void setSurname( String s ) {
+
+		surname.set(s);
+	}
+
+	public void SetPassword( String p ) {
+
+		password.set(p);
+	}
+
+	public void setMail( String m ) {
+
+		mail.set(m);
 	}
 }

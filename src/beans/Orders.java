@@ -19,22 +19,22 @@ public class Orders {
 		status = new SimpleStringProperty(state);
 	}
 	
-	public int getcustomer() {
+	public int getCustomer() {
 		
 		return customer.get();
 	}
 	
-	public int getproduct() {
+	public int getProduct() {
 		
 		return product.get();
 	}
 	
-	public Timestamp getpurchaseDate() {
+	public Timestamp getPurchaseDate() {
 		
 		return purchaseDate.get();
 	}
 	
-	public String getstatus() {
+	public String getStatus() {
 		
 		return status.get();
 	}

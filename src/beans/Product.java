@@ -25,22 +25,22 @@ public class Product {
 		return IDproduct.get();
 	}
 	
-	public String getproductName() {
+	public String getProductName() {
 		
 		return productName.get();
 	}
 	
-	public int getprice() {
+	public int getPrice() {
 		
 		return price.get();
 	}
 	
-	public String getproductDescription() {
+	public String getProductDescription() {
 		
 		return productDescription.get();
 	}
 	
-	public boolean getproductAvailability() {
+	public boolean getProductAvailability() {
 		
 		return productAvailability.get();
 	}

@@ -77,7 +77,7 @@ public class GraphicInterface extends Application implements Initializable {
         switch( userType ) {
             case CUSTOMER:
 
-                myInterface = new CustomerController( myApplication );
+                myInterface = new CustomerController( myApplication , name );
                 myApplication.lookup( "#CustomerPage" ).setVisible( true );
                 break;
 
@@ -89,7 +89,7 @@ public class GraphicInterface extends Application implements Initializable {
 
             case HEAD_DEPARTMENT:
 
-                myInterface = new HeadDepartmentController( myApplication );
+                myInterface = new HeadDepartmentController( myApplication , DatabaseInnovativeSolutions.getTeam( name ) );
                 myApplication.lookup( "#HeadPage" ).setVisible( true );
                 break;
 
@@ -140,7 +140,7 @@ public class GraphicInterface extends Application implements Initializable {
     }
 
     @FXML
-    private void undoSearch( ActionEvent event ){
+    private void undoSearch(){
 
         if( myInterface instanceof AdminController ) {
             ((AdminController) myInterface).undoSearch();

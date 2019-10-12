@@ -32,11 +32,11 @@
                     </ScrollPane>
                   </children>
                 </AnchorPane>
-                <AnchorPane id="DEP_HEADProducts" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0" visible="true">
+                <AnchorPane id="DEP_HEADEmployees" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0" visible="true">
                   <children>
                     <ScrollPane layoutX="0.0" layoutY="0.0" maxWidth="-1.0" prefHeight="235.0" prefWidth="498.0">
                       <content>
-                        <AnchorPane id="DEP_HEADProductsTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
+                        <AnchorPane id="DEP_HEADEmployeesTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
                       </content>
                     </ScrollPane>
                   </children>
@@ -133,14 +133,14 @@
                 <Text fill="WHITE" font="$x2" layoutX="17.0" layoutY="25.0" scaleX="1.0" scaleY="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ADMINISTRATOR" />
               </children>
             </Pane>
-            <ImageView fitHeight="35.249901465010325" fitWidth="46.9998664855957" layoutX="30.0" layoutY="91.0" onMouseClicked="#undoSearch" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView id="ADMINUndo" fitHeight="35.249901465010325" fitWidth="46.9998664855957" layoutX="30.0" layoutY="91.0" onMouseClicked="#undoSearch" pickOnBounds="true" preserveRatio="true" visible="false">
               <image>
                 <Image url="file:../../data/undoSearchCross.png" />
               </image>
             </ImageView>
-            <ScrollPane layoutX="74.0" layoutY="91.0" maxWidth="-1.0" prefHeight="235.0" prefWidth="498.0">
+            <ScrollPane layoutX="74.0" layoutY="91.0" maxWidth="-1.0" pannable="false" prefHeight="230.0" prefWidth="492.0">
               <content>
-                <AnchorPane id="ADMINEmployeesTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
+                <AnchorPane id="ADMINUsersTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
               </content>
             </ScrollPane>
           </children>

@@ -7,6 +7,5 @@ abstract class InterfaceController {
     private static TextField searchValue;
 
     abstract void searchValue();
-    abstract void loadValues();
 
 }

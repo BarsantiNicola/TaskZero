@@ -1,5 +1,6 @@
 package graphicInterface;
 
+import DatabaseManagement.DatabaseInnovativeSolutions;
 import beans.Orders;
 import beans.Product;
 import javafx.collections.FXCollections;
@@ -20,16 +21,18 @@ public class CustomerController extends InterfaceController{
     private static AnchorPane productsSection;
     private static AnchorPane ordersSection;
     private static TextField searchInput;
-    boolean currentSection;
+    private boolean currentSection;
+    private String customerId;
 
 
-    CustomerController( Scene app ){
+    CustomerController( Scene app , String cId ){
 
 
         String[][] productFields = { { "Name" , "productName" } , { "Availability" , "productAvailability" } , {"Price" , "price"} , { "Description" , "productDescription" }};
         String[][] orderFields = { { "Product" , "product" } , { "Model" , "model" } , { "Purchase Date" , "purchaseDate" } , { "State" , "status" }};
         TableColumn column;
 
+        customerId = cId;
         searchInput = (TextField)app.lookup( "#CUSTOMERSearch" );
         ordersSection = (AnchorPane)app.lookup( "#CUSTOMEROrders" );
         productsSection = (AnchorPane)app.lookup( "#CUSTOMERProducts" );
@@ -69,6 +72,9 @@ public class CustomerController extends InterfaceController{
             productsTableView.getColumns().add( column );
 
         }
+
+        ordersTable.addAll( DatabaseInnovativeSolutions.getOrderStatus( customerId ));
+        productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
 
         ((AnchorPane)app.lookup( "#CUSTOMEROrdersTable" )).getChildren().add( ordersTableView );
         ((AnchorPane)app.lookup( "#CUSTOMERProductsTable" )).getChildren().add( productsTableView );
