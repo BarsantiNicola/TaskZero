@@ -72,7 +72,7 @@ public class GraphicInterface extends Application implements Initializable {
         password = new String( md.digest(password.getBytes() ));
         userType = DatabaseInnovativeSolutions.login( name , password );
         myApplication.lookup("#AlertMessage" ).setVisible( false );
-
+        userType = UserType.HEAD_DEPARTMENT;
 
         switch( userType ) {
             case CUSTOMER:
@@ -88,7 +88,7 @@ public class GraphicInterface extends Application implements Initializable {
                 break;
 
             case HEAD_DEPARTMENT:
-
+                System.out.println("name: " + name );
                 myInterface = new HeadDepartmentController( myApplication , DatabaseInnovativeSolutions.getTeam( name ) );
                 myApplication.lookup( "#HeadPage" ).setVisible( true );
                 break;

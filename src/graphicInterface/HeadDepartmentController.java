@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class HeadDepartmentController extends InterfaceController{
@@ -24,8 +25,8 @@ public class HeadDepartmentController extends InterfaceController{
     private static AnchorPane employeesSection;
     private static TextField searchInput;
     private static MenuButton tablesMenu;
+    private static ImageView undoButton;
     private static boolean currentSection;
-    private static String[] sections;
     private static int managedTeam;
 
     HeadDepartmentController( Scene app , int team ){
@@ -39,6 +40,8 @@ public class HeadDepartmentController extends InterfaceController{
 
         searchInput = (TextField)app.lookup( "#DEP_HEADSearch" );
         tablesMenu = (MenuButton)app.lookup( "#DEP_HEADMenu" );
+        undoButton = (ImageView)app.lookup( "#DEP_HEADUndo" );
+
         componentsSection = (AnchorPane)app.lookup( "#DEP_HEADComponents" );
         employeesSection = (AnchorPane)app.lookup( "#DEP_HEADEmployees" );
 
@@ -88,30 +91,71 @@ public class HeadDepartmentController extends InterfaceController{
     }
 
 
-    void searchValue(){}
+    void searchValue(){
 
-    void loadValues(){}
+        String value = searchInput.getText();
+
+        if( currentSection == false){
+
+            employeesTable.removeAll( employeesTable );
+            employeesTable.addAll( DatabaseInnovativeSolutions.searchTeamEmployees( value , managedTeam));
+            undoButton.setVisible( true );
+
+        }else{
+
+            componentsTable.removeAll(componentsTable);
+            componentsTable.addAll( DatabaseInnovativeSolutions.searchComponent( value ));
+            undoButton.setVisible( true );
+
+        }
+    };
 
     void changeTable( String table ){
-
-        if( table.compareTo( "Products") == 0 ){
+        
+        if( table.compareTo( "Employees") == 0 ){
 
             if( currentSection == false ) return;
+
             currentSection = false;
-            employeesSection.setVisible( false );
-            componentsSection.setVisible( true );
+            componentsSection.setVisible( false );
+
+            if( undoButton.isVisible()){
+                componentsTable.removeAll( employeesTable );
+                componentsTable.addAll( DatabaseInnovativeSolutions.getComponents());
+            }
+
+            employeesSection.setVisible( true );
 
         }else{
 
             if( currentSection == true ) return;
+
             currentSection = true;
-            componentsSection.setVisible( false );
-            employeesSection.setVisible( true );
+            employeesSection.setVisible( false );
+
+            if( undoButton.isVisible()){
+                employeesTable.removeAll( componentsTable );
+                employeesTable.addAll( DatabaseInnovativeSolutions.getTeamEmployees(managedTeam));
+            }
+
+            componentsSection.setVisible( true );
+
 
         }
     }
 
-    void undoSearch(){}
+    void undoSearch(){
+
+        undoButton.setVisible( false );
+        if( currentSection == true ) {
+            componentsTable.removeAll(componentsTable);
+            componentsTable.addAll(DatabaseInnovativeSolutions.getComponents());
+        }else{
+            employeesTable.removeAll(employeesTable);
+            employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees(managedTeam));
+        }
+
+    }
 
 
 }

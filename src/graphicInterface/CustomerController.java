@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class CustomerController extends InterfaceController{
@@ -23,6 +24,7 @@ public class CustomerController extends InterfaceController{
     private static TextField searchInput;
     private boolean currentSection;
     private String customerId;
+    private ImageView undoButton;
 
 
     CustomerController( Scene app , String cId ){
@@ -33,7 +35,10 @@ public class CustomerController extends InterfaceController{
         TableColumn column;
 
         customerId = cId;
+
         searchInput = (TextField)app.lookup( "#CUSTOMERSearch" );
+        undoButton = (ImageView)app.lookup( "#CUSTOMERUndo" );
+
         ordersSection = (AnchorPane)app.lookup( "#CUSTOMEROrders" );
         productsSection = (AnchorPane)app.lookup( "#CUSTOMERProducts" );
 
@@ -81,29 +86,69 @@ public class CustomerController extends InterfaceController{
 
     }
 
-    void searchValue(){};
+    void searchValue(){
+
+        String value = searchInput.getText();
+
+        if( currentSection ){
+
+            productsTable.removeAll( productsTable );
+            productsTable.addAll( DatabaseInnovativeSolutions.searchProducts( value ));
+            undoButton.setVisible( true );
+
+        }else{
+
+            ordersTable.removeAll(ordersTable);
+            ordersTable.addAll( DatabaseInnovativeSolutions.searchOrders( value , customerId ));
+            undoButton.setVisible( true );
+
+        }
+    };
 
     void changeTable( String table ){
 
         if( table.compareTo( "Products") == 0 ){
 
             if( currentSection == false ) return;
+
             currentSection = false;
             ordersSection.setVisible( false );
+
+            if( undoButton.isVisible()){
+                ordersTable.removeAll( ordersTable );
+                ordersTable.addAll( DatabaseInnovativeSolutions.getOrderStatus( customerId ));
+            }
+
             productsSection.setVisible( true );
 
         }else{
 
             if( currentSection == true ) return;
+
             currentSection = true;
             productsSection.setVisible( false );
+
+            if( undoButton.isVisible()){
+                productsTable.removeAll( productsTable );
+                productsTable.addAll( DatabaseInnovativeSolutions.getAvailableProducts());
+            }
+
             ordersSection.setVisible( true );
 
 
         }
     }
 
-    void loadValues(){};
+    void undoSearch(){
 
-    void undoSearch(){};
+        undoButton.setVisible( false );
+        if( currentSection == true ) {
+            ordersTable.removeAll(ordersTable);
+            ordersTable.addAll(DatabaseInnovativeSolutions.getOrderStatus(customerId));
+        }else{
+            productsTable.removeAll(productsTable);
+            productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
+        }
+
+    }
 }

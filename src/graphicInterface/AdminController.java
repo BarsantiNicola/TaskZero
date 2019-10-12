@@ -17,7 +17,7 @@ class AdminController extends InterfaceController{
     private static TextField searchInput;
     private static ImageView undoButton;
 
-    //  THE FUNCION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
+    //  THE FUNCTION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
     AdminController( Scene app ){
 
         String[][] userFields = { { "Username" , "username" } , { "Password" ,"password" } , { "Name" , "name" } , { "Surname" ,"surname" } , { "Email" , "mail"} };  //  FIELDS OF TABLE EMPLOYEE
@@ -58,7 +58,6 @@ class AdminController extends InterfaceController{
         userTable.addAll( DatabaseInnovativeSolutions.searchUsers( value ));
         undoButton.setVisible( true );
 
-
     }
 
     void undoSearch(){
@@ -66,7 +65,6 @@ class AdminController extends InterfaceController{
         undoButton.setVisible( false );
         userTable.removeAll( userTable );
         userTable.addAll( DatabaseInnovativeSolutions.getUsers());
-
 
     }
 
