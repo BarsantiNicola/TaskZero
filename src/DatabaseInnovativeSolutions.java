@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import beans.*;
 
-public class Task0Class {
+public class DatabaseInnovativeSolutions {
 
 	private static String connectionString;
 	private static Connection myConnection;

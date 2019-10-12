@@ -1,6 +1,6 @@
 package graphicInterface;
 
-import beans.Order;
+import beans.Orders;
 import beans.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,9 +15,9 @@ import javafx.scene.layout.AnchorPane;
 public class CustomerController extends InterfaceController{
 
     private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
-    private static ObservableList<Order> ordersTable = FXCollections.observableArrayList();
+    private static ObservableList<Orders> ordersTable = FXCollections.observableArrayList();
     private static TableView<Product> productsTableView;
-    private static TableView<Order> ordersTableView;
+    private static TableView<Orders> ordersTableView;
     private static AnchorPane productsSection;
     private static AnchorPane ordersSection;
     private static TextField searchInput;
