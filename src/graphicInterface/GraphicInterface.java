@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 public class GraphicInterface extends Application implements Initializable {
 
     private static Scene myApplication;
-    private static UserType userType = UserType.HEAD_DEPARTMENT;
+    private static UserType userType = UserType.CUSTOMER;
     private static InterfaceController myInterface;
 
     @Override

@@ -17,7 +17,7 @@ public class AdminController extends InterfaceController{
     //  THE FUNCION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
     AdminController( Scene app ){
 
-        String[] fields = { "name" , "surname" , "email" };  //  FIELDS OF TABLE EMPLOYEE
+        String[][] employeeFields = { { "Name" , "IDEmployee" } , { "Salary" ,"salary" } , { "Role" , "role" } , { "Team" ,"team" } };  //  FIELDS OF TABLE EMPLOYEE
         TableColumn column;
 
         searchInput = (TextField)app.lookup( "#ADMINSearch" );  //  TEXT INPUT FOR SEARCH INFORMATION
@@ -30,10 +30,10 @@ public class AdminController extends InterfaceController{
 
         employeeTableView.setItems( employeeTable );
 
-        for( int a = 0; a<fields.length; a++ ){
+        for( int a = 0; a<employeeFields.length; a++ ){
 
-            column = new TableColumn( fields[a] );
-            column.setCellValueFactory( new PropertyValueFactory<>( fields[a]) );
+            column = new TableColumn( employeeFields[a][0] );
+            column.setCellValueFactory( new PropertyValueFactory<>( employeeFields[a][1] ));
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
             employeeTableView.getColumns().add( column );

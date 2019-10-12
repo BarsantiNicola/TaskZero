@@ -25,8 +25,9 @@ public class CustomerController extends InterfaceController{
 
     CustomerController( Scene app ){
 
-        String[] fields = { "name" , "date" , "state" , "price" };
-        String[] fields2 = { "name" , "model" , "price" };
+
+        String[][] productFields = { { "Name" , "productName" } , { "Availability" , "productAvailability" } , {"Price" , "price"} , { "Description" , "productDescription" }};
+        String[][] orderFields = { { "Product" , "product" } , { "Model" , "model" } , { "Purchase Date" , "purchaseDate" } , { "State" , "status" }};
         TableColumn column;
 
         searchInput = (TextField)app.lookup( "#CUSTOMERSearch" );
@@ -49,20 +50,20 @@ public class CustomerController extends InterfaceController{
 
         currentSection = false;  //  set productTable for initial table showed
 
-        for( int a = 0; a<fields.length; a++ ){
+        for( int a = 0; a<orderFields.length; a++ ){
 
-            column = new TableColumn( fields[a] );
-            column.setCellValueFactory( new PropertyValueFactory<>( fields[a]) );
+            column = new TableColumn( orderFields[a][0] );
+            column.setCellValueFactory( new PropertyValueFactory<>( orderFields[a][1] ));
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
             ordersTableView.getColumns().add( column );
 
         }
 
-        for( int a = 0; a<fields2.length; a++ ){
+        for( int a = 0; a<productFields.length; a++ ){
 
-            column = new TableColumn( fields2[a] );
-            column.setCellValueFactory( new PropertyValueFactory<>( fields2[a]) );
+            column = new TableColumn( productFields[a][0] );
+            column.setCellValueFactory( new PropertyValueFactory<>( productFields[a][1] ));
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
             productsTableView.getColumns().add( column );

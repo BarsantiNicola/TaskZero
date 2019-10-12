@@ -1,7 +1,6 @@
 package graphicInterface;
 
 import beans.Component;
-import beans.Employee;
 import beans.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,8 +27,9 @@ public class HeadDepartmentController extends InterfaceController{
 
     HeadDepartmentController( Scene app ){
 
-        String[] fields = { "Team" , "#Members" , "Project" };
-        String[] fields2 = { "name" , "model" , "price" };
+        //  associations from the field of the table and the identificator of the bean class variable related
+        String[][] componentFields = { { "Name" , "componentName"} , { "Availability" , "componentAvailability" } , { "Description" , "componentDescription"} };
+        String[][] productFields = { { "Name" , "productName" } , { "Availability" , "productAvailability" } , {"Price" , "price"} , { "Description" , "productDescription" }};
         TableColumn column;
 
         searchInput = (TextField)app.lookup( "#DEP_HEADSearch" );
@@ -54,20 +54,20 @@ public class HeadDepartmentController extends InterfaceController{
 
         currentSection = false; //  set the table to  team products table
 
-        for( int a = 0; a<fields.length; a++ ){
+        for( int a = 0; a<componentFields.length; a++ ){
 
-            column = new TableColumn( fields[a] );
-            column.setCellValueFactory( new PropertyValueFactory<>( fields[a]) );
+            column = new TableColumn( componentFields[a][0] );
+            column.setCellValueFactory( new PropertyValueFactory<>( componentFields[a][1] ));
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
             componentsTableView.getColumns().add( column );
 
         }
 
-        for( int a = 0; a<fields2.length; a++ ){
+        for( int a = 0; a<productFields.length; a++ ){
 
-            column = new TableColumn( fields2[a] );
-            column.setCellValueFactory( new PropertyValueFactory<>( fields2[a]) );
+            column = new TableColumn( productFields[a][0] );
+            column.setCellValueFactory( new PropertyValueFactory<>( productFields[a][1] ));
             column.setMinWidth( 160 );
             column.setMaxWidth( 200 );
             productsTableView.getColumns().add( column );
