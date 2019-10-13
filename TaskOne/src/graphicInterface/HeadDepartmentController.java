@@ -111,7 +111,7 @@ public class HeadDepartmentController extends InterfaceController{
     };
 
     void changeTable( String table ){
-        
+
         if( table.compareTo( "Employees") == 0 ){
 
             if( currentSection == false ) return;

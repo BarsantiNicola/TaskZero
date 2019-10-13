@@ -14,13 +14,13 @@
       <children>
         <AnchorPane id="HeadPage" minWidth="617.0" prefHeight="400.0" prefWidth="617.0" visible="false">
           <children>
-            <TextField id="DEP_HEADSearch" layoutX="269.0" layoutY="67.0" prefWidth="187.0" text="" />
             <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="7.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
               <image>
                 <Image url="file:../../data/main_background.jpg" />
               </image>
             </ImageView>
-            <Button layoutX="409.0" layoutY="67.0" mnemonicParsing="false" onAction="#searchValue" text="Search" />
+            <TextField id="DEP_HEADSearch" focusTraversable="false" layoutX="250.0" layoutY="68.0" prefWidth="187.0" text="" />
+            <Button layoutX="409.0" layoutY="68.0" mnemonicParsing="false" onAction="#searchValue" text="Search" />
             <StackPane layoutX="85.0" layoutY="103.0" minWidth="485.0" prefHeight="233.0" prefWidth="485.0">
               <children>
                 <AnchorPane id="DEP_HEADComponents" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0" visible="false">
@@ -138,11 +138,23 @@
                 <Image url="file:../../data/undoSearchCross.png" />
               </image>
             </ImageView>
-            <ScrollPane layoutX="74.0" layoutY="91.0" maxWidth="-1.0" pannable="false" prefHeight="230.0" prefWidth="492.0">
+            <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="74.0" layoutY="91.0" maxWidth="-1.0" pannable="false" prefHeight="230.0" prefWidth="492.0">
               <content>
                 <AnchorPane id="ADMINUsersTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
               </content>
             </ScrollPane>
+            <HBox id="ADMINInsert" layoutX="32.0" layoutY="342.0" prefHeight="27.0" prefWidth="512.0">
+              <children>
+                <TextField prefHeight="27.0" prefWidth="99.0" promptText="Username" />
+                <TextField prefHeight="27.0" prefWidth="99.0" promptText="Name" />
+                <TextField prefHeight="27.0" prefWidth="99.0" promptText="Surname" />
+                <TextField prefHeight="27.0" prefWidth="99.0" promptText="Password" text="" />
+                <TextField prefHeight="27.0" prefWidth="99.0" promptText="Mail" text="" />
+              </children>
+            </HBox>
+            <Button layoutX="527.0" layoutY="344.0" mnemonicParsing="false" onAction="#insertValue" text="Insert" />
+            <Text id="ADMINFail" font="$x1" layoutX="471.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserimento Fallito" visible="false" />
+            <Text id="ADMINSuccess" font="$x1" layoutX="471.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserimento Riuscito" visible="false" />
           </children>
         </AnchorPane>
         <AnchorPane id="AccessPage" prefHeight="400.0" prefWidth="600.0" visible="true">
