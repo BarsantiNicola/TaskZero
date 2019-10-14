@@ -8,14 +8,14 @@ public class Component {
 	private final SimpleIntegerProperty IDcomponent;
 	private final SimpleStringProperty componentName;
 	private final SimpleStringProperty componentDescription;
-	private final SimpleBooleanProperty componentAvailability;
+	private final SimpleIntegerProperty componentAvailability;
 	
-	public Component( int id, String name, String description, boolean availability ) {
+	public Component( int id, String name, String description, int availability ) {
 		
 		IDcomponent = new SimpleIntegerProperty(id);
 		componentName = new SimpleStringProperty(name);
 		componentDescription = new SimpleStringProperty(description);
-		componentAvailability = new SimpleBooleanProperty(availability);
+		componentAvailability = new SimpleIntegerProperty(availability);
 	}
 	
 	public int getIDproduct() {
@@ -33,7 +33,7 @@ public class Component {
 		return componentDescription.get();
 	}
 	
-	public boolean getProductAvailability() {
+	public int getProductAvailability() {
 		
 		return componentAvailability.get();
 	}

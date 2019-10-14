@@ -1,7 +1,7 @@
 package DatabaseManagement;
 
 import beans.*;
-import com.mysql.cj.x.protobuf.MysqlxCrud;
+//import com.mysql.cj.x.protobuf.MysqlxCrud;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -41,7 +41,7 @@ public class DatabaseInnovativeSolutions {
 
 	static {
 
-		connectionString = "jdbc:mysql://localhost:3306/exercise1?user=root&password=root&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+		connectionString = "jdbc:mysql://localhost:3306/?user=root&password=root&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 		myConnection = null;
 
 		try {
@@ -57,7 +57,7 @@ public class DatabaseInnovativeSolutions {
 			getAvailableProductsStatement = myConnection.prepareStatement(
 					"SELECT IDproduct , productName, productPrice , productDescription , productAvailability "
 							+ " FROM product "
-							+ " WHERE productAvailability = 1 ");
+							+ " WHERE productAvailability > 0 ");
 
 			updateSalaryStatement = myConnection.prepareStatement(
 					"UPDATE employee"

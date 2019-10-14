@@ -9,15 +9,15 @@ public class Product {
 	private final SimpleStringProperty productName;
 	private final SimpleIntegerProperty price;
 	private final SimpleStringProperty productDescription;
-	private final SimpleBooleanProperty productAvailability;
+	private final SimpleIntegerProperty productAvailability;
 	
-	public Product( int id, String name, int cost, String description, boolean availability ) {
+	public Product( int id, String name, int cost, String description, int availability ) {
 		
 		IDproduct = new SimpleIntegerProperty(id);
 		productName = new SimpleStringProperty(name);
 		price = new SimpleIntegerProperty(cost);
 		productDescription = new SimpleStringProperty(description);
-		productAvailability = new SimpleBooleanProperty(availability);
+		productAvailability = new SimpleIntegerProperty(availability);
 	}
 	
 	public int getIDproduct() {
@@ -40,7 +40,7 @@ public class Product {
 		return productDescription.get();
 	}
 	
-	public boolean getProductAvailability() {
+	public int getProductAvailability() {
 		
 		return productAvailability.get();
 	}
