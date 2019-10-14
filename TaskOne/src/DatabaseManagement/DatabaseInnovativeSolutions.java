@@ -30,11 +30,9 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement isCustomerStatement;
 	private static PreparedStatement getManagedTeam;
 	private static PreparedStatement getUsers;
-	private static PreparedStatement getComponents;
 	private static PreparedStatement searchUsers;
 	private static PreparedStatement searchProducts;
 	private static PreparedStatement searchOrders;
-	private static PreparedStatement searchComponents;
 	private static PreparedStatement searchTeamEmployee;
 	private static PreparedStatement insertUser;
 
@@ -48,11 +46,11 @@ public class DatabaseInnovativeSolutions {
 			myConnection = DriverManager.getConnection(connectionString);
 
 			System.out.println("Database Connection Established");
-
+			
 			getOrderStatusStatement = myConnection.prepareStatement(
-					"SELECT product,purchaseDate,status "
-							+ " FROM orders"
-							+ " WHERE customer=?");
+					"SELECT product,purchaseDate,status"
+					+ " FROM orders"
+					+ " WHERE customer=?");
 
 			getAvailableProductsStatement = myConnection.prepareStatement(
 					"SELECT IDproduct , productName, productPrice , productDescription , productAvailability "
@@ -79,7 +77,7 @@ public class DatabaseInnovativeSolutions {
 							+ " WHERE team=?");
 
 			insertProductStatement = myConnection.prepareStatement(
-					"INSERT INTO product VALUES (?,?,?,?,1");
+					"INSERT INTO product VALUES (?,?,?,?,?");
 
 			updatePriceStatement = myConnection.prepareStatement(
 					"UPDATE product"
@@ -104,15 +102,11 @@ public class DatabaseInnovativeSolutions {
 							+ " FROM customer"
 							+ " WHERE IDcustomer=?"
 			);
+			
 			getManagedTeam = myConnection.prepareStatement(
 					"SELECT IDTeam "
 							+ " FROM Team"
 							+ " WHERE teamLeader=?"
-			);
-
-			getComponents = myConnection.prepareStatement(
-					"SELECT IDComponent , componentName , componentDescription , componentAvailability"
-							+ " FROM component"
 			);
 
 			getUsers = myConnection.prepareStatement(
@@ -141,13 +135,6 @@ public class DatabaseInnovativeSolutions {
 
 			);
 
-			searchComponents = myConnection.prepareStatement(
-					"SELECT IDcomponent , componentName , componentDescription , componentAvailability"
-							+ " FROM Component"
-							+ " WHERE componentName = value"
-
-			);
-
 			searchTeamEmployee = myConnection.prepareStatement(
 					"SELECT IDemployee,salary,role"
 							+ " FROM employee"
@@ -156,6 +143,7 @@ public class DatabaseInnovativeSolutions {
 			insertUser = myConnection.prepareStatement(
 					"INSERT INTO User VALUES ( ? , ? , ? , ? , ? )"
 			);
+			
 			System.out.println("Statements Created Correctly");
 
 		} catch (SQLException caughtException) {
@@ -164,27 +152,27 @@ public class DatabaseInnovativeSolutions {
 			System.out.println("VendorError: " + caughtException.getErrorCode());
 		}
 	}
-
-	public static List<Orders> getOrderStatus(String idCustomer) {
-
+	
+	public static List<Orders> getOrderStatus( int customer ){
+		
 		List<Orders> ordersList = new ArrayList<>();
 
 		try {
 
-			getOrderStatusStatement.setString(1, idCustomer);
 			getOrderStatusStatement.execute();
 
 			ResultSet orderStatusResult = getOrderStatusStatement.getResultSet();
 
 			while (orderStatusResult.next()) {
 
-				ordersList.add(new Orders(orderStatusResult.getInt("customer"),
+				ordersList.add(new Orders(customer,
 								orderStatusResult.getInt("product"),
 								orderStatusResult.getTimestamp("purchaseDate"),
 								orderStatusResult.getString("status")
 						)
 				);
 			}
+
 
 		} catch (SQLException caughtException) {
 			System.out.println("SQLException: " + caughtException.getMessage());
@@ -211,7 +199,7 @@ public class DatabaseInnovativeSolutions {
 								availableProductsResult.getString("productName"),
 								availableProductsResult.getInt("price"),
 								availableProductsResult.getString("productDescription"),
-								availableProductsResult.getBoolean("productAvailability")
+								availableProductsResult.getInt("productAvailability")
 						)
 				);
 			}
@@ -314,7 +302,7 @@ public class DatabaseInnovativeSolutions {
 		return employeeList;
 	}
 
-	public static int insertProduct(int id, String name, int cost, String description) {
+	public static int insertProduct(int id, String name, int cost, String description, int availability) {
 
 		int insertedRows = 0;
 
@@ -324,6 +312,7 @@ public class DatabaseInnovativeSolutions {
 			insertProductStatement.setString(2, name);
 			insertProductStatement.setString(3, Integer.toString(cost));
 			insertProductStatement.setString(4, description);
+			insertProductStatement.setInt(5, availability);
 
 			insertedRows = insertProductStatement.executeUpdate();
 
@@ -354,29 +343,6 @@ public class DatabaseInnovativeSolutions {
 		}
 
 		return updatedRows;
-	}
-
-	public static List<Component> getComponents() {
-
-		List<Component> list = new ArrayList<>();
-
-		try {
-
-			getComponents.execute();
-
-			ResultSet components = getComponents.getResultSet();
-
-			while (components.next())
-				list.add(new Component(components.getInt("IDcomponent"), components.getString("componentName"), components.getString("componentDescription"), components.getBoolean("componentAvailability")));
-
-		} catch (SQLException caughtException) {
-
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-
-		}
-		return list;
 	}
 
 	public static int getTeam(String name) {
@@ -467,7 +433,7 @@ public class DatabaseInnovativeSolutions {
 			searchProducts.execute();
 			ResultSet products = searchProducts.getResultSet();
 			while (products.next())
-				list.add(new Product(products.getInt("IDProduct"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getBoolean("productAvailability")));
+				list.add(new Product(products.getInt("IDProduct"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getInt("productAvailability")));
 		} catch (SQLException caughtException) {
 
 			System.out.println("SQLException: " + caughtException.getMessage());
@@ -494,31 +460,6 @@ public class DatabaseInnovativeSolutions {
 			ResultSet orders = searchOrders.getResultSet();
 			while (orders.next())
 				list.add(new Orders(orders.getInt("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getString("status")));
-
-		} catch (SQLException caughtException) {
-
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-
-		}
-
-		return list;
-
-	}
-
-	public static List<Component> searchComponent(String value) {
-
-		List<Component> list = new ArrayList<>();
-
-		try {
-
-			searchComponents.setString(1, value);
-
-			searchComponents.execute();
-			ResultSet components = searchComponents.getResultSet();
-			while (components.next())
-				list.add(new Component(components.getInt("IDcomponent"), components.getString("componentName"), components.getString("componentDescription"), components.getBoolean("componentAvailability")));
 
 		} catch (SQLException caughtException) {
 
