@@ -17,14 +17,19 @@ public class DatabaseInnovativeSolutions {
 
 	private static String connectionString;
 	private static Connection myConnection;
-	private static PreparedStatement getOrderStatusStatement;
-	private static PreparedStatement getAvailableProductsStatement;
-	private static PreparedStatement updateSalaryStatement;
-	private static PreparedStatement updateTeamLeaderStatement;
+	
+	//these statements are the ones related to the operations
+	private static PreparedStatement addUserStatement;
 	private static PreparedStatement deleteUserStatement;
+	private static PreparedStatement updateSalaryStatement;
+	private static PreparedStatement getTeamProductsStatement;
 	private static PreparedStatement getTeamEmployeeStatement;
 	private static PreparedStatement insertProductStatement;
-	private static PreparedStatement updatePriceStatement;
+	private static PreparedStatement getAvailableProductsStatement;
+	private static PreparedStatement insertOrderStatement;
+	private static PreparedStatement getOrderStatusStatement;
+	
+	
 	private static PreparedStatement loginStatement;
 	private static PreparedStatement isEmployeeStatement;
 	private static PreparedStatement isCustomerStatement;
@@ -47,43 +52,47 @@ public class DatabaseInnovativeSolutions {
 
 			System.out.println("Database Connection Established");
 			
-			getOrderStatusStatement = myConnection.prepareStatement(
-					"SELECT product,purchaseDate,status"
-					+ " FROM orders"
-					+ " WHERE customer=?");
-
-			getAvailableProductsStatement = myConnection.prepareStatement(
-					"SELECT IDproduct , productName, productPrice , productDescription , productAvailability "
-							+ " FROM product "
-							+ " WHERE productAvailability > 0 ");
-
+			//OPERATIONS STATEMENTS
+			
+			addUserStatement = myConnection.prepareStatement(
+					"INSERT INTO user");"
+					
+			deleteUserStatement = myConnection.prepareStatement(
+					"DELETE FROM user"
+							+ " WHERE nickname=?");
+			
 			updateSalaryStatement = myConnection.prepareStatement(
 					"UPDATE employee"
 							+ " SET salary=?"
 							+ " WHERE id=?");
-
-			updateTeamLeaderStatement = myConnection.prepareStatement(
-					"UPDATE team"
-							+ " SET IDleader=?"
-							+ " WHERE IDteam=?");
-
-			deleteUserStatement = myConnection.prepareStatement(
-					"DELETE FROM user"
-							+ " WHERE nickname=?");
-
+			
+			getTeamProductsStatement = myConnection.prepareStatement(
+					" SELECT P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability"
+				 +  " FROM product P INNER JOIN assembles A ON P.productName = A.product"
+				 +  " WHERE team=?");
+			
 			getTeamEmployeeStatement = myConnection.prepareStatement(
 					"SELECT IDemployee,salary,role"
 							+ " FROM employee"
 							+ " WHERE team=?");
-
+			
 			insertProductStatement = myConnection.prepareStatement(
-					"INSERT INTO product VALUES (?,?,?,?,?");
-
-			updatePriceStatement = myConnection.prepareStatement(
-					"UPDATE product"
-							+ " SET price=?"
-							+ " WHERE IDproduct=?"
-			);
+					"INSERT INTO product VALUES (?,?,?,?,0");
+			
+			getAvailableProductsStatement = myConnection.prepareStatement(
+					"SELECT IDproduct , productName, productPrice , productDescription , productAvailability "
+							+ " FROM product "
+							+ " WHERE productAvailability > 0 ");
+			
+			insertOrderStatement = myConnection.prepareStatement(
+					"INSERT INTO orders VALUES (?,?,?,?,?");
+			
+			getOrderStatusStatement = myConnection.prepareStatement(
+					"SELECT product,purchaseDate,status"
+					+ " FROM orders"
+					+ " WHERE customer=?");
+			
+			//OTHER STATEMENTS
 
 			loginStatement = myConnection.prepareStatement(
 					"SELECT COUNT(*) AS numberOfUsers"
@@ -153,6 +162,183 @@ public class DatabaseInnovativeSolutions {
 		}
 	}
 	
+	//OPERATIONS
+	
+	public static int insertUser() {
+		
+	}
+	
+	public static int deleteUser(String username) {
+
+		int deletedRows = 0;
+
+		try {
+
+			deleteUserStatement.setString(1, username);
+
+			deletedRows = deleteUserStatement.executeUpdate();
+
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+
+		return deletedRows;
+	}
+	
+	public static int updateSalary(int salary, int employee) {
+
+		int updatedRows = 0;
+
+		try {
+
+			updateSalaryStatement.setString(1, Integer.toString(salary));
+			updateSalaryStatement.setString(2, Integer.toString(employee));
+
+			updatedRows = updateSalaryStatement.executeUpdate();
+
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+
+		return updatedRows;
+	}
+	
+	public static List<Product> getTeamProducts( int team ){
+		
+		List<Product> teamProductList = new ArrayList<>();
+		
+		try {
+			getTeamProductsStatement.setInt(1, team);
+		
+			getTeamProductsStatement.execute();
+
+			ResultSet getTeamProductsResult = getTeamEmployeeStatement.getResultSet();
+
+			while (getTeamProductsResult.next()) {
+
+				teamProductList.add(new Product(getTeamProductsResult.getInt("productType"),
+						getTeamProductsResult.getString("productName"),
+						getTeamProductsResult.getInt("productPrice"),
+						getTeamProductsResult.getString("productDescription"),
+						getTeamProductsResult.getInt("productAvailability")
+						)
+				);
+			}
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+		
+		return teamProductList;
+	}
+	
+	public static List<Employee> getTeamEmployees(int team) {
+
+		List<Employee> employeeList = new ArrayList<>();
+
+		try {
+			getTeamEmployeeStatement.setInt(1, team);
+			System.out.println("employee");
+			getTeamEmployeeStatement.execute();
+
+			ResultSet teamEmployeeResult = getTeamEmployeeStatement.getResultSet();
+
+			while (teamEmployeeResult.next()) {
+
+				employeeList.add(new Employee(teamEmployeeResult.getString("IDemployee"),
+								teamEmployeeResult.getInt("salary"),
+								teamEmployeeResult.getString("role"),
+								teamEmployeeResult.getInt("team")
+						)
+				);
+			}
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+
+		return employeeList;
+	}
+	
+	public static int insertProduct(int id, String name, int cost, String description ) {
+
+		int insertedRows = 0;
+
+		try {
+
+			insertProductStatement.setString(1, Integer.toString(id));
+			insertProductStatement.setString(2, name);
+			insertProductStatement.setString(3, Integer.toString(cost));
+			insertProductStatement.setString(4, description);
+
+			insertedRows = insertProductStatement.executeUpdate();
+
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+
+		return insertedRows;
+	}
+	
+	public static List<Product> getAvailableProducts() {
+
+		List<Product> productList = new ArrayList<>();
+
+		try {
+
+			getAvailableProductsStatement.execute();
+
+			ResultSet availableProductsResult = getAvailableProductsStatement.getResultSet();
+
+			while (availableProductsResult.next()) {
+
+				productList.add(new Product(availableProductsResult.getInt("IDproduct"),
+								availableProductsResult.getString("productName"),
+								availableProductsResult.getInt("price"),
+								availableProductsResult.getString("productDescription"),
+								availableProductsResult.getInt("productAvailability")
+						)
+				);
+			}
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+
+		return productList;
+	}
+	
+	public static int insertOrder( String customer, int product, int price) {
+		
+		int insertedRows = 0;
+
+		try {
+
+			insertOrderStatement.setString(1, customer);
+			insertOrderStatement.setString(2, Integer.toString(product));
+			insertOrderStatement.setString(3, Integer.toString(price));
+			insertOrderStatement.setString(4, "IN LAVORAZIONE");
+
+			insertedRows = insertOrderStatement.executeUpdate();
+
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+
+		return insertedRows;
+	}
+	
 	public static List<Orders> getOrderStatus( int customer ){
 		
 		List<Orders> ordersList = new ArrayList<>();
@@ -183,168 +369,8 @@ public class DatabaseInnovativeSolutions {
 		return ordersList;
 	}
 
-	public static List<Product> getAvailableProducts() {
-
-		List<Product> productList = new ArrayList<>();
-
-		try {
-
-			getAvailableProductsStatement.execute();
-
-			ResultSet availableProductsResult = getAvailableProductsStatement.getResultSet();
-
-			while (availableProductsResult.next()) {
-
-				productList.add(new Product(availableProductsResult.getInt("IDproduct"),
-								availableProductsResult.getString("productName"),
-								availableProductsResult.getInt("price"),
-								availableProductsResult.getString("productDescription"),
-								availableProductsResult.getInt("productAvailability")
-						)
-				);
-			}
-
-
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return productList;
-	}
-
-	public static int updateSalary(int salary, int employee) {
-
-		int updatedRows = 0;
-
-		try {
-
-			updateSalaryStatement.setString(1, Integer.toString(salary));
-			updateSalaryStatement.setString(2, Integer.toString(employee));
-
-			updatedRows = updateSalaryStatement.executeUpdate();
-
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return updatedRows;
-	}
-
-	public static int updateTeamLeader(int leader, int team) {
-
-		int updatedRows = 0;
-
-		try {
-
-			updateTeamLeaderStatement.setString(1, Integer.toString(leader));
-			updateTeamLeaderStatement.setString(2, Integer.toString(team));
-
-			updatedRows = updateTeamLeaderStatement.executeUpdate();
-
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return updatedRows;
-	}
-
-	public static int deleteUser(String username) {
-
-		int deletedRows = 0;
-
-		try {
-
-			deleteUserStatement.setString(1, username);
-
-			deletedRows = deleteUserStatement.executeUpdate();
-
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return deletedRows;
-	}
-
-	public static List<Employee> getTeamEmployees(int team) {
-
-		List<Employee> employeeList = new ArrayList<>();
-
-		try {
-			getTeamEmployeeStatement.setInt(1, team);
-			System.out.println("employee");
-			getTeamEmployeeStatement.execute();
-
-			ResultSet teamEmployeeResult = getTeamEmployeeStatement.getResultSet();
-
-			while (teamEmployeeResult.next()) {
-
-				employeeList.add(new Employee(teamEmployeeResult.getString("IDemployee"),
-								teamEmployeeResult.getInt("salary"),
-								teamEmployeeResult.getString("role"),
-								teamEmployeeResult.getInt("team")
-						)
-				);
-			}
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return employeeList;
-	}
-
-	public static int insertProduct(int id, String name, int cost, String description, int availability) {
-
-		int insertedRows = 0;
-
-		try {
-
-			insertProductStatement.setString(1, Integer.toString(id));
-			insertProductStatement.setString(2, name);
-			insertProductStatement.setString(3, Integer.toString(cost));
-			insertProductStatement.setString(4, description);
-			insertProductStatement.setInt(5, availability);
-
-			insertedRows = insertProductStatement.executeUpdate();
-
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return insertedRows;
-	}
-
-	public static int updatePrice(int cost, int product) {
-
-		int updatedRows = 0;
-
-		try {
-
-			updatePriceStatement.setString(1, Integer.toString(cost));
-			updatePriceStatement.setString(2, Integer.toString(product));
-
-			updatedRows = updatePriceStatement.executeUpdate();
-
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return updatedRows;
-	}
-
+	//UTILITY FUNCTIONS
+	
 	public static int getTeam(String name) {
 
 		try {
@@ -420,6 +446,7 @@ public class DatabaseInnovativeSolutions {
 		return list;
 	}
 
+	//questa c'è già sopra
 	public static List<Product> searchProducts(String value) {
 
 		List<Product> list = new ArrayList<>();
@@ -446,6 +473,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
+	//questa c'è già sopra
 	public static List<Orders> searchOrders(String value, String customerID) {
 
 		List<Orders> list = new ArrayList<>();
@@ -473,6 +501,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
+	//questa c'è già sopra
 	public static List<Employee> searchTeamEmployees(String value, int team) {
 
 		List<Employee> list = new ArrayList<>();

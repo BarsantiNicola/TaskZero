@@ -5,7 +5,7 @@ import javafx.beans.property.*;
 
 public class Product {
 	
-	private final SimpleIntegerProperty IDproduct;
+	private final SimpleIntegerProperty productType;
 	private final SimpleStringProperty productName;
 	private final SimpleIntegerProperty price;
 	private final SimpleStringProperty productDescription;
@@ -13,7 +13,7 @@ public class Product {
 	
 	public Product( int id, String name, int cost, String description, int availability ) {
 		
-		IDproduct = new SimpleIntegerProperty(id);
+		productType = new SimpleIntegerProperty(id);
 		productName = new SimpleStringProperty(name);
 		price = new SimpleIntegerProperty(cost);
 		productDescription = new SimpleStringProperty(description);
@@ -22,7 +22,7 @@ public class Product {
 	
 	public int getIDproduct() {
 		
-		return IDproduct.get();
+		return productType.get();
 	}
 	
 	public String getProductName() {
