@@ -6,20 +6,22 @@ import javafx.beans.property.*;
 
 public class Orders {
 
-	private final SimpleIntegerProperty customer;
+	private final SimpleStringProperty customer;
 	private final SimpleIntegerProperty product;
 	private final SimpleObjectProperty<Timestamp> purchaseDate;
+	private final SimpleIntegerProperty price;
 	private final SimpleStringProperty status;
 	
-	public Orders( int idcustomer, int idproduct, Timestamp date, String state ) {
+	public Orders( String idcustomer, int idproduct, Timestamp date, int cost , String state ) {
 		
-		customer = new SimpleIntegerProperty(idcustomer);
+		customer = new SimpleStringProperty(idcustomer);
+		price = new SimpleIntegerProperty( cost );
 		product = new SimpleIntegerProperty(idproduct);
 		purchaseDate = new SimpleObjectProperty(date);
 		status = new SimpleStringProperty(state);
 	}
 	
-	public int getCustomer() {
+	public String getCustomer() {
 		
 		return customer.get();
 	}

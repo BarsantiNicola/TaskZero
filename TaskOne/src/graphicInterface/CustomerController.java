@@ -30,7 +30,7 @@ public class CustomerController extends InterfaceController{
     CustomerController( Scene app , String cId ){
 
 
-        String[][] productFields = { { "Name" , "productName" } , { "Availability" , "productAvailability" } , {"Price" , "price"} , { "Description" , "productDescription" }};
+        String[][] productFields = { { "Name" , "productName" } , { "Availability" , "productAvailability" } , {"Price" , "productPrice"} , { "Description" , "productDescription" }};
         String[][] orderFields = { { "Product" , "product" } , { "Model" , "model" } , { "Purchase Date" , "purchaseDate" } , { "State" , "status" }};
         TableColumn column;
 

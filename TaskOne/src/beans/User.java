@@ -3,21 +3,28 @@ package beans;
 
 import javafx.beans.property.*;
 
+//  bean class used by administrator interface to show user indipendently by the role
 public class User {
 	
-	private final SimpleStringProperty username;
+	private final SimpleStringProperty username;   //  ID for searching
 	private final SimpleStringProperty name;
 	private final SimpleStringProperty surname;
 	private final SimpleStringProperty password;
 	private final SimpleStringProperty mail;
-	
-	public User( String Username, String Name, String Surname, String Password, String Mail ) {
+	private final SimpleStringProperty role;       //  CUSTOMER/ADMINISTRATOR/HEAD DEPARTMENT
+	private final SimpleIntegerProperty salary;     //  may be miss(ex. a CUSTOMER)
+	private final SimpleIntegerProperty team;       //  may be miss
+
+	public User( String Username, String Name, String Surname, String Password, String Mail , String Role , int Salary , int Team ) {
 		
 		username = new SimpleStringProperty(Username);
 		name = new SimpleStringProperty(Name);
 		surname = new SimpleStringProperty(Surname);
 		password = new SimpleStringProperty(Password);
 		mail = new SimpleStringProperty(Mail);
+		role = new SimpleStringProperty(Role);
+		salary = new SimpleIntegerProperty(Salary);
+		team = new SimpleIntegerProperty(Team);
 
 	}
 	
@@ -46,28 +53,19 @@ public class User {
 		return mail.get();
 	}
 
-	public void setUsername( String u ) {
+	public String getRole() {
 
-		username.set(u);
+		return role.get();
 	}
 
-	public void setName( String n ) {
+	public int getSalary() {
 
-		name.set(n);
+		return salary.get();
 	}
 
-	public void setSurname( String s ) {
+	public int getTeam() {
 
-		surname.set(s);
+		return team.get();
 	}
 
-	public void SetPassword( String p ) {
-
-		password.set(p);
-	}
-
-	public void setMail( String m ) {
-
-		mail.set(m);
-	}
 }

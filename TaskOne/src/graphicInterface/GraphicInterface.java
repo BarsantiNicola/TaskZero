@@ -7,18 +7,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import java.util.ResourceBundle;
 
 
@@ -28,6 +22,7 @@ public class GraphicInterface extends Application implements Initializable {
     private static Scene myApplication;
     private static UserType userType = UserType.CUSTOMER;
     private static InterfaceController myInterface;
+    private static AnchorPane insertPopup;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -35,44 +30,85 @@ public class GraphicInterface extends Application implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("interface.fxml"));
 
         new DatabaseInnovativeSolutions();
+
         primaryStage.setTitle("Innovation Solutions");
         myApplication = new Scene( root , 590 , 390 );
         primaryStage.setScene( myApplication );
         primaryStage.setResizable( false );
 
-
+        insertPopup = (AnchorPane)myApplication.lookup( "#insertPopUp" );
         primaryStage.show();
 
     }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
     }
 
+    @FXML
+    private void insertPopup( ActionEvent event ){
+        if( myInterface instanceof AdminController )
+            ((AdminController)myInterface).showInsertPopup();
+    }
+
+    @FXML
+    private void insertUser( ActionEvent event ){
+        if( myInterface instanceof AdminController )
+            ((AdminController)myInterface).insertUser();
+    }
+
+
+    @FXML
+    private void closePopup( ActionEvent event ){
+
+        if( myInterface instanceof AdminController )
+            ((AdminController)myInterface).closePopups();
+
+    }
+
+    @FXML
+    private void updatePopup( ActionEvent event ){
+
+        if( myInterface instanceof AdminController )
+            ((AdminController)myInterface).showUpdatePopup();
+    }
+
+    @FXML
+    private void updateUser( ActionEvent event ){
+
+        if( myInterface instanceof AdminController )
+            ((AdminController)myInterface).updateUser();
+
+    }
+
+    @FXML
+    private void deletePopup( ActionEvent event ){
+
+        if( myInterface instanceof AdminController )
+            ((AdminController)myInterface).showDeletePopup();
+
+    }
+
+    @FXML
+    private void deleteUser( ActionEvent event ){
+
+        if( myInterface instanceof AdminController )
+            ((AdminController)myInterface).deleteUser();
+
+    }
 
     @FXML
     private void accessRequest( ActionEvent event ){
 
         String name = ((TextField)myApplication.lookup( "#FormName" )).getCharacters().toString();
         String password = ((PasswordField)myApplication.lookup(( "#FormPassword" ))).getText();
-        MessageDigest md = null;
 
-        try {
-
-            md = MessageDigest.getInstance( "SHA-1" );
-
-        }catch( NoSuchAlgorithmException e ) {
-
-            System.out.println("An error has occured while trying to encrypt data" + e.getMessage());
-            System.exit(1 );
-
-        }
-
-        password = new String( md.digest(password.getBytes() ));
         userType = DatabaseInnovativeSolutions.login( name , password );
         myApplication.lookup("#AlertMessage" ).setVisible( false );
-        userType = UserType.ADMINISTRATOR;
+
 
         switch( userType ) {
             case CUSTOMER:
@@ -143,7 +179,7 @@ public class GraphicInterface extends Application implements Initializable {
     private void insertValue( ActionEvent event ){
 
         if( myInterface instanceof  AdminController ) {
-            ((AdminController) myInterface).insertValue();
+            ((AdminController) myInterface).insertUser();
             return;
         }
 

@@ -82,7 +82,7 @@ public class HeadDepartmentController extends InterfaceController{
 
         }
 
-        componentsTable.addAll(DatabaseInnovativeSolutions.getComponents());
+        //componentsTable.addAll(DatabaseInnovativeSolutions.getComponents());
         employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees( managedTeam));
 
         ((AnchorPane)app.lookup( "#DEP_HEADComponentsTable" )).getChildren().add( componentsTableView );
@@ -104,7 +104,7 @@ public class HeadDepartmentController extends InterfaceController{
         }else{
 
             componentsTable.removeAll(componentsTable);
-            componentsTable.addAll( DatabaseInnovativeSolutions.searchComponent( value ));
+          //  componentsTable.addAll( DatabaseInnovativeSolutions.searchComponent( value ));
             undoButton.setVisible( true );
 
         }
@@ -121,7 +121,7 @@ public class HeadDepartmentController extends InterfaceController{
 
             if( undoButton.isVisible()){
                 componentsTable.removeAll( employeesTable );
-                componentsTable.addAll( DatabaseInnovativeSolutions.getComponents());
+               // componentsTable.addAll( DatabaseInnovativeSolutions.getComponents());
             }
 
             employeesSection.setVisible( true );
@@ -149,7 +149,7 @@ public class HeadDepartmentController extends InterfaceController{
         undoButton.setVisible( false );
         if( currentSection == true ) {
             componentsTable.removeAll(componentsTable);
-            componentsTable.addAll(DatabaseInnovativeSolutions.getComponents());
+          //  componentsTable.addAll(DatabaseInnovativeSolutions.getComponents());
         }else{
             employeesTable.removeAll(employeesTable);
             employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees(managedTeam));

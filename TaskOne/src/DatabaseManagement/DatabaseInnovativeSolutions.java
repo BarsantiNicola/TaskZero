@@ -40,11 +40,12 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement searchOrders;
 	private static PreparedStatement searchTeamEmployee;
 	private static PreparedStatement insertUser;
+	private static PreparedStatement insertEmployee;
 
 
 	static {
 
-		connectionString = "jdbc:mysql://localhost:3306/?user=root&password=root&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+		connectionString = "jdbc:mysql://localhost:3306/exercise1?user=root&password=root&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 		myConnection = null;
 
 		try {
@@ -55,16 +56,18 @@ public class DatabaseInnovativeSolutions {
 			//OPERATIONS STATEMENTS
 			
 			addUserStatement = myConnection.prepareStatement(
-					"INSERT INTO user");"
+					"INSERT INTO user values ( ? , ? , ? , ? )");
 					
 			deleteUserStatement = myConnection.prepareStatement(
-					"DELETE FROM user"
-							+ " WHERE nickname=?");
+					"START TRANSACTION; DELETE FROM `user`"
+							+ " WHERE username = ?;"
+							+ " DELETE FROM `Employee`"
+							+ " WHERE IDemployee = ?; COMMIT");
 			
 			updateSalaryStatement = myConnection.prepareStatement(
 					"UPDATE employee"
 							+ " SET salary=?"
-							+ " WHERE id=?");
+							+ " WHERE IDemployee=?");
 			
 			getTeamProductsStatement = myConnection.prepareStatement(
 					" SELECT P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability"
@@ -80,7 +83,7 @@ public class DatabaseInnovativeSolutions {
 					"INSERT INTO product VALUES (?,?,?,?,0");
 			
 			getAvailableProductsStatement = myConnection.prepareStatement(
-					"SELECT IDproduct , productName, productPrice , productDescription , productAvailability "
+					"SELECT productType , productName, productPrice , productDescription , productAvailability "
 							+ " FROM product "
 							+ " WHERE productAvailability > 0 ");
 			
@@ -119,39 +122,43 @@ public class DatabaseInnovativeSolutions {
 			);
 
 			getUsers = myConnection.prepareStatement(
-					"SELECT username , name, surname, password , mail"
-							+ " FROM User"
+					"SELECT username, name, surname, password, mail , salary , role, team"
+						+ " FROM user LEFT JOIN employee"
+						+ " ON user.username = employee.IDemployee"
 			);
 
 			searchUsers = myConnection.prepareStatement(
 
-					"SELECT username, name, surname , password , mail"
-							+ " FROM User"
+					"SELECT username, name, surname, password, mail , salary , role, team"
+							+ " FROM user LEFT JOIN employee"
+							+ " ON user.username = employee.IDemployee"
 							+ " WHERE username = ? OR name = ? OR surname = ? OR mail = ?"
+							+ " OR role = ?"
 			);
 
 			searchProducts = myConnection.prepareStatement(
-					"SELECT IDProduct , productName , price , productDescription , productAvailability"
+					"SELECT productType , productName , price , productDescription , productAvailability"
 							+ " FROM Product"
 							+ " WHERE IDProduct = ? OR productName = ? OR price = ? "
 
 			);
 
 			searchOrders = myConnection.prepareStatement(
-					"SELECT IDProduct , productName , price , productDescription , productAvailability"
+					"SELECT productType , productName , price , productDescription , productAvailability"
 							+ " FROM Order"
 							+ " WHERE customer = ? AND (product = ?  OR status = ?)"
 
 			);
 
 			searchTeamEmployee = myConnection.prepareStatement(
-					"SELECT IDemployee,salary,role"
+					"SELECT IDemployee,salary,role , admin "
 							+ " FROM employee"
 							+ " WHERE team=? AND ( salary = ? OR role = ?)");
 
 			insertUser = myConnection.prepareStatement(
-					"INSERT INTO User VALUES ( ? , ? , ? , ? , ? )"
+					"START TRANSACTION; INSERT INTO `User`( username , name , surname , password , mail ) VALUE ( ? , ? , ? , ? , ? ); INSERT INTO `Employee`( IDemployee , salary , role, team ) VALUE ( ? , ? , ? , ? ); COMMIT;"
 			);
+
 			
 			System.out.println("Statements Created Correctly");
 
@@ -164,9 +171,7 @@ public class DatabaseInnovativeSolutions {
 	
 	//OPERATIONS
 	
-	public static int insertUser() {
-		
-	}
+
 	
 	public static int deleteUser(String username) {
 
@@ -174,7 +179,8 @@ public class DatabaseInnovativeSolutions {
 
 		try {
 
-			deleteUserStatement.setString(1, username);
+			deleteUserStatement.setString(1, username );
+			deleteUserStatement.setString( 2, username );
 
 			deletedRows = deleteUserStatement.executeUpdate();
 
@@ -187,24 +193,20 @@ public class DatabaseInnovativeSolutions {
 		return deletedRows;
 	}
 	
-	public static int updateSalary(int salary, int employee) {
-
-		int updatedRows = 0;
+	public static void updateSalary(int salary, String employee) {
 
 		try {
 
-			updateSalaryStatement.setString(1, Integer.toString(salary));
-			updateSalaryStatement.setString(2, Integer.toString(employee));
+			updateSalaryStatement.setInt(1, salary );
+			updateSalaryStatement.setString(2, employee);
 
-			updatedRows = updateSalaryStatement.executeUpdate();
+			 updateSalaryStatement.executeUpdate();
 
 		} catch (SQLException caughtException) {
 			System.out.println("SQLException: " + caughtException.getMessage());
 			System.out.println("SQLState: " + caughtException.getSQLState());
 			System.out.println("VendorError: " + caughtException.getErrorCode());
 		}
-
-		return updatedRows;
 	}
 	
 	public static List<Product> getTeamProducts( int team ){
@@ -300,9 +302,9 @@ public class DatabaseInnovativeSolutions {
 
 			while (availableProductsResult.next()) {
 
-				productList.add(new Product(availableProductsResult.getInt("IDproduct"),
+				productList.add(new Product(availableProductsResult.getInt("productType"),
 								availableProductsResult.getString("productName"),
-								availableProductsResult.getInt("price"),
+								availableProductsResult.getInt("productPrice"),
 								availableProductsResult.getString("productDescription"),
 								availableProductsResult.getInt("productAvailability")
 						)
@@ -339,7 +341,7 @@ public class DatabaseInnovativeSolutions {
 		return insertedRows;
 	}
 	
-	public static List<Orders> getOrderStatus( int customer ){
+	public static List<Orders> getOrderStatus( String IDcustomer ){
 		
 		List<Orders> ordersList = new ArrayList<>();
 
@@ -349,11 +351,12 @@ public class DatabaseInnovativeSolutions {
 
 			ResultSet orderStatusResult = getOrderStatusStatement.getResultSet();
 
-			while (orderStatusResult.next()) {
+			while ( orderStatusResult.next() ) {
 
-				ordersList.add(new Orders(customer,
+				ordersList.add(new Orders(IDcustomer,
 								orderStatusResult.getInt("product"),
 								orderStatusResult.getTimestamp("purchaseDate"),
+								orderStatusResult.getInt( "price" ),
 								orderStatusResult.getString("status")
 						)
 				);
@@ -404,7 +407,7 @@ public class DatabaseInnovativeSolutions {
 			ResultSet users = getUsers.getResultSet();
 
 			while (users.next())
-				list.add(new User(users.getString("username"), users.getString("name"), users.getString("surname"), users.getString("password"), users.getString("mail")));
+				list.add(new User(users.getString("username"), users.getString("name"), users.getString("surname"), users.getString("password"), users.getString("mail") , users.getString( "role") , users.getInt( "salary") , users.getInt( "Team")));
 
 		} catch (SQLException caughtException) {
 
@@ -428,12 +431,13 @@ public class DatabaseInnovativeSolutions {
 			searchUsers.setString(2, value);
 			searchUsers.setString(3, value);
 			searchUsers.setString(4, value);
+			searchUsers.setString(5, value);
 
 			searchUsers.execute();
 			ResultSet users = searchUsers.getResultSet();
 
 			while (users.next())
-				list.add(new User(users.getString("username"), users.getString("name"), users.getString("surname"), users.getString("password"), users.getString("mail")));
+				list.add(new User(users.getString("username"), users.getString("name"), users.getString("surname"), users.getString("password"), users.getString("mail") , users.getString( "role") , users.getInt("salary") , users.getInt("Team")));
 
 		} catch (SQLException caughtException) {
 
@@ -446,7 +450,7 @@ public class DatabaseInnovativeSolutions {
 		return list;
 	}
 
-	//questa c'è già sopra
+	//questa c'ï¿½ giï¿½ sopra
 	public static List<Product> searchProducts(String value) {
 
 		List<Product> list = new ArrayList<>();
@@ -473,7 +477,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
-	//questa c'è già sopra
+	//questa c'ï¿½ giï¿½ sopra
 	public static List<Orders> searchOrders(String value, String customerID) {
 
 		List<Orders> list = new ArrayList<>();
@@ -487,7 +491,7 @@ public class DatabaseInnovativeSolutions {
 			searchOrders.execute();
 			ResultSet orders = searchOrders.getResultSet();
 			while (orders.next())
-				list.add(new Orders(orders.getInt("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getString("status")));
+				list.add(new Orders(orders.getString("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getInt( "price" ) , orders.getString("status")));
 
 		} catch (SQLException caughtException) {
 
@@ -501,7 +505,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
-	//questa c'è già sopra
+	//questa c'ï¿½ giï¿½ sopra
 	public static List<Employee> searchTeamEmployees(String value, int team) {
 
 		List<Employee> list = new ArrayList<>();
@@ -580,15 +584,19 @@ public class DatabaseInnovativeSolutions {
 	}
 
 
-	public static boolean insertUser(HashMap<String, String> values) {
+	public static boolean insertUser( User newUser) {
 
 		try {
 
-			insertUser.setString(1, values.get("Username"));
-			insertUser.setString(2, values.get("Name"));
-			insertUser.setString(3, values.get("Surname"));
-			insertUser.setString(4, values.get("Password"));
-			insertUser.setString(5, values.get("Mail"));
+			insertUser.setString(1, newUser.getUsername());
+			insertUser.setString(2, newUser.getName());
+			insertUser.setString(3, newUser.getSurname());
+			insertUser.setString(4, newUser.getPassword());
+			insertUser.setString(5, newUser.getMail());
+			insertUser.setString(6, newUser.getUsername());
+			insertUser.setInt(7, newUser.getSalary());
+			insertUser.setString(8, newUser.getRole());
+			insertUser.setInt(9, newUser.getTeam());
 
 			insertUser.execute();
 			return true;

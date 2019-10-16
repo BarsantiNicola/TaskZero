@@ -7,7 +7,7 @@ public class Product {
 	
 	private final SimpleIntegerProperty productType;
 	private final SimpleStringProperty productName;
-	private final SimpleIntegerProperty price;
+	private final SimpleIntegerProperty productPrice;
 	private final SimpleStringProperty productDescription;
 	private final SimpleIntegerProperty productAvailability;
 	
@@ -15,12 +15,12 @@ public class Product {
 		
 		productType = new SimpleIntegerProperty(id);
 		productName = new SimpleStringProperty(name);
-		price = new SimpleIntegerProperty(cost);
+		productPrice = new SimpleIntegerProperty(cost);
 		productDescription = new SimpleStringProperty(description);
 		productAvailability = new SimpleIntegerProperty(availability);
 	}
 	
-	public int getIDproduct() {
+	public int getProductType() {
 		
 		return productType.get();
 	}
@@ -30,9 +30,9 @@ public class Product {
 		return productName.get();
 	}
 	
-	public int getPrice() {
+	public int getProductPrice() {
 		
-		return price.get();
+		return productPrice.get();
 	}
 	
 	public String getProductDescription() {
