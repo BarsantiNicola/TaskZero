@@ -81,12 +81,15 @@ public class DatabaseInnovativeSolutions {
 				 +  " WHERE team=?");
 			
 			getTeamEmployeeStatement = myConnection.prepareStatement(
-					"SELECT IDemployee,salary,role"
-							+ " FROM employee"
-							+ " WHERE team=?");
+					"select IDemployee , name , surname , mail , role" +
+							" from user" +
+							" join employee" +
+							" on user.username = IDemployee\n" +
+							" where team = ?;");
 			
 			insertProductStatement = myConnection.prepareStatement(
-					"INSERT INTO product VALUES (?,?,?,?,0");
+					"INSERT INTO product VALUES (?,?,?,?,?);"
+			);
 			
 			getAvailableProductsStatement = myConnection.prepareStatement(
 					"SELECT productType , productName, productPrice , productDescription , productAvailability "
@@ -150,9 +153,9 @@ public class DatabaseInnovativeSolutions {
 			);
 
 			searchProducts = myConnection.prepareStatement(
-					"SELECT productType , productName , price , productDescription , productAvailability"
+					"SELECT productType , productName , productPrice , productDescription , productAvailability"
 							+ " FROM Product"
-							+ " WHERE IDProduct = ? OR productName = ? OR price = ? "
+							+ " WHERE productName = ?;"
 
 			);
 
@@ -164,9 +167,12 @@ public class DatabaseInnovativeSolutions {
 			);
 
 			searchTeamEmployee = myConnection.prepareStatement(
-					"SELECT IDemployee,salary,role , admin "
-							+ " FROM employee"
-							+ " WHERE team=? AND ( salary = ? OR role = ?)");
+					"select IDemployee , name , surname , mail , role" +
+							" from user" +
+							" join employee" +
+							" on user.username = employee.IDemployee" +
+							" where team = ?" +
+							" AND ( IDemployee = ? OR name = ? OR surname = ? OR mail = ? OR role = ?); ");
 
 			insertUser = myConnection.prepareStatement(
 					"INSERT INTO `User`( username , name , surname , password , mail ) VALUE ( ? , ? , ? , ? , ? );"
@@ -301,7 +307,6 @@ public class DatabaseInnovativeSolutions {
 
 		try {
 			getTeamEmployeeStatement.setInt(1, team);
-			System.out.println("employee5");
 			getTeamEmployeeStatement.execute();
 
 			ResultSet teamEmployeeResult = getTeamEmployeeStatement.getResultSet();
@@ -309,11 +314,10 @@ public class DatabaseInnovativeSolutions {
 			while (teamEmployeeResult.next()) {
 
 				employeeList.add(new Employee(teamEmployeeResult.getString("IDemployee"),
-								teamEmployeeResult.getInt("salary"),
-								teamEmployeeResult.getString("role"),
-								teamEmployeeResult.getInt("team")
-						)
-				);
+								teamEmployeeResult.getString("name"),
+								teamEmployeeResult.getString("surname"),
+								teamEmployeeResult.getString("mail"),
+								teamEmployeeResult.getString("role")));
 			}
 		} catch (SQLException caughtException) {
 			System.out.println("SQLException: " + caughtException.getMessage());
@@ -324,16 +328,17 @@ public class DatabaseInnovativeSolutions {
 		return employeeList;
 	}
 	
-	public static int insertProduct(int id, String name, int cost, String description ) {
+	public static int insertProduct(int id, String name, int cost, String description , int availability ) {
 
 		int insertedRows = 0;
 
 		try {
 
-			insertProductStatement.setString(1, Integer.toString(id));
+			insertProductStatement.setInt(1, id);
 			insertProductStatement.setString(2, name);
-			insertProductStatement.setString(3, Integer.toString(cost));
-			insertProductStatement.setString(4, description);
+			insertProductStatement.setInt(3, cost);
+			insertProductStatement.setString(4, description );
+			insertProductStatement.setInt( 5 , availability );
 
 			insertedRows = insertProductStatement.executeUpdate();
 
@@ -513,14 +518,15 @@ public class DatabaseInnovativeSolutions {
 
 		try {
 
-			searchProducts.setInt(1, Integer.parseInt(value));
-			searchProducts.setString(2, value);
-			searchProducts.setInt(3, Integer.parseInt(value));
+			searchProducts.setString(1, value);
+
 
 			searchProducts.execute();
 			ResultSet products = searchProducts.getResultSet();
+
 			while (products.next())
-				list.add(new Product(products.getInt("IDProduct"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getInt("productAvailability")));
+				list.add(new Product(products.getInt("productType"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getInt("productAvailability")));
+
 		} catch (SQLException caughtException) {
 
 			System.out.println("SQLException: " + caughtException.getMessage());
@@ -569,13 +575,20 @@ public class DatabaseInnovativeSolutions {
 		try {
 
 			searchTeamEmployee.setInt(1, team);
-			searchTeamEmployee.setInt(2, Integer.parseInt(value));
+			searchTeamEmployee.setString(2, value );
 			searchTeamEmployee.setString(3, value);
+			searchTeamEmployee.setString(4, value);
+			searchTeamEmployee.setString(5, value);
+			searchTeamEmployee.setString(6, value);
 
 			searchTeamEmployee.execute();
 			ResultSet employees = searchTeamEmployee.getResultSet();
 			while (employees.next())
-				list.add(new Employee(employees.getString("IDemployee"), employees.getInt("salary"), employees.getString("role"), team));
+				list.add(new Employee( employees.getString("IDemployee"),
+						employees.getString("name"),
+						employees.getString("surname"),
+						employees.getString("mail"),
+						employees.getString("role")));
 
 		} catch (SQLException caughtException) {
 

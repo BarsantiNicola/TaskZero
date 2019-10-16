@@ -6,69 +6,73 @@ import beans.Employee;
 import beans.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 public class HeadDepartmentController extends InterfaceController{
 
-    private static ObservableList<Component> componentsTable = FXCollections.observableArrayList();
+    private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
     private static ObservableList<Employee> employeesTable = FXCollections.observableArrayList();
-    private static TableView<Component> componentsTableView;
+    private static TableView<Product> productsTableView;
     private static TableView<Employee> employeesTableView;
-    private static AnchorPane componentsSection;
+    private static AnchorPane productsSection;
     private static AnchorPane employeesSection;
     private static TextField searchInput;
-    private static MenuButton tablesMenu;
     private static ImageView undoButton;
     private static boolean currentSection;
     private static int managedTeam;
+    private static AnchorPane insertPopup;
 
     HeadDepartmentController( Scene app , int team ){
 
         //  associations from the field of the table and the identificator of the bean class variable related
-        String[][] componentFields = { { "Name" , "componentName"} , { "Availability" , "componentAvailability" } , { "Description" , "componentDescription"} };
-        String[][] employeeFields = { { "ID" , "IDEmployee" } , { "Salary" , "salary" } , {"Role" , "role"} };
+        String[][] productFields = { { "Name" , "productName"} , { "Price" , "productPrice" } , { "Availability" , "productAvailability" } , { "Description" , "productDescription"} };
+        String[][] employeeFields = { { "ID" , "IDemployee" }  , { "Name" , "name" }  , { "Surname" , "surname" } , { "Email" , "mail" } , {"Role" , "role"} };
         TableColumn column;
 
         managedTeam = team;
 
         searchInput = (TextField)app.lookup( "#DEP_HEADSearch" );
-        tablesMenu = (MenuButton)app.lookup( "#DEP_HEADMenu" );
         undoButton = (ImageView)app.lookup( "#DEP_HEADUndo" );
 
-        componentsSection = (AnchorPane)app.lookup( "#DEP_HEADComponents" );
+        productsSection = (AnchorPane)app.lookup( "#DEP_HEADProducts" );
         employeesSection = (AnchorPane)app.lookup( "#DEP_HEADEmployees" );
+        insertPopup = (AnchorPane)app.lookup( "#DEP_HEADInsertPopUp" );
 
-        componentsTableView =  new TableView<>();
+        productsTableView =  new TableView<>();
         employeesTableView = new TableView<>();
 
-        componentsTable = FXCollections.observableArrayList();
+        productsTable = FXCollections.observableArrayList();
         employeesTable = FXCollections.observableArrayList();
 
 
-        componentsTableView.setMinWidth( 498 );
-        employeesTableView.setMinWidth( 498 );
-        componentsTableView.setMinHeight( 233 );
+        productsTableView.setMaxWidth( 485 );
+        employeesTableView.setMinWidth( 485 );
+        productsTableView.setMaxHeight( 233 );
+        employeesTableView.setMinHeight( 233 );
+        productsTableView.setPrefSize( 485 , 233 );
         employeesTableView.setMinHeight( 233 );
 
-        componentsTableView.setItems( componentsTable );
+        productsTableView.setItems( productsTable );
         employeesTableView.setItems( employeesTable );
 
         currentSection = false; //  set the table to  team products table
 
-        for( int a = 0; a<componentFields.length; a++ ){
+        for( int a = 0; a<productFields.length; a++ ){
 
-            column = new TableColumn( componentFields[a][0] );
-            column.setCellValueFactory( new PropertyValueFactory<>( componentFields[a][1] ));
-            column.setMinWidth( 160 );
-            column.setMaxWidth( 200 );
-            componentsTableView.getColumns().add( column );
+            column = new TableColumn( productFields[a][0] );
+            column.setCellValueFactory( new PropertyValueFactory<>( productFields[a][1] ));
+
+            column.setMinWidth( 53 );
+            column.setMaxWidth( 233 );
+            productsTableView.getColumns().add( column );
 
         }
 
@@ -76,20 +80,61 @@ public class HeadDepartmentController extends InterfaceController{
 
             column = new TableColumn( employeeFields[a][0] );
             column.setCellValueFactory( new PropertyValueFactory<>( employeeFields[a][1] ));
-            column.setMinWidth( 160 );
-            column.setMaxWidth( 200 );
+            column.setMinWidth( 53 );
+            column.setMaxWidth( 233 );
             employeesTableView.getColumns().add( column );
 
         }
 
-        //componentsTable.addAll(DatabaseInnovativeSolutions.getComponents());
-        employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees( managedTeam));
+        productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
+        employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees( managedTeam ));
 
-        ((AnchorPane)app.lookup( "#DEP_HEADComponentsTable" )).getChildren().add( componentsTableView );
+        ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productsTableView );
         ((AnchorPane)app.lookup( "#DEP_HEADEmployeesTable" )).getChildren().add( employeesTableView );
 
     }
 
+
+    void showInsertPopup(){
+
+        insertPopup.setVisible(true);
+
+    }
+
+    void closePopups(){
+        insertPopup.setVisible(false);
+    }
+
+    void insertProduct(){
+
+        Iterator<Node> it = insertPopup.getChildren().iterator();
+        Node app;
+        TextField value;
+        String description = "";
+        HashMap<String , String> values = new HashMap<>();
+
+        while (it.hasNext()) {
+            app =  it.next();
+            if( app instanceof TextField ) {
+                value = (TextField) app;
+                values.put( value.getPromptText(), value.getText());
+                continue;
+            }
+            if( app instanceof TextArea)
+                description = ((TextArea) app).getText();
+
+        }
+
+        Product newProduct = new Product( Integer.parseInt(values.get("ProductType")) , values.get("ProductName") , Integer.parseInt(values.get("ProductPrice")) , description , Integer.parseInt(values.get("n."))  );
+        if( DatabaseInnovativeSolutions.insertProduct( newProduct.getProductType() , newProduct.getProductName() , newProduct.getProductPrice() , newProduct.getProductDescription() , newProduct.getProductAvailability()) > 0 ){
+
+            productsTable.add( newProduct );
+            closePopups();
+
+        }
+
+
+    }
 
     void searchValue(){
 
@@ -103,8 +148,8 @@ public class HeadDepartmentController extends InterfaceController{
 
         }else{
 
-            componentsTable.removeAll(componentsTable);
-          //  componentsTable.addAll( DatabaseInnovativeSolutions.searchComponent( value ));
+            productsTable.removeAll(productsTable);
+            productsTable.addAll( DatabaseInnovativeSolutions.searchProducts( value ));
             undoButton.setVisible( true );
 
         }
@@ -117,11 +162,11 @@ public class HeadDepartmentController extends InterfaceController{
             if( currentSection == false ) return;
 
             currentSection = false;
-            componentsSection.setVisible( false );
+            productsSection.setVisible( false );
 
             if( undoButton.isVisible()){
-                componentsTable.removeAll( employeesTable );
-               // componentsTable.addAll( DatabaseInnovativeSolutions.getComponents());
+                productsTable.removeAll( employeesTable );
+                productsTable.addAll( DatabaseInnovativeSolutions.getAvailableProducts());
             }
 
             employeesSection.setVisible( true );
@@ -134,11 +179,11 @@ public class HeadDepartmentController extends InterfaceController{
             employeesSection.setVisible( false );
 
             if( undoButton.isVisible()){
-                employeesTable.removeAll( componentsTable );
+                employeesTable.removeAll( productsTable );
                 employeesTable.addAll( DatabaseInnovativeSolutions.getTeamEmployees(managedTeam));
             }
 
-            componentsSection.setVisible( true );
+            productsSection.setVisible( true );
 
 
         }
@@ -148,8 +193,8 @@ public class HeadDepartmentController extends InterfaceController{
 
         undoButton.setVisible( false );
         if( currentSection == true ) {
-            componentsTable.removeAll(componentsTable);
-          //  componentsTable.addAll(DatabaseInnovativeSolutions.getComponents());
+            productsTable.removeAll(productsTable);
+            productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
         }else{
             employeesTable.removeAll(employeesTable);
             employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees(managedTeam));

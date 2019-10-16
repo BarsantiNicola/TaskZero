@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="graphicInterface.GraphicInterface">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="graphicInterface.GraphicInterface">
   <children>
     <StackPane layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
       <children>
@@ -21,22 +21,22 @@
             </ImageView>
             <TextField id="DEP_HEADSearch" focusTraversable="false" layoutX="250.0" layoutY="68.0" prefWidth="187.0" text="" />
             <Button layoutX="409.0" layoutY="68.0" mnemonicParsing="false" onAction="#searchValue" text="Search" />
-            <StackPane layoutX="85.0" layoutY="103.0" minWidth="485.0" prefHeight="233.0" prefWidth="485.0">
+            <StackPane layoutX="85.0" layoutY="103.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="485.0" prefHeight="233.0" prefWidth="485.0">
               <children>
-                <AnchorPane id="DEP_HEADComponents" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0" visible="false">
+                <AnchorPane id="DEP_HEADEmployees" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="485.0" prefHeight="233.0" prefWidth="485.0" visible="true">
                   <children>
-                    <ScrollPane layoutX="0.0" layoutY="0.0" maxWidth="-1.0" prefHeight="235.0" prefWidth="498.0">
+                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="0.0" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="485.0">
                       <content>
-                        <AnchorPane id="DEP_HEADComponentsTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
+                        <AnchorPane id="DEP_HEADEmployeesTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="485.0" prefHeight="233.0" prefWidth="485.0" />
                       </content>
                     </ScrollPane>
                   </children>
                 </AnchorPane>
-                <AnchorPane id="DEP_HEADEmployees" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="498.0" prefHeight="233.0" prefWidth="498.0" visible="true">
+                <AnchorPane id="DEP_HEADProducts" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="485.0" prefHeight="300.0" prefWidth="485.0" visible="true">
                   <children>
-                    <ScrollPane layoutX="0.0" layoutY="0.0" maxWidth="-1.0" prefHeight="235.0" prefWidth="498.0">
+                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="0.0" layoutY="0.0" maxHeight="-1.0" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="485.0">
                       <content>
-                        <AnchorPane id="DEP_HEADEmployeesTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
+                        <AnchorPane id="DEP_HEADProductsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="233.0" minWidth="485.0" prefHeight="233.0" prefWidth="485.0" />
                       </content>
                     </ScrollPane>
                   </children>
@@ -49,7 +49,7 @@
               </font>
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#changeTable" text="Employees" />
-                <MenuItem mnemonicParsing="false" onAction="#changeTable" text="Components" />
+                <MenuItem mnemonicParsing="false" onAction="#changeTable" text="Products" />
               </items>
             </MenuButton>
             <Pane layoutX="7.0" layoutY="10.0" prefHeight="35.0" prefWidth="168.0" style="-fx-background-color: #000000;">
@@ -66,6 +66,33 @@
                 <Image url="file:../../data/undoSearchCross.png" />
               </image>
             </ImageView>
+            <Button layoutX="423.0" layoutY="354.0" mnemonicParsing="false" onAction="#insertPopup" prefWidth="148.0" text="Aggiungi prodotto" />
+            <AnchorPane id="DEP_HEADInsertPopUp" layoutX="82.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="492.0" visible="false">
+              <children>
+                <ImageView fitHeight="327.0" fitWidth="492.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="false" smooth="true" visible="true">
+                  <image>
+                    <Image url="file:../../data/access_background.jpg" />
+                  </image>
+                </ImageView>
+                <Pane layoutX="0.0" layoutY="0.0" prefHeight="28.0" prefWidth="491.0" style="-fx-background-color: #000000;">
+                  <children>
+                    <Text fill="WHITE" font="$x1" layoutX="7.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert new user" />
+                  </children>
+                </Pane>
+                <TextField layoutX="171.0" layoutY="45.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.9608154296875" prefWidth="145.0" promptText="ProductType" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="191.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="ProductName" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="210.0" layoutY="94.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="ProductPrice" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="250.0" layoutY="117.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="29.0" promptText="n." style="-fx-font-size: 8pt ;" text="" />
+                <Button font="$x1" layoutX="48.0" layoutY="240.0" mnemonicParsing="false" onAction="#insertProduct" prefHeight="38.0" prefWidth="69.0" text="Insert" />
+                <Button font="$x1" layoutX="154.0" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closePopup" prefHeight="38.0" prefWidth="69.0" text="Exit" />
+                <Text fill="WHITE" font="$x1" layoutX="82.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ProductType" />
+                <Text fill="WHITE" font="$x1" layoutX="93.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ProductName" />
+                <Text fill="WHITE" font="$x1" layoutX="110.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ProductPrice" />
+                <Text fill="WHITE" font="$x1" layoutX="125.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ProductAvailability" />
+                <Text fill="WHITE" font="$x1" layoutX="154.0" layoutY="154.0" scaleX="1.0" scaleY="0.9999937347040251" strokeType="OUTSIDE" strokeWidth="0.0" text="ProductDescription" />
+                <TextArea layoutX="283.0" layoutY="143.0" prefHeight="123.0" prefWidth="161.0" promptText="ProductDescription" wrapText="true" />
+              </children>
+            </AnchorPane>
           </children>
         </AnchorPane>
         <AnchorPane id="CustomerPage" prefHeight="200.0" prefWidth="200.0" visible="false">
@@ -160,8 +187,8 @@
                     <Text fill="WHITE" font="$x1" layoutX="7.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Salary" />
                   </children>
                 </Pane>
-                <TextField layoutX="333.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="149.9998779296875" promptText="NewSalary" text="" />
-                <TextField layoutX="95.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="150.0" promptText="Username" />
+                <TextField layoutX="333.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="149.9998779296875" promptText="NewSalary" style="-fx-font-size: 8pt ;" text="" />
+                <TextField layoutX="95.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="150.0" promptText="Username" style="-fx-font-size: 8pt ;" />
                 <Button layoutX="333.0" layoutY="44.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="15.9609375" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateUser" prefHeight="16.0" prefWidth="60.0" text="Update">
                   <font>
                     <Font name="System Bold" size="9.0" fx:id="x3" />
@@ -179,18 +206,18 @@
                     <Image url="file:../../data/access_background.jpg" />
                   </image>
                 </ImageView>
-                <Pane layoutX="0.0" layoutY="0.0" prefHeight="28.0" prefWidth="406.0" style="-fx-background-color: #000000;">
+                <Pane layoutX="0.0" layoutY="0.0" prefHeight="28.0" prefWidth="491.0" style="-fx-background-color: #000000;">
                   <children>
                     <Text fill="WHITE" font="$x1" layoutX="7.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert new user" />
                   </children>
                 </Pane>
-                <TextField layoutX="226.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.9608154296875" prefWidth="145.0" promptText="Username" />
-                <TextField layoutX="226.0" layoutY="66.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Name" />
-                <TextField layoutX="226.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Surname" />
-                <TextField layoutX="226.0" layoutY="114.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Password" text="" />
-                <TextField layoutX="226.0" layoutY="138.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Mail" />
-                <TextField layoutX="226.0" layoutY="162.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Role" />
-                <TextField layoutX="226.0" layoutY="186.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Salary" />
+                <TextField layoutX="226.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.9608154296875" prefWidth="145.0" promptText="Username" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="226.0" layoutY="66.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Name" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="226.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Surname" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="226.0" layoutY="114.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Password" style="-fx-font-size: 8pt ;" text="" />
+                <TextField layoutX="226.0" layoutY="138.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Mail" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="226.0" layoutY="162.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Role" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="226.0" layoutY="186.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Salary" style="-fx-font-size: 8pt ;" />
                 <Button font="$x1" layoutX="101.0" layoutY="240.0" mnemonicParsing="false" onAction="#insertUser" prefHeight="38.0" prefWidth="69.0" text="Insert" />
                 <Button font="$x1" layoutX="325.0" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closePopup" prefHeight="38.0" prefWidth="69.0" text="Exit" />
                 <Text fill="WHITE" font="$x1" layoutX="129.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
@@ -200,7 +227,7 @@
                 <Text fill="WHITE" font="$x1" layoutX="154.0" layoutY="154.0" scaleX="1.0" scaleY="0.9999937347040251" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
                 <Text fill="WHITE" font="$x1" layoutX="160.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Role" />
                 <Text fill="WHITE" font="$x1" layoutX="150.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Salary" />
-                <TextField layoutX="227.0" layoutY="209.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Team" />
+                <TextField layoutX="227.0" layoutY="209.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Team" style="-fx-font-size: 8pt ;" />
                 <Text fill="WHITE" font="$x1" layoutX="154.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team" />
               </children>
             </AnchorPane>

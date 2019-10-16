@@ -129,6 +129,7 @@ class AdminController extends InterfaceController{
         User newUser = new User( values.get("Username") , values.get( "Name") , values.get("Surname") , values.get("Password") , values.get("Mail") , values.get("Role") , Integer.parseInt(values.get("Salary")) , Integer.parseInt(values.get("Team" )));
         if ( DatabaseInnovativeSolutions.insertUser( newUser ))
             userTable.add(newUser);
+            closePopups();
 
 
 

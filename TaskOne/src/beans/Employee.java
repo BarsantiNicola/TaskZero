@@ -6,16 +6,18 @@ import javafx.beans.property.*;
 public class Employee {
 	
 	private final SimpleStringProperty IDemployee;
-	private final SimpleIntegerProperty salary;
+	private final SimpleStringProperty name;
+	private final SimpleStringProperty surname;
+	private final SimpleStringProperty mail;
 	private final SimpleStringProperty role;
-	private final SimpleIntegerProperty team;
 	
-	public Employee( String id, int money, String job, int group ) {
+	public Employee( String id, String n , String s , String m , String job ) {
 		
 		IDemployee = new SimpleStringProperty(id);
-		salary = new SimpleIntegerProperty(money);
+		name = new SimpleStringProperty(n);
+		surname = new SimpleStringProperty(s);
+		mail = new SimpleStringProperty(m);
 		role = new SimpleStringProperty(job);
-		team = new SimpleIntegerProperty(group);
 
 	}
 	
@@ -24,9 +26,19 @@ public class Employee {
 		return IDemployee.get();
 	}
 	
-	public int getSalary() {
+	public String getName() {
 		
-		return salary.get();
+		return name.get();
+	}
+
+	public String getSurname() {
+
+		return surname.get();
+	}
+
+	public String getMail() {
+
+		return mail.get();
 	}
 
 	public String getRole() {
@@ -34,8 +46,4 @@ public class Employee {
 		return role.get();
 	}
 
-	public int getTeam() {
-	
-		return team.get();
-	}
 }
