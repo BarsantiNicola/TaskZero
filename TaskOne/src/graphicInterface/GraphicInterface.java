@@ -108,7 +108,7 @@ public class GraphicInterface extends Application implements Initializable {
 
         userType = DatabaseInnovativeSolutions.login( name , password );
         myApplication.lookup("#AlertMessage" ).setVisible( false );
-
+        System.out.println("user: " + userType);
 
         switch( userType ) {
             case CUSTOMER:

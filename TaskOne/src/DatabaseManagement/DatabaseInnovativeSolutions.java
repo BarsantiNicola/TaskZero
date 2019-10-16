@@ -20,7 +20,8 @@ public class DatabaseInnovativeSolutions {
 	
 	//these statements are the ones related to the operations
 	private static PreparedStatement addUserStatement;
-	private static PreparedStatement deleteUserStatement;
+	private static PreparedStatement deleteUser;
+	private static PreparedStatement deleteEmployee;
 	private static PreparedStatement updateSalaryStatement;
 	private static PreparedStatement getTeamProductsStatement;
 	private static PreparedStatement getTeamEmployeeStatement;
@@ -41,6 +42,10 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement searchTeamEmployee;
 	private static PreparedStatement insertUser;
 	private static PreparedStatement insertEmployee;
+	private static PreparedStatement startTransaction;
+	private static PreparedStatement commit;
+	private static PreparedStatement rollback;
+	private static PreparedStatement isTeamLeader;
 
 
 	static {
@@ -58,11 +63,12 @@ public class DatabaseInnovativeSolutions {
 			addUserStatement = myConnection.prepareStatement(
 					"INSERT INTO user values ( ? , ? , ? , ? )");
 					
-			deleteUserStatement = myConnection.prepareStatement(
-					"START TRANSACTION; DELETE FROM `user`"
-							+ " WHERE username = ?;"
-							+ " DELETE FROM `Employee`"
-							+ " WHERE IDemployee = ?; COMMIT");
+			deleteUser = myConnection.prepareStatement(
+					"DELETE FROM `user` WHERE username = ?;"
+			);
+
+			deleteEmployee = myConnection.prepareStatement(
+					"DELETE FROM `Employee` WHERE IDemployee = ?;");
 			
 			updateSalaryStatement = myConnection.prepareStatement(
 					"UPDATE employee"
@@ -105,8 +111,15 @@ public class DatabaseInnovativeSolutions {
 
 			isEmployeeStatement = myConnection.prepareStatement(
 					"SELECT COUNT(*) AS isEmployee"
-							+ " FROM team"
-							+ " WHERE teamLeader=?"
+							+ " FROM Employee"
+							+ " WHERE IDemployee=?"
+			);
+
+			isTeamLeader = myConnection.prepareStatement(
+
+					"SELECT COUNT(*) AS isTeamLeader"
+							+ " FROM Team"
+							+ " WHERE TeamLeader=?"
 			);
 
 			isCustomerStatement = myConnection.prepareStatement(
@@ -156,7 +169,23 @@ public class DatabaseInnovativeSolutions {
 							+ " WHERE team=? AND ( salary = ? OR role = ?)");
 
 			insertUser = myConnection.prepareStatement(
-					"START TRANSACTION; INSERT INTO `User`( username , name , surname , password , mail ) VALUE ( ? , ? , ? , ? , ? ); INSERT INTO `Employee`( IDemployee , salary , role, team ) VALUE ( ? , ? , ? , ? ); COMMIT;"
+					"INSERT INTO `User`( username , name , surname , password , mail ) VALUE ( ? , ? , ? , ? , ? );"
+			);
+
+			insertEmployee = myConnection.prepareStatement(
+					"INSERT INTO `Employee`( IDemployee , salary , role, team ) VALUE ( ? , ? , ? , ? );"
+			);
+
+			startTransaction = myConnection.prepareStatement(
+					"START TRANSACTION;"
+			);
+
+			commit = myConnection.prepareStatement(
+					"START TRANSACTION;"
+			);
+
+			rollback = myConnection.prepareStatement(
+					"ROLLBACK TRANSACTION;"
 			);
 
 			
@@ -173,26 +202,53 @@ public class DatabaseInnovativeSolutions {
 	
 
 	
-	public static int deleteUser(String username) {
+	public static boolean deleteUser( String username ) {
 
-		int deletedRows = 0;
 
 		try {
 
-			deleteUserStatement.setString(1, username );
-			deleteUserStatement.setString( 2, username );
-
-			deletedRows = deleteUserStatement.executeUpdate();
+			startTransaction.execute();
+			deleteUser.setString(1, username );
+			deleteUser.execute();
+			if( DatabaseInnovativeSolutions.isEmployee( username ))
+				deleteEmployee.setString( 1, username );
+			commit.execute();
+			return true;
 
 		} catch (SQLException caughtException) {
+			try{
+				rollback.execute();
+				System.out.println("Rollback executed");
+			}catch( SQLException e ){
+				System.out.println("SQLException: " + e.getMessage());
+				System.out.println("SQLState: " + e.getSQLState());
+				System.out.println("VendorError: " + e.getErrorCode());
+			}
 			System.out.println("SQLException: " + caughtException.getMessage());
 			System.out.println("SQLState: " + caughtException.getSQLState());
 			System.out.println("VendorError: " + caughtException.getErrorCode());
 		}
 
-		return deletedRows;
+		return false;
 	}
-	
+
+	public static boolean isEmployee( String username ){
+		ResultSet result;
+		try {
+			isEmployeeStatement.setString(1, username);
+			isEmployeeStatement.execute();
+			result = isEmployeeStatement.getResultSet();
+			result.next();
+			return result.getInt("isEmployee") > 0;
+		}catch( SQLException e ){
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+			return false;
+		}
+
+	}
+
 	public static void updateSalary(int salary, String employee) {
 
 		try {
@@ -245,7 +301,7 @@ public class DatabaseInnovativeSolutions {
 
 		try {
 			getTeamEmployeeStatement.setInt(1, team);
-			System.out.println("employee");
+			System.out.println("employee5");
 			getTeamEmployeeStatement.execute();
 
 			ResultSet teamEmployeeResult = getTeamEmployeeStatement.getResultSet();
@@ -549,14 +605,13 @@ public class DatabaseInnovativeSolutions {
 
 			if (loginConclusion == 1) {
 
-				isEmployeeStatement.setString(1, user);
+				isEmployeeStatement.setString(1, user );
 				isEmployeeStatement.execute();
 
 				ResultSet isEmployeeResult = isEmployeeStatement.getResultSet();
 				isEmployeeResult.next();
-				int isEmployeeConclusion = isEmployeeResult.getInt("isEmployee");
 
-				if (isEmployeeConclusion == 1)
+				if ( isTeamLeader( user) )
 					return UserType.HEAD_DEPARTMENT;
 
 				isCustomerStatement.setString(1, user);
@@ -584,24 +639,60 @@ public class DatabaseInnovativeSolutions {
 	}
 
 
+	public static boolean isTeamLeader( String user ){
+		ResultSet result;
+		try {
+			isTeamLeader.setString(1, user);
+			isTeamLeader.execute();
+			result = isTeamLeader.getResultSet();
+			result.next();
+			return result.getInt("isTeamLeader") > 0;
+		}catch( SQLException e ){
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+			return false;
+		}
+
+	}
 	public static boolean insertUser( User newUser) {
 
 		try {
+
+			startTransaction.execute();
 
 			insertUser.setString(1, newUser.getUsername());
 			insertUser.setString(2, newUser.getName());
 			insertUser.setString(3, newUser.getSurname());
 			insertUser.setString(4, newUser.getPassword());
 			insertUser.setString(5, newUser.getMail());
-			insertUser.setString(6, newUser.getUsername());
-			insertUser.setInt(7, newUser.getSalary());
-			insertUser.setString(8, newUser.getRole());
-			insertUser.setInt(9, newUser.getTeam());
-
 			insertUser.execute();
+
+			if( newUser.getRole()!= null && newUser.getRole().length() > 0 ) {
+				insertEmployee.setString(1, newUser.getUsername());
+				insertEmployee.setInt(2, newUser.getSalary());
+				insertEmployee.setString(3, newUser.getRole());
+				insertEmployee.setInt(4, newUser.getTeam());
+				insertEmployee.execute();
+			}
+
+			commit.execute();
 			return true;
 
 		} catch (SQLException caughtException) {
+
+			try {
+				rollback.execute();
+				System.out.println("Rollback executed");
+
+			}catch( SQLException e ){
+
+				System.out.println("SQLException: " + e.getMessage());
+				System.out.println("SQLState: " + e.getSQLState());
+				System.out.println("VendorError: " + e.getErrorCode());
+
+			}
+
 			System.out.println("SQLException: " + caughtException.getMessage());
 			System.out.println("SQLState: " + caughtException.getSQLState());
 			System.out.println("VendorError: " + caughtException.getErrorCode());

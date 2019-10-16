@@ -4,19 +4,12 @@ import DatabaseManagement.DatabaseInnovativeSolutions;
 import beans.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import javafx.stage.Popup;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -26,9 +19,6 @@ class AdminController extends InterfaceController{
     private static TableView<User> userTableView;
     private static TextField searchInput;
     private static ImageView undoButton;
-    private static HBox insertForm;
-    private static Text adminFail;
-    private static Text adminSuccess;
     private static AnchorPane insertPopup, updatePopup, deletePopup;
 
     //  THE FUNCTION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
@@ -36,16 +26,12 @@ class AdminController extends InterfaceController{
 
         String[][] userFields = { { "Username" , "username" } , { "Password" ,"password" } , { "Name" , "name" } , { "Surname" ,"surname" } , { "Email" , "mail"} , { "Role" , "role"} , { "Salary" , "salary"} , { "Team" , "team"} };  //  FIELDS OF TABLE EMPLOYEE
         TableColumn column;
-        final TableRow p = null;
         searchInput = (TextField)app.lookup( "#ADMINSearch" );  //  TEXT INPUT FOR SEARCH INFORMATION
         undoButton = (ImageView)app.lookup( "#ADMINUndo" );
-        insertForm = (HBox)app.lookup( "#ADMINInsert" );
+
         insertPopup = (AnchorPane)app.lookup( "#ADMINInsertPopUp" );
         updatePopup = (AnchorPane)app.lookup( "#ADMINUpdatePopUp" );
         deletePopup = (AnchorPane)app.lookup( "#ADMINDeletePopUp" );
-
-        adminFail = (Text)app.lookup( "#ADMINFail" );
-        adminSuccess = (Text)app.lookup( "#ADMINSuccess" );
 
         userTableView =  new TableView<>();               //  TABLE EMPLOYEE
         userTableView.setEditable(true);
@@ -74,55 +60,30 @@ class AdminController extends InterfaceController{
         ((AnchorPane)app.lookup( "#ADMINUsersTable" )).getChildren().add( userTableView );
     }
 
-    public void deleteUser(){
 
-        Iterator<Node> node = deletePopup.getChildren().iterator();
-        Iterator<User> users;
-        Node app;
-        User scroll;
-        String username = null;
-
-        while( node.hasNext() ){
-            app = node.next();
-            if( app instanceof TextField ) {
-                username = ((TextField) app).getText();
-                break;
-            }
-        }
-
-        if( username == null ) return;
-        if( DatabaseInnovativeSolutions.deleteUser( username ) == 0 ){
-            users = userTable.iterator();
-            while( users.hasNext()){
-                scroll = users.next();
-                if( scroll.getUsername().compareTo(username) == 0 ){
-                    userTable.remove( scroll );
-                    return;
-                }
-            }
-
-        }
-
-    }
-    public void showInsertPopup(){
+    //  it shows the popup for insert new users
+    void showInsertPopup(){
 
         insertPopup.setVisible( true );
 
     }
 
-    public void showUpdatePopup(){
+    //  it shows the popup for update the users salary
+    void showUpdatePopup(){
 
         updatePopup.setVisible( true );
 
     }
 
-    public void showDeletePopup(){
+    //  it shows the popup for delete users accounts
+    void showDeletePopup(){
 
         deletePopup.setVisible( true );
 
     }
 
-    public void closePopups(){
+    //  it closes all popups of the interface
+    void closePopups(){
 
         insertPopup.setVisible( false );
         updatePopup.setVisible( false );
@@ -130,6 +91,7 @@ class AdminController extends InterfaceController{
 
     }
 
+    //  it searches the input value in all the possible String fields
     void searchValue() {
 
         String value = searchInput.getText();
@@ -139,6 +101,7 @@ class AdminController extends InterfaceController{
 
     }
 
+    //  it does the undo of a research reset the interface to the default behavior
     void undoSearch(){
 
         undoButton.setVisible( false );
@@ -147,6 +110,7 @@ class AdminController extends InterfaceController{
 
     }
 
+    //  it insert a user insert by the textFile given in the insert popup
     void insertUser() {
 
         Iterator<Node> it = insertPopup.getChildren().iterator();
@@ -163,40 +127,17 @@ class AdminController extends InterfaceController{
         }
 
         User newUser = new User( values.get("Username") , values.get( "Name") , values.get("Surname") , values.get("Password") , values.get("Mail") , values.get("Role") , Integer.parseInt(values.get("Salary")) , Integer.parseInt(values.get("Team" )));
-        if ( DatabaseInnovativeSolutions.insertUser( newUser )) {
-
-            it = insertForm.getChildren().iterator();
-            while (it.hasNext())
-                ((TextField) it.next()).setText("");
-
-            userTable.removeAll(userTable);
+        if ( DatabaseInnovativeSolutions.insertUser( newUser ))
             userTable.add(newUser);
-            adminSuccess.setVisible(true);
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
 
-            }
-            adminSuccess.setVisible(false);
 
-        }else{
 
-            adminFail.setVisible(true);
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-
-            }
-            adminFail.setVisible(false);
-
-        }
     }
 
+    //  it updates the salary of a employee given by his username(the primary key of users)
     void updateUser(){
 
         Iterator<Node> it = updatePopup.getChildren().iterator();
-        Iterator<User> users;
-        User user;
         Node app;
         String username = null;
         int salary = 0;
@@ -216,5 +157,36 @@ class AdminController extends InterfaceController{
     }
 
 
+    //  it deletes a user account defined by his username(primary key of users)
+    void deleteUser(){
+
+        Iterator<Node> node = deletePopup.getChildren().iterator();
+        Iterator<User> users;
+        Node app;
+        User scroll;
+        String username = null;
+
+        while( node.hasNext() ){
+            app = node.next();
+            if( app instanceof TextField ) {
+                username = ((TextField) app).getText();
+                break;
+            }
+        }
+
+        if( username == null ) return;
+        if( DatabaseInnovativeSolutions.deleteUser( username )){
+            users = userTable.iterator();
+            while( users.hasNext()){
+                scroll = users.next();
+                if( scroll.getUsername().compareTo(username) == 0 ){
+                    userTable.remove( scroll );
+                    return;
+                }
+            }
+
+        }
+
+    }
 
 }

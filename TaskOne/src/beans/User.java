@@ -15,7 +15,7 @@ public class User {
 	private final SimpleIntegerProperty salary;     //  may be miss(ex. a CUSTOMER)
 	private final SimpleIntegerProperty team;       //  may be miss
 
-	public User( String Username, String Name, String Surname, String Password, String Mail , String Role , int Salary , int Team ) {
+	public User( String Username, String Name, String Surname, String Password, String Mail , String Role , Integer Salary , Integer Team ) {
 		
 		username = new SimpleStringProperty(Username);
 		name = new SimpleStringProperty(Name);
