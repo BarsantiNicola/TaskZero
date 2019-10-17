@@ -1,7 +1,6 @@
 package graphicInterface;
 
 import DatabaseManagement.DatabaseInnovativeSolutions;
-import beans.Component;
 import beans.Employee;
 import beans.Product;
 import javafx.collections.FXCollections;
@@ -86,7 +85,7 @@ public class HeadDepartmentController extends InterfaceController{
 
         }
 
-        productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
+        productsTable.addAll(DatabaseInnovativeSolutions.getTeamProducts( managedTeam ));
         employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees( managedTeam ));
 
         ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productsTableView );
@@ -108,9 +107,9 @@ public class HeadDepartmentController extends InterfaceController{
     void insertProduct(){
 
         Iterator<Node> it = insertPopup.getChildren().iterator();
+        Iterator<Product> product = productsTable.iterator();
         Node app;
         TextField value;
-        String description = "";
         HashMap<String , String> values = new HashMap<>();
 
         while (it.hasNext()) {
@@ -120,18 +119,29 @@ public class HeadDepartmentController extends InterfaceController{
                 values.put( value.getPromptText(), value.getText());
                 continue;
             }
-            if( app instanceof TextArea)
-                description = ((TextArea) app).getText();
 
         }
 
-        Product newProduct = new Product( Integer.parseInt(values.get("ProductType")) , values.get("ProductName") , Integer.parseInt(values.get("ProductPrice")) , description , Integer.parseInt(values.get("n."))  );
-        if( DatabaseInnovativeSolutions.insertProduct( newProduct.getProductType() , newProduct.getProductName() , newProduct.getProductPrice() , newProduct.getProductDescription() , newProduct.getProductAvailability()) > 0 ){
+        Product p;
+        String name = values.get("ProductName");
+        int number = Integer.parseInt(values.get("n."));
 
-            productsTable.add( newProduct );
-            closePopups();
+        while( product.hasNext() ){
+            p = product.next();
+            if( p.getProductName().compareTo(name) == 0 ) {
 
+                if (DatabaseInnovativeSolutions.updateProductAvailability(p.getProductType(), p.getProductAvailability() + number)) {
+                    productsTable.removeAll( p );
+                    p.setProductAvailability( p.getProductAvailability() + number );
+                    productsTable.add( p );
+                    closePopups();
+
+
+                }
+                return;
+            }
         }
+
 
 
     }

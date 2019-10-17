@@ -1,10 +1,11 @@
 package graphicInterface;
 
 import DatabaseManagement.DatabaseInnovativeSolutions;
-import beans.Orders;
+import beans.Order;
 import beans.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,15 +14,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import java.sql.Timestamp;
+import java.util.Iterator;
+
+import static com.oracle.jrockit.jfr.ContentType.Timestamp;
+
 public class CustomerController extends InterfaceController{
 
     private static ObservableList<Product> productsTable = FXCollections.observableArrayList();
-    private static ObservableList<Orders> ordersTable = FXCollections.observableArrayList();
+    private static ObservableList<Order> ordersTable = FXCollections.observableArrayList();
     private static TableView<Product> productsTableView;
-    private static TableView<Orders> ordersTableView;
+    private static TableView<Order> ordersTableView;
     private static AnchorPane productsSection;
     private static AnchorPane ordersSection;
     private static TextField searchInput;
+    private AnchorPane insertPopup;
     private boolean currentSection;
     private String customerId;
     private ImageView undoButton;
@@ -30,14 +37,15 @@ public class CustomerController extends InterfaceController{
     CustomerController( Scene app , String cId ){
 
 
-        String[][] productFields = { { "Name" , "productName" } , { "Availability" , "productAvailability" } , {"Price" , "productPrice"} , { "Description" , "productDescription" }};
-        String[][] orderFields = { { "Product" , "product" } , { "Model" , "model" } , { "Purchase Date" , "purchaseDate" } , { "State" , "status" }};
+        String[][] productFields = { { "Name" , "productName"} , { "Price" , "productPrice" } , { "Availability" , "productAvailability" } , { "Description" , "productDescription"} };
+        String[][] orderFields = { { "ProductName" , "productName" } , { "ProductPrice" , "productPrice" } , { "Purchase Date" , "purchaseDate" } ,  { "Purchased Price" , "purchasedPrice" }  , { "Status" , "orderStatus" }};
         TableColumn column;
 
         customerId = cId;
 
         searchInput = (TextField)app.lookup( "#CUSTOMERSearch" );
         undoButton = (ImageView)app.lookup( "#CUSTOMERUndo" );
+        insertPopup = (AnchorPane)app.lookup( "#CUSTOMERInsertPopUp" );
 
         ordersSection = (AnchorPane)app.lookup( "#CUSTOMEROrders" );
         productsSection = (AnchorPane)app.lookup( "#CUSTOMERProducts" );
@@ -62,8 +70,8 @@ public class CustomerController extends InterfaceController{
 
             column = new TableColumn( orderFields[a][0] );
             column.setCellValueFactory( new PropertyValueFactory<>( orderFields[a][1] ));
-            column.setMinWidth( 160 );
-            column.setMaxWidth( 200 );
+            column.setMinWidth( 53 );
+            column.setMaxWidth( 233 );
             ordersTableView.getColumns().add( column );
 
         }
@@ -72,18 +80,62 @@ public class CustomerController extends InterfaceController{
 
             column = new TableColumn( productFields[a][0] );
             column.setCellValueFactory( new PropertyValueFactory<>( productFields[a][1] ));
-            column.setMinWidth( 160 );
-            column.setMaxWidth( 200 );
+            column.setMinWidth( 53 );
+            column.setMaxWidth( 233 );
             productsTableView.getColumns().add( column );
 
         }
 
-        ordersTable.addAll( DatabaseInnovativeSolutions.getOrderStatus( customerId ));
+        ordersTable.addAll( DatabaseInnovativeSolutions.getOrder( customerId ));
         productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
 
         ((AnchorPane)app.lookup( "#CUSTOMEROrdersTable" )).getChildren().add( ordersTableView );
         ((AnchorPane)app.lookup( "#CUSTOMERProductsTable" )).getChildren().add( productsTableView );
 
+    }
+
+    void showInsertPopup(){
+
+        insertPopup.setVisible( true );
+
+    }
+
+    void closePopups(){
+
+        insertPopup.setVisible( false );
+
+    }
+
+    void insertOrder(){
+
+        Iterator<Node> it = insertPopup.getChildren().iterator();
+        Iterator<Product> productList = productsTable.iterator();
+        Node app;
+        Product product;
+        Order newOrder;
+
+        String productName = "";
+        while( it.hasNext()){
+            app = it.next();
+            if( app instanceof TextField ) {
+                productName = ((TextField) app).getText();
+                break;
+            }
+        }
+
+        while( productList.hasNext() ) {
+
+            product = productList.next();
+            if( product.getProductName().compareTo(productName) == 0 ){
+                newOrder = new Order( productName , product.getProductPrice() , new Timestamp(System.currentTimeMillis())  , product.getProductPrice() ,"ordered"  );
+                if( DatabaseInnovativeSolutions.insertOrder(customerId , product.getProductType() , product.getProductPrice())  > 0 ){
+                    ordersTable.add( newOrder );
+                    if( product.getProductAvailability() == 1 )
+                        productsTable.remove(product);
+
+                }
+            }
+        }
     }
 
     void searchValue(){
@@ -116,7 +168,7 @@ public class CustomerController extends InterfaceController{
 
             if( undoButton.isVisible()){
                 ordersTable.removeAll( ordersTable );
-                ordersTable.addAll( DatabaseInnovativeSolutions.getOrderStatus( customerId ));
+                ordersTable.addAll( DatabaseInnovativeSolutions.getOrder( customerId ));
             }
 
             productsSection.setVisible( true );
@@ -144,7 +196,7 @@ public class CustomerController extends InterfaceController{
         undoButton.setVisible( false );
         if( currentSection == true ) {
             ordersTable.removeAll(ordersTable);
-            ordersTable.addAll(DatabaseInnovativeSolutions.getOrderStatus(customerId));
+            ordersTable.addAll(DatabaseInnovativeSolutions.getOrder(customerId));
         }else{
             productsTable.removeAll(productsTable);
             productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());

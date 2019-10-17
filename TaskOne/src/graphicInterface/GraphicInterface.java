@@ -54,12 +54,20 @@ public class GraphicInterface extends Application implements Initializable {
             ((AdminController)myInterface).showInsertPopup();
         if( myInterface instanceof HeadDepartmentController )
             ((HeadDepartmentController)myInterface).showInsertPopup();
+        if( myInterface instanceof CustomerController )
+            ((CustomerController)myInterface).showInsertPopup();
     }
 
     @FXML
     private void insertUser( ActionEvent event ){
         if( myInterface instanceof AdminController )
             ((AdminController)myInterface).insertUser();
+    }
+
+    @FXML
+    private void insertOrder( ActionEvent event ){
+        if( myInterface instanceof CustomerController )
+            ((CustomerController)myInterface).insertOrder();
     }
 
     @FXML
@@ -77,6 +85,9 @@ public class GraphicInterface extends Application implements Initializable {
 
         if( myInterface instanceof HeadDepartmentController )
             ((HeadDepartmentController)myInterface).closePopups();
+
+        if( myInterface instanceof CustomerController )
+            ((CustomerController)myInterface).closePopups();
 
     }
 

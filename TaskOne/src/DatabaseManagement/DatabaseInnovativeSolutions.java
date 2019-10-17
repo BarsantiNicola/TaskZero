@@ -3,11 +3,7 @@ package DatabaseManagement;
 import beans.*;
 //import com.mysql.cj.x.protobuf.MysqlxCrud;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import java.util.*;
 
@@ -46,6 +42,8 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement commit;
 	private static PreparedStatement rollback;
 	private static PreparedStatement isTeamLeader;
+	private static PreparedStatement getOrders;
+	private static PreparedStatement updateProductAvailability;
 
 
 	static {
@@ -76,9 +74,8 @@ public class DatabaseInnovativeSolutions {
 							+ " WHERE IDemployee=?");
 			
 			getTeamProductsStatement = myConnection.prepareStatement(
-					" SELECT P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability"
-				 +  " FROM product P INNER JOIN assembles A ON P.productName = A.product"
-				 +  " WHERE team=?");
+					"SELECT P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability "
+						+ " FROM product P INNER JOIN assembles A ON P.productType = A.product WHERE team = ?;");
 			
 			getTeamEmployeeStatement = myConnection.prepareStatement(
 					"select IDemployee , name , surname , mail , role" +
@@ -97,11 +94,12 @@ public class DatabaseInnovativeSolutions {
 							+ " WHERE productAvailability > 0 ");
 			
 			insertOrderStatement = myConnection.prepareStatement(
-					"INSERT INTO orders VALUES (?,?,?,?,?");
+					"INSERT INTO orders VALUES (?,?,?,?,?)");
 			
-			getOrderStatusStatement = myConnection.prepareStatement(
-					"SELECT product,purchaseDate,status"
-					+ " FROM orders"
+			getOrders = myConnection.prepareStatement(
+					"SELECT productName , productPrice ,purchaseDate, price , status"
+					+ " FROM orders JOIN product"
+					+ " ON  orders.product = product.productType"
 					+ " WHERE customer=?");
 			
 			//OTHER STATEMENTS
@@ -194,6 +192,12 @@ public class DatabaseInnovativeSolutions {
 					"ROLLBACK TRANSACTION;"
 			);
 
+			updateProductAvailability = myConnection.prepareStatement(
+						"UPDATE product " +
+								" SET productAvailability = ?" +
+								" WHERE productType = ?;"
+			);
+
 			
 			System.out.println("Statements Created Correctly");
 
@@ -276,13 +280,13 @@ public class DatabaseInnovativeSolutions {
 		List<Product> teamProductList = new ArrayList<>();
 		
 		try {
-			getTeamProductsStatement.setInt(1, team);
+			getTeamProductsStatement.setInt(1 , team );
 		
 			getTeamProductsStatement.execute();
 
-			ResultSet getTeamProductsResult = getTeamEmployeeStatement.getResultSet();
+			ResultSet getTeamProductsResult = getTeamProductsStatement.getResultSet();
 
-			while (getTeamProductsResult.next()) {
+			while(getTeamProductsResult.next()) {
 
 				teamProductList.add(new Product(getTeamProductsResult.getInt("productType"),
 						getTeamProductsResult.getString("productName"),
@@ -292,6 +296,7 @@ public class DatabaseInnovativeSolutions {
 						)
 				);
 			}
+
 		} catch (SQLException caughtException) {
 			System.out.println("SQLException: " + caughtException.getMessage());
 			System.out.println("SQLState: " + caughtException.getSQLState());
@@ -388,8 +393,9 @@ public class DatabaseInnovativeSolutions {
 
 			insertOrderStatement.setString(1, customer);
 			insertOrderStatement.setString(2, Integer.toString(product));
-			insertOrderStatement.setString(3, Integer.toString(price));
-			insertOrderStatement.setString(4, "IN LAVORAZIONE");
+			insertOrderStatement.setObject( 3 , new Timestamp(System.currentTimeMillis()));
+			insertOrderStatement.setString(4, Integer.toString(price));
+			insertOrderStatement.setString(5, "received");
 
 			insertedRows = insertOrderStatement.executeUpdate();
 
@@ -402,20 +408,21 @@ public class DatabaseInnovativeSolutions {
 		return insertedRows;
 	}
 	
-	public static List<Orders> getOrderStatus( String IDcustomer ){
+	public static List<Order> getOrder( String IDcustomer ){
 		
-		List<Orders> ordersList = new ArrayList<>();
+		List<Order> ordersList = new ArrayList<>();
 
 		try {
 
-			getOrderStatusStatement.execute();
+			getOrders.setString( 1 , IDcustomer );
+			getOrders.execute();
 
-			ResultSet orderStatusResult = getOrderStatusStatement.getResultSet();
+			ResultSet orderStatusResult = getOrders.getResultSet();
 
 			while ( orderStatusResult.next() ) {
 
-				ordersList.add(new Orders(IDcustomer,
-								orderStatusResult.getInt("product"),
+				ordersList.add(new Order(orderStatusResult.getString( "productName"),
+								orderStatusResult.getInt("productPrice"),
 								orderStatusResult.getTimestamp("purchaseDate"),
 								orderStatusResult.getInt( "price" ),
 								orderStatusResult.getString("status")
@@ -540,9 +547,9 @@ public class DatabaseInnovativeSolutions {
 	}
 
 	//questa c'� gi� sopra
-	public static List<Orders> searchOrders(String value, String customerID) {
+	public static List<Order> searchOrders(String value, String customerID) {
 
-		List<Orders> list = new ArrayList<>();
+		List<Order> list = new ArrayList<>();
 
 		try {
 
@@ -553,7 +560,7 @@ public class DatabaseInnovativeSolutions {
 			searchOrders.execute();
 			ResultSet orders = searchOrders.getResultSet();
 			while (orders.next())
-				list.add(new Orders(orders.getString("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getInt( "price" ) , orders.getString("status")));
+				list.add(new Order(orders.getString("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getInt( "price" ) , orders.getString("status")));
 
 		} catch (SQLException caughtException) {
 
@@ -668,6 +675,23 @@ public class DatabaseInnovativeSolutions {
 		}
 
 	}
+
+	public static boolean updateProductAvailability( int product , int value ){
+
+		try {
+			updateProductAvailability.setInt(1, value);
+			updateProductAvailability.setInt(2, product );
+			updateProductAvailability.execute();
+			return true;
+		}catch( SQLException e ){
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+			return false;
+		}
+
+	}
+
 	public static boolean insertUser( User newUser) {
 
 		try {

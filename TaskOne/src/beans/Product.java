@@ -44,6 +44,11 @@ public class Product {
 		
 		return productAvailability.get();
 	}
+
+	public void setProductAvailability( int n ) {
+
+		productAvailability.set(n);
+	}
 	
 	
 }
