@@ -745,4 +745,4 @@ public class DatabaseInnovativeSolutions {
 }
 //This class manages the connection with the DB. In particular, the connection is established 
 //into the static block, and statements are prepared there too. The class offers different 
-//functions that execute this statements.
+//functions that execute these statements.
