@@ -435,9 +435,9 @@ public class DatabaseInnovativeSolutions {
 		
 		try {
 
-			searchTeamProductsStatement.setString( 1 , Integer.toString(team) );
+			searchTeamProductsStatement.setInt( 1 , team );
 			searchTeamProductsStatement.setString(2, name);
-			getOrders.execute();
+			searchTeamProductsStatement.execute();
 
 			ResultSet teamProductResult = searchTeamProductsStatement.getResultSet();
 
