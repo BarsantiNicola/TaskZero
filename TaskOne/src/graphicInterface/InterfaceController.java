@@ -4,7 +4,6 @@ package graphicInterface;
 
 abstract class InterfaceController {
 
-
     abstract void searchValue();
     abstract void undoSearch();
     abstract void showInsertPopup();

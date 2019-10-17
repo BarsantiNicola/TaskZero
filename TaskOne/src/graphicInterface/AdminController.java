@@ -31,7 +31,7 @@ class AdminController extends InterfaceController{
     //  THE FUNCTION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
     AdminController( Scene app ){
 
-        //  it linnks the fields to the class variable associated
+        //  it links the fields to the class variable associated
         String[][] userFields = { { "Username" , "username" } , { "Password" ,"password" } , { "Name" , "name" } , { "Surname" ,"surname" } , { "Email" , "mail"} , { "Role" , "role"} , { "Salary" , "salary"} , { "Team" , "team"} };  //  FIELDS OF TABLE EMPLOYEE
         TableColumn column;
 

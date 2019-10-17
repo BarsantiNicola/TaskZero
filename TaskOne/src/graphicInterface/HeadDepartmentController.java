@@ -159,7 +159,7 @@ public class HeadDepartmentController extends InterfaceController{
         }else{
 
             productsTable.removeAll(productsTable);
-            productsTable.addAll( DatabaseInnovativeSolutions.searchProducts( value ));
+            productsTable.addAll( DatabaseInnovativeSolutions.searchTeamProducts( managedTeam , value ));
             undoButton.setVisible( true );
 
         }

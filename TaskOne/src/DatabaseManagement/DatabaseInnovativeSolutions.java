@@ -337,29 +337,7 @@ public class DatabaseInnovativeSolutions {
 		return employeeList;
 	}
 	
-	//insert a new product
-	public static int insertProduct(int id, String name, int cost, String description , int availability ) {
 
-		int insertedRows = 0;
-
-		try {
-
-			insertProductStatement.setInt(1, id);
-			insertProductStatement.setString(2, name);
-			insertProductStatement.setInt(3, cost);
-			insertProductStatement.setString(4, description );
-			insertProductStatement.setInt( 5 , availability );
-
-			insertedRows = insertProductStatement.executeUpdate();
-
-		} catch (SQLException caughtException) {
-			System.out.println("SQLException: " + caughtException.getMessage());
-			System.out.println("SQLState: " + caughtException.getSQLState());
-			System.out.println("VendorError: " + caughtException.getErrorCode());
-		}
-
-		return insertedRows;
-	}
 	
 	//retrieve all the products having availability > 0 
 	public static List<Product> getAvailableProducts() {
