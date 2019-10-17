@@ -141,7 +141,7 @@ public class HeadDepartmentController extends InterfaceController{
                 return;
             }
         }
-
+        closePopups();
 
 
     }

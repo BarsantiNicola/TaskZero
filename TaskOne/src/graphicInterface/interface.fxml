@@ -186,8 +186,6 @@
               </content>
             </ScrollPane>
             <Button layoutX="91.0" layoutY="344.0" mnemonicParsing="false" onAction="#insertPopup" prefWidth="129.0" text="New User" />
-            <Text id="ADMINFail" font="$x1" layoutX="471.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserimento Fallito" visible="false" />
-            <Text id="ADMINSuccess" font="$x1" layoutX="471.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserimento Riuscito" visible="false" />
             <Button layoutX="261.0" layoutY="345.0" mnemonicParsing="false" onAction="#updatePopup" prefWidth="129.0" text="Update Salary" />
             <Button layoutX="432.0" layoutY="345.0" mnemonicParsing="false" onAction="#deletePopup" prefWidth="129.0" text="Delete User" />
             <AnchorPane id="ADMINUpdatePopUp" layoutX="75.0" layoutY="321.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="492.0" visible="false">

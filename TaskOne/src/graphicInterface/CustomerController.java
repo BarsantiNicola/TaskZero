@@ -136,6 +136,7 @@ public class CustomerController extends InterfaceController{
                 }
             }
         }
+        closePopups();
     }
 
     void searchValue(){

@@ -25,7 +25,6 @@ class AdminController extends InterfaceController{
     private static TableView<User> userTableView;
     private static TextField searchInput;
     private static ImageView undoButton;
-    private static Text validOperation, errorOperation;
     private static AnchorPane insertPopup, updatePopup, deletePopup;
 
     //  THE FUNCTION LINKS THE TABLES OF "ADMIN INTERFACE" TO CONTROL APPLICATION
@@ -37,8 +36,7 @@ class AdminController extends InterfaceController{
 
         searchInput = (TextField)app.lookup( "#ADMINSearch" );  //  TEXT INPUT FOR SEARCH INFORMATION
         undoButton = (ImageView)app.lookup( "#ADMINUndo" );     //  BUTTON FOR CLOSE THE SEARCHING TABLE
-        validOperation = (Text)app.lookup( "#ADMINSuccess" );
-        errorOperation = (Text)app.lookup( "#ADMINFailure" );
+
 
         insertPopup = (AnchorPane)app.lookup( "#ADMINInsertPopUp" );  // POPUP FOR INSERT USERS
         updatePopup = (AnchorPane)app.lookup( "#ADMINUpdatePopUp" );  // POPUP FOR UPDATE USERS
@@ -152,18 +150,8 @@ class AdminController extends InterfaceController{
                     values.get("Role"), 0,
                     0);
 
-        if(DatabaseInnovativeSolutions.insertUser(newUser)) {
-
+        if(DatabaseInnovativeSolutions.insertUser(newUser))
             userTable.add(newUser);
-            validOperation.setVisible(true);
-            errorOperation.setVisible(false);
-
-        }else {
-
-            errorOperation.setVisible(true);
-            validOperation.setVisible(false);
-
-        }
 
         closePopups();
 
@@ -187,17 +175,7 @@ class AdminController extends InterfaceController{
                     salary = Integer.parseInt(((TextField) app).getText());
         }
 
-        if( DatabaseInnovativeSolutions.updateSalary(salary, username)){
-
-            validOperation.setVisible(true);
-            errorOperation.setVisible(false);
-
-        }else{
-
-            errorOperation.setVisible(true);
-            validOperation.setVisible(false);
-
-        }
+        DatabaseInnovativeSolutions.updateSalary(salary, username);
 
         userTable.removeAll(userTable);
         userTable.addAll(DatabaseInnovativeSolutions.getUsers());
@@ -239,15 +217,9 @@ class AdminController extends InterfaceController{
                 if( scroll.getUsername().compareTo(username) == 0 ){
 
                     userTable.remove( scroll );
-                    errorOperation.setVisible( false );
-                    validOperation.setVisible( true );
-
                     return;
                 }
             }
-
-            validOperation.setVisible(false);
-            errorOperation.setVisible(true);
 
         }
 
