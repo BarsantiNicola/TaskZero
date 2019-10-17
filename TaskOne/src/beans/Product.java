@@ -16,7 +16,7 @@ public class Product {
 		productType = new SimpleIntegerProperty(id);
 		productName = new SimpleStringProperty(name);
 		productPrice = new SimpleIntegerProperty(cost);
-		productDescription = new SimpleStringProperty(description);
+		productDescription = new SimpleStringProperty(description.replaceAll( "#123" , "\n"));
 		productAvailability = new SimpleIntegerProperty(availability);
 	}
 	

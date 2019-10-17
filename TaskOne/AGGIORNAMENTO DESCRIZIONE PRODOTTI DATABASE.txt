@@ -1,0 +1,5 @@
+UPDATE `exercise1`.`product` SET `productDescription` = 'A smartband with fitness and medical#123tracking functions that can be connected#123via bluetooth to a smartphone' WHERE (`productType` = '1');
+UPDATE `exercise1`.`product` SET `productDescription` = 'A lock that can be installed into a door#123to allow it to be opened remotely or#123via a touchpad' WHERE (`productType` = '2');
+UPDATE `exercise1`.`product` SET `productDescription` = 'A smart doorbell with an integrated#123display that initiates a video call when#123 someone rings at the door' WHERE (`productType` = '3');
+UPDATE `exercise1`.`product` SET `productDescription` = 'A light bulb allowing remote control#123via Bluetooth' WHERE (`productType` = '4');
+UPDATE `exercise1`.`product` SET `productDescription` = 'A smart thermostat that allows#123remote readings and programming' WHERE (`productType` = '5');
