@@ -259,9 +259,6 @@
                 <Text fill="WHITE" font="$x1" layoutX="265.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
               </children>
             </AnchorPane>
-            <Text layoutX="87.0" layoutY="75.0" scaleX="1.2258690665254985" scaleY="1.315712187958884" strokeType="OUTSIDE" strokeWidth="0.0" text="Last operation report:" />
-            <Text id="ADMINFailure" fill="BLACK" font="$x1" layoutX="220.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FAILURE" visible="false" />
-            <Text id="ADMINSuccess" fill="BLACK" font="$x1" layoutX="220.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SUCCESS" visible="false" />
           </children>
         </AnchorPane>
         <AnchorPane id="AccessPage" prefHeight="400.0" prefWidth="600.0" visible="true">
@@ -271,7 +268,7 @@
                 <Image url="file:../../data/access_background.jpg" />
               </image>
             </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="226.0" layoutY="42.0" pickOnBounds="true" preserveRatio="false">
+            <ImageView fitHeight="146.0" fitWidth="200.0" layoutX="201.0" layoutY="42.0" pickOnBounds="true" preserveRatio="false">
               <image>
                 <Image url="file:../../data/logo.png" />
               </image>

@@ -96,7 +96,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
+            <state relative-caret-position="-1037">
               <caret line="27" column="42" lean-forward="true" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
             </state>
           </provider>
@@ -361,12 +361,12 @@
       <workItem from="1571227966020" duration="6260000" />
       <workItem from="1571257112329" duration="11997000" />
       <workItem from="1571300155480" duration="26336000" />
-      <workItem from="1571347673573" duration="2452000" />
+      <workItem from="1571347673573" duration="2693000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="151831000" />
+    <option name="totallyTimeSpent" value="152072000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -566,7 +566,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="-1037">
           <caret line="27" column="42" lean-forward="true" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
         </state>
       </provider>
