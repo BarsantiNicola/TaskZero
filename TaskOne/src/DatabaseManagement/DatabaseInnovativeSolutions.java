@@ -7,12 +7,10 @@ import java.util.*;
 
 public class DatabaseInnovativeSolutions {
 
-
 	private static String connectionString;
 	private static Connection myConnection;
 	
 	//these statements are the ones related to the operations
-	private static PreparedStatement addUserStatement;
 	private static PreparedStatement deleteUser;
 	private static PreparedStatement deleteEmployee;
 	private static PreparedStatement updateSalaryStatement;
@@ -22,7 +20,8 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement getAvailableProductsStatement;
 	private static PreparedStatement insertOrderStatement;
 	
-	
+	//utility statements
+	private static PreparedStatement searchTeamProductsStatement;
 	private static PreparedStatement loginStatement;
 	private static PreparedStatement isEmployeeStatement;
 	private static PreparedStatement isCustomerStatement;
@@ -41,7 +40,7 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement getOrders;
 	private static PreparedStatement updateProductAvailability;
 
-
+	//initialize connection and statements
 	static {
 
 		connectionString = "jdbc:mysql://localhost:3306/exercise1?user=root&password=root&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
@@ -52,10 +51,7 @@ public class DatabaseInnovativeSolutions {
 
 			System.out.println("Database Connection Established");
 			
-			//OPERATIONS STATEMENTS
-			
-			addUserStatement = myConnection.prepareStatement(
-					"INSERT INTO user values ( ? , ? , ? , ? )");
+			//OPERATIONS QUERY
 					
 			deleteUser = myConnection.prepareStatement(
 					"DELETE FROM `user` WHERE username = ?;"
@@ -99,6 +95,12 @@ public class DatabaseInnovativeSolutions {
 					+ " WHERE customer=?");
 			
 			//OTHER STATEMENTS
+			
+			searchTeamProductsStatement = myConnection.prepareStatement(
+					"SELECT P.*"
+					+ " FROM product P INNER JOIN assembles A ON P.productType = A.product "
+					+ " WHERE team=? AND productName=? "
+					);
 
 			loginStatement = myConnection.prepareStatement(
 					"SELECT COUNT(*) AS numberOfUsers"
@@ -208,10 +210,8 @@ public class DatabaseInnovativeSolutions {
 	
 	//OPERATIONS
 	
-
-	
+	//delete the user having the given username
 	public static boolean deleteUser( String username ) {
-
 
 		try {
 
@@ -240,6 +240,7 @@ public class DatabaseInnovativeSolutions {
 		return false;
 	}
 
+	//determine if a user is header departement or not
 	public static boolean isEmployee( String username ){
 		ResultSet result;
 		try {
@@ -257,6 +258,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
+	//update the salary of an employee at the given value
 	public static boolean updateSalary(int salary, String employee) {
 
 		try {
@@ -275,6 +277,7 @@ public class DatabaseInnovativeSolutions {
 		}
 	}
 	
+	//retrieve all the products related to a team
 	public static List<Product> getTeamProducts( int team ){
 		
 		List<Product> teamProductList = new ArrayList<>();
@@ -306,6 +309,7 @@ public class DatabaseInnovativeSolutions {
 		return teamProductList;
 	}
 	
+	//retrieve all the employees of a given team
 	public static List<Employee> getTeamEmployees(int team) {
 
 		List<Employee> employeeList = new ArrayList<>();
@@ -333,6 +337,7 @@ public class DatabaseInnovativeSolutions {
 		return employeeList;
 	}
 	
+	//insert a new product
 	public static int insertProduct(int id, String name, int cost, String description , int availability ) {
 
 		int insertedRows = 0;
@@ -356,6 +361,7 @@ public class DatabaseInnovativeSolutions {
 		return insertedRows;
 	}
 	
+	//retrieve all the products having availability > 0 
 	public static List<Product> getAvailableProducts() {
 
 		List<Product> productList = new ArrayList<>();
@@ -385,6 +391,7 @@ public class DatabaseInnovativeSolutions {
 		return productList;
 	}
 	
+	//insert a new order 
 	public static int insertOrder( String customer, int product, int price) {
 		
 		int insertedRows = 0;
@@ -408,6 +415,7 @@ public class DatabaseInnovativeSolutions {
 		return insertedRows;
 	}
 	
+	//retrieve all the orders of a given customer
 	public static List<Order> getOrder( String IDcustomer ){
 		
 		List<Order> ordersList = new ArrayList<>();
@@ -442,6 +450,40 @@ public class DatabaseInnovativeSolutions {
 
 	//UTILITY FUNCTIONS
 	
+	//retrieve all the products of a given team
+	public static List<Product> searchTeamProducts( int team, String name ){
+		
+		List<Product> teamProducts = new ArrayList<>();
+		
+		try {
+
+			searchTeamProductsStatement.setString( 1 , Integer.toString(team) );
+			searchTeamProductsStatement.setString(2, name);
+			getOrders.execute();
+
+			ResultSet teamProductResult = searchTeamProductsStatement.getResultSet();
+
+			while ( teamProductResult.next() ) {
+
+				teamProducts.add(new Product(teamProductResult.getInt( "productType"),
+								teamProductResult.getString("productName"),
+								teamProductResult.getInt("productPrice"),
+								teamProductResult.getString( "productDescription" ),
+								teamProductResult.getInt("productAvailability")
+						)
+				);
+			}
+
+
+		} catch (SQLException caughtException) {
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+		}
+
+		return teamProducts;
+	}
+	
 	public static int getTeam(String name) {
 
 		try {
@@ -465,6 +507,7 @@ public class DatabaseInnovativeSolutions {
 		return -1;
 	}
 
+	//retrieve a list of all the users
 	public static List<User> getUsers() {
 
 		List<User> list = new ArrayList<>();
@@ -518,7 +561,7 @@ public class DatabaseInnovativeSolutions {
 		return list;
 	}
 
-	//questa c'� gi� sopra
+	
 	public static List<Product> searchProducts(String value) {
 
 		List<Product> list = new ArrayList<>();
@@ -546,7 +589,6 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
-	//questa c'� gi� sopra
 	public static List<Order> searchOrders(String value, String customerID) {
 
 		List<Order> list = new ArrayList<>();
@@ -574,7 +616,6 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
-	//questa c'� gi� sopra
 	public static List<Employee> searchTeamEmployees(String value, int team) {
 
 		List<Employee> list = new ArrayList<>();
@@ -609,6 +650,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
+	//login function
 	public static UserType login(String user, String psw) {
 
 		try {
@@ -658,7 +700,7 @@ public class DatabaseInnovativeSolutions {
 		return UserType.NOUSER;
 	}
 
-
+	//determines if a user is a team leader
 	public static boolean isTeamLeader( String user ){
 		ResultSet result;
 		try {
@@ -676,6 +718,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
+	//update the availability of a given product
 	public static boolean updateProductAvailability( int product , int value ){
 
 		try {
@@ -692,6 +735,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
+	//insert a new given user
 	public static boolean insertUser( User newUser) {
 
 		try {
