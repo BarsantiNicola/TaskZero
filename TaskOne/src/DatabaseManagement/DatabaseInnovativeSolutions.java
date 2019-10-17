@@ -1,10 +1,7 @@
 package DatabaseManagement;
 
 import beans.*;
-//import com.mysql.cj.x.protobuf.MysqlxCrud;
-
 import java.sql.*;
-
 import java.util.*;
 
 
@@ -24,7 +21,6 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement insertProductStatement;
 	private static PreparedStatement getAvailableProductsStatement;
 	private static PreparedStatement insertOrderStatement;
-	private static PreparedStatement getOrderStatusStatement;
 	
 	
 	private static PreparedStatement loginStatement;
@@ -202,9 +198,11 @@ public class DatabaseInnovativeSolutions {
 			System.out.println("Statements Created Correctly");
 
 		} catch (SQLException caughtException) {
+
 			System.out.println("SQLException: " + caughtException.getMessage());
 			System.out.println("SQLState: " + caughtException.getSQLState());
 			System.out.println("VendorError: " + caughtException.getErrorCode());
+
 		}
 	}
 	
@@ -259,7 +257,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
-	public static void updateSalary(int salary, String employee) {
+	public static boolean updateSalary(int salary, String employee) {
 
 		try {
 
@@ -267,11 +265,13 @@ public class DatabaseInnovativeSolutions {
 			updateSalaryStatement.setString(2, employee);
 
 			 updateSalaryStatement.executeUpdate();
+			 return true;
 
 		} catch (SQLException caughtException) {
 			System.out.println("SQLException: " + caughtException.getMessage());
 			System.out.println("SQLState: " + caughtException.getSQLState());
 			System.out.println("VendorError: " + caughtException.getErrorCode());
+			return false;
 		}
 	}
 	
@@ -706,6 +706,12 @@ public class DatabaseInnovativeSolutions {
 			insertUser.execute();
 
 			if( newUser.getRole()!= null && newUser.getRole().length() > 0 ) {
+
+				if( newUser.getSalary() <= 0 || newUser.getTeam() <= 0 ){
+					rollback.execute();
+					return false;
+				}
+
 				insertEmployee.setString(1, newUser.getUsername());
 				insertEmployee.setInt(2, newUser.getSalary());
 				insertEmployee.setString(3, newUser.getRole());

@@ -81,7 +81,7 @@
                 </Pane>
                 <TextField layoutX="328.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="33.421875" promptText="n." style="-fx-font-size: 8pt ;" text="" />
                 <TextField layoutX="146.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="88.0" promptText="ProductName" style="-fx-font-size: 8pt ;" />
-                <Button layoutX="333.0" layoutY="47.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="15.9609375" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertProduct" prefHeight="16.0" prefWidth="60.0" text="Add">
+                <Button layoutX="333.0" layoutY="47.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="15.9609375" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertElement" prefHeight="16.0" prefWidth="60.0" text="Add">
                   <font>
                     <Font name="System Bold" size="9.0" fx:id="x3" />
                   </font>
@@ -154,7 +154,7 @@
                   </children>
                 </Pane>
                 <TextField layoutX="127.0" layoutY="29.0" prefHeight="16.0" prefWidth="145.0" promptText="ProductName" style="-fx-font-size: 8pt ;" />
-                <Button font="$x3" layoutX="287.0" layoutY="21.0" minHeight="15.9609375" mnemonicParsing="false" onAction="#insertOrder" prefHeight="31.0" prefWidth="73.0" text="Add Order" />
+                <Button font="$x3" layoutX="287.0" layoutY="21.0" minHeight="15.9609375" mnemonicParsing="false" onAction="#insertElement" prefHeight="31.0" prefWidth="73.0" text="Add Order" />
                 <Button font="$x3" layoutX="381.0" layoutY="21.0" minHeight="7.0" mnemonicParsing="false" onAction="#closePopup" prefHeight="31.0" prefWidth="72.0" text="Exit" />
                 <Text fill="WHITE" font="$x1" layoutX="34.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name" />
               </children>
@@ -185,11 +185,11 @@
                 <AnchorPane id="ADMINUsersTable" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="233.0" prefWidth="486.0" />
               </content>
             </ScrollPane>
-            <Button layoutX="436.0" layoutY="344.0" mnemonicParsing="false" onAction="#insertPopup" prefWidth="129.0" text="New User" />
+            <Button layoutX="91.0" layoutY="344.0" mnemonicParsing="false" onAction="#insertPopup" prefWidth="129.0" text="New User" />
             <Text id="ADMINFail" font="$x1" layoutX="471.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserimento Fallito" visible="false" />
             <Text id="ADMINSuccess" font="$x1" layoutX="471.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserimento Riuscito" visible="false" />
-            <Button layoutX="261.0" layoutY="344.0" mnemonicParsing="false" onAction="#updatePopup" prefWidth="129.0" text="Update User" />
-            <Button layoutX="88.0" layoutY="344.0" mnemonicParsing="false" onAction="#deletePopup" prefWidth="129.0" text="Delete User" />
+            <Button layoutX="261.0" layoutY="345.0" mnemonicParsing="false" onAction="#updatePopup" prefWidth="129.0" text="Update Salary" />
+            <Button layoutX="432.0" layoutY="345.0" mnemonicParsing="false" onAction="#deletePopup" prefWidth="129.0" text="Delete User" />
             <AnchorPane id="ADMINUpdatePopUp" layoutX="75.0" layoutY="321.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="492.0" visible="false">
               <children>
                 <ImageView fitHeight="65.0" fitWidth="492.0" layoutX="0.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="false" smooth="true">
@@ -222,24 +222,24 @@
                     <Text fill="WHITE" font="$x1" layoutX="7.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert new user" />
                   </children>
                 </Pane>
-                <TextField layoutX="226.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.9608154296875" prefWidth="145.0" promptText="Username" style="-fx-font-size: 8pt ;" />
-                <TextField layoutX="226.0" layoutY="66.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Name" style="-fx-font-size: 8pt ;" />
-                <TextField layoutX="226.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Surname" style="-fx-font-size: 8pt ;" />
-                <TextField layoutX="226.0" layoutY="114.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Password" style="-fx-font-size: 8pt ;" text="" />
-                <TextField layoutX="226.0" layoutY="138.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Mail" style="-fx-font-size: 8pt ;" />
-                <TextField layoutX="226.0" layoutY="162.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Role" style="-fx-font-size: 8pt ;" />
-                <TextField layoutX="226.0" layoutY="186.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Salary" style="-fx-font-size: 8pt ;" />
-                <Button font="$x1" layoutX="101.0" layoutY="240.0" mnemonicParsing="false" onAction="#insertUser" prefHeight="38.0" prefWidth="69.0" text="Insert" />
-                <Button font="$x1" layoutX="325.0" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closePopup" prefHeight="38.0" prefWidth="69.0" text="Exit" />
-                <Text fill="WHITE" font="$x1" layoutX="129.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-                <Text fill="WHITE" font="$x1" layoutX="152.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-                <Text fill="WHITE" font="$x1" layoutX="135.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Surname" />
-                <Text fill="WHITE" font="$x1" layoutX="131.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-                <Text fill="WHITE" font="$x1" layoutX="154.0" layoutY="154.0" scaleX="1.0" scaleY="0.9999937347040251" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
-                <Text fill="WHITE" font="$x1" layoutX="160.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Role" />
-                <Text fill="WHITE" font="$x1" layoutX="150.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Salary" />
-                <TextField layoutX="227.0" layoutY="209.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Team" style="-fx-font-size: 8pt ;" />
-                <Text fill="WHITE" font="$x1" layoutX="154.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team" />
+                <TextField layoutX="313.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.9608154296875" prefWidth="145.0" promptText="Username" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="313.0" layoutY="66.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Name" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="313.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Surname" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="313.0" layoutY="114.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Password" style="-fx-font-size: 8pt ;" text="" />
+                <TextField layoutX="313.0" layoutY="138.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Mail" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="313.0" layoutY="162.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Role" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="313.0" layoutY="186.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Salary" style="-fx-font-size: 8pt ;" />
+                <Button id="ADMINInsertButton" font="$x1" layoutX="84.0" layoutY="84.0" mnemonicParsing="false" onAction="#insertElement" prefHeight="38.0" prefWidth="69.0" text="Insert" />
+                <Button font="$x1" layoutX="84.0" layoutY="217.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closePopup" prefHeight="38.0" prefWidth="69.0" text="Exit" />
+                <Text fill="WHITE" font="$x1" layoutX="230.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+                <Text fill="WHITE" font="$x1" layoutX="251.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+                <Text fill="WHITE" font="$x1" layoutX="237.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Surname" />
+                <Text fill="WHITE" font="$x1" layoutX="233.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+                <Text fill="WHITE" font="$x1" layoutX="256.0" layoutY="151.0" scaleX="1.0" scaleY="0.9999937347040251" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+                <Text fill="WHITE" font="$x1" layoutX="259.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Role" />
+                <Text fill="WHITE" font="$x1" layoutX="250.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Salary" />
+                <TextField layoutX="313.0" layoutY="209.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="145.0" promptText="Team" style="-fx-font-size: 8pt ;" />
+                <Text fill="WHITE" font="$x1" layoutX="253.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team" />
               </children>
             </AnchorPane>
             <AnchorPane id="ADMINDeletePopUp" layoutX="75.0" layoutY="321.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="492.0" visible="false">
@@ -261,6 +261,9 @@
                 <Text fill="WHITE" font="$x1" layoutX="265.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
               </children>
             </AnchorPane>
+            <Text layoutX="87.0" layoutY="75.0" scaleX="1.2258690665254985" scaleY="1.315712187958884" strokeType="OUTSIDE" strokeWidth="0.0" text="Last operation report:" />
+            <Text id="ADMINFailure" fill="BLACK" font="$x1" layoutX="220.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FAILURE" visible="false" />
+            <Text id="ADMINSuccess" fill="BLACK" font="$x1" layoutX="220.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SUCCESS" visible="false" />
           </children>
         </AnchorPane>
         <AnchorPane id="AccessPage" prefHeight="400.0" prefWidth="600.0" visible="true">

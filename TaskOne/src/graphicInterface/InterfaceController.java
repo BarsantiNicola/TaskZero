@@ -1,11 +1,15 @@
 package graphicInterface;
 
-import javafx.scene.control.TextField;
+
 
 abstract class InterfaceController {
 
-    private static TextField searchValue;
 
     abstract void searchValue();
+    abstract void undoSearch();
+    abstract void showInsertPopup();
+    abstract void insertNewElement();
+    abstract void closePopups();
+    abstract void changeTable( String SECTION );
 
 }

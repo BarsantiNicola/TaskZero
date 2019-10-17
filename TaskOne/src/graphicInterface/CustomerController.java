@@ -106,7 +106,7 @@ public class CustomerController extends InterfaceController{
 
     }
 
-    void insertOrder(){
+    void insertNewElement(){
 
         Iterator<Node> it = insertPopup.getChildren().iterator();
         Iterator<Product> productList = productsTable.iterator();

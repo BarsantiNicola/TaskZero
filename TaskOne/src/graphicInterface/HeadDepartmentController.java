@@ -104,7 +104,7 @@ public class HeadDepartmentController extends InterfaceController{
         insertPopup.setVisible(false);
     }
 
-    void insertProduct(){
+    void insertNewElement(){
 
         Iterator<Node> it = insertPopup.getChildren().iterator();
         Iterator<Product> product = productsTable.iterator();
