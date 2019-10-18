@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFxApplication/DatabaseManagement/DatabaseInnovativeSolutions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFxApplication/DatabaseManagement/DatabaseInnovativeSolutions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphicInterface/interface.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphicInterface/interface.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="" />
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -80,8 +75,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DatabaseManagement/DatabaseInnovativeSolutions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="659" column="97" selection-start-line="659" selection-start-column="97" selection-end-line="659" selection-end-column="97" />
+            <state relative-caret-position="116">
+              <caret line="71" column="28" selection-start-line="71" selection-start-column="28" selection-end-line="71" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -104,8 +99,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="912">
-              <caret line="159" selection-start-line="159" selection-end-line="159" />
+            <state relative-caret-position="-652">
+              <caret line="34" column="140" selection-start-line="34" selection-start-column="140" selection-end-line="34" selection-end-column="140" />
             </state>
           </provider>
         </entry>
@@ -186,8 +181,8 @@
         <option value="$PROJECT_DIR$/src/graphicInterface/GraphicInterface.java" />
         <option value="$PROJECT_DIR$/src/beans/Order.java" />
         <option value="$PROJECT_DIR$/src/beans/Product.java" />
-        <option value="$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java" />
         <option value="$PROJECT_DIR$/src/graphicInterface/CustomerController.java" />
+        <option value="$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java" />
         <option value="$PROJECT_DIR$/src/DatabaseManagement/DatabaseInnovativeSolutions.java" />
       </list>
     </option>
@@ -399,12 +394,12 @@
       <workItem from="1571347673573" duration="4699000" />
       <workItem from="1571392445336" duration="4503000" />
       <workItem from="1571411542605" duration="5405000" />
-      <workItem from="1571418645507" duration="4221000" />
+      <workItem from="1571418645507" duration="7752000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="168207000" />
+    <option name="totallyTimeSpent" value="171738000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -582,13 +577,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="912">
-          <caret line="159" selection-start-line="159" selection-end-line="159" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/graphicInterface/CustomerController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1972">
@@ -599,10 +587,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/graphicInterface/HeadDepartmentController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-652">
+          <caret line="34" column="140" selection-start-line="34" selection-start-column="140" selection-end-line="34" selection-end-column="140" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DatabaseManagement/DatabaseInnovativeSolutions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="659" column="97" selection-start-line="659" selection-start-column="97" selection-end-line="659" selection-end-column="97" />
+        <state relative-caret-position="116">
+          <caret line="71" column="28" selection-start-line="71" selection-start-column="28" selection-end-line="71" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

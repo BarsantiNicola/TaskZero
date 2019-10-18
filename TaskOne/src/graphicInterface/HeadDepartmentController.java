@@ -32,7 +32,7 @@ public class HeadDepartmentController extends InterfaceController{
     HeadDepartmentController( Scene app , int team ){
 
         //  associations from the field of the table and the identificator of the bean class variable related
-        String[][] productFields = { { "productID" , "productId"} , { "Name" , "productName"} , { "Price" , "productPrice" } , { "Description" , "productDescription"} };
+        String[][] productFields = { { "Name" , "productName"} , { "Price" , "productPrice" } , { "Availability" , "ProductAvailability"} , { "Description" , "productDescription"} };
         String[][] employeeFields = { { "ID" , "IDemployee" }  , { "Name" , "name" }  , { "Surname" , "surname" } , { "Email" , "mail" } , {"Role" , "role"} };
         TableColumn column;
 
@@ -124,15 +124,14 @@ public class HeadDepartmentController extends InterfaceController{
 
         Product p;
         String name = values.get("ProductName");
-        int number = Integer.parseInt(values.get("n."));
 
         while( product.hasNext() ){
             p = product.next();
             if( p.getProductName().compareTo(name) == 0 ) {
 
-                if (DatabaseInnovativeSolutions.updateProductAvailability(p.getProductType(), p.getProductAvailability() + number)) {
+                if (DatabaseInnovativeSolutions.updateProductAvailability(p.getProductType(), p.getProductAvailability() + 1)) {
                     productsTable.removeAll( p );
-                    p.setProductAvailability( p.getProductAvailability() + number );
+                    p.setProductAvailability( p.getProductAvailability() + 1 );
                     productsTable.add( p );
                     closePopups();
 
@@ -153,7 +152,7 @@ public class HeadDepartmentController extends InterfaceController{
         if( currentSection == false){
 
             employeesTable.removeAll( employeesTable );
-            employeesTable.addAll( DatabaseInnovativeSolutions.searchTeamEmployees( value , managedTeam));
+            employeesTable.addAll( DatabaseInnovativeSolutions.searchTeamEmployees( managedTeam , value ));
             undoButton.setVisible( true );
 
         }else{
@@ -176,7 +175,7 @@ public class HeadDepartmentController extends InterfaceController{
 
             if( undoButton.isVisible()){
                 productsTable.removeAll( employeesTable );
-                productsTable.addAll( DatabaseInnovativeSolutions.getAvailableProducts());
+                productsTable.addAll( DatabaseInnovativeSolutions.getTeamProducts(managedTeam));
             }
 
             employeesSection.setVisible( true );
@@ -204,10 +203,10 @@ public class HeadDepartmentController extends InterfaceController{
         undoButton.setVisible( false );
         if( currentSection == true ) {
             productsTable.removeAll(productsTable);
-            productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
+            productsTable.addAll(DatabaseInnovativeSolutions.getTeamProducts( managedTeam ));
         }else{
             employeesTable.removeAll(employeesTable);
-            employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees(managedTeam));
+            employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees( managedTeam ));
         }
 
     }

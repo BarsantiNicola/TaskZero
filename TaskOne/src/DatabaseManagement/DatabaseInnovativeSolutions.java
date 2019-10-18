@@ -69,9 +69,8 @@ public class DatabaseInnovativeSolutions {
 			
 			getTeamProductsStatement = myConnection.prepareStatement(
 
-					"SELECT IDproduct AS productId , P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability "
-						+ " FROM product P INNER JOIN assembles A ON P.productType = A.product " +
-							"JOIN product_stock ON product_stock.productType = P.productType WHERE team = ?;");
+					"SELECT P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability "
+						+ " FROM product P INNER JOIN assembles A ON P.productType = A.product  WHERE team = ?;");
 			
 			getTeamEmployeeStatement = myConnection.prepareStatement(
 					"select IDemployee , name , surname , mail , role" +
@@ -92,19 +91,15 @@ public class DatabaseInnovativeSolutions {
 							" ON IDproduct = product " +
 							" WHERE productType = ?)" +
 							" ORDER BY IDProduct"
+
 			);
 
 			getAvailableProductsStatement = myConnection.prepareStatement(
 					      "SELECT product.productType , productName, productPrice , productDescription , productAvailability "
 							+ " FROM product"
-							+ " WHERE productAvailability > 0");
-					/*"SELECT IDproduct AS productId , product.productType , productName, productPrice , productDescription , productAvailability "
-							+ " FROM product JOIN order"
-							+ " ON product.productType = product_stock.productType"
-							+ " WHERE productAvailability > 0 AND IDproduct NOT IN (" +
-								" SELECT PS.IDproduct " +
-								" FROM product_stock AS PS JOIN orders" +
-								" ON PS.IDproduct = orders.product)");*/
+							+ " WHERE productAvailability > 0"
+
+			);
 
 			getProductType = myConnection.prepareStatement(
 							"SELECT productType" +
@@ -125,9 +120,11 @@ public class DatabaseInnovativeSolutions {
 			//OTHER STATEMENTS
 			
 			searchTeamProductsStatement = myConnection.prepareStatement(
-					"SELECT P.*"
-					+ " FROM product P INNER JOIN assembles A ON P.productType = A.product "
-					+ " WHERE team=? AND productName=? "
+
+					"SELECT  P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability "
+							+ " FROM product P INNER JOIN assembles A ON P.productType = A.product " +
+							" WHERE team = ? AND productName=?;"
+
 					);
 
 			loginStatement = myConnection.prepareStatement(
@@ -189,11 +186,6 @@ public class DatabaseInnovativeSolutions {
 							+ " ON  orders.product = product_stock.IDproduct"
 							+ " JOIN product ON product_stock.productType = product.productType"
 							+ " WHERE orders.customer=? AND product.productName = ?"
-					/*"SELECT product , productType , productName , price , productDescription , productAvailability"
-							+ " FROM Order JOIN product_stock"
-							+  " ON Order.product = product_stock.IDproduct"
-							+  " JOIN product ON product_stock.productType = product.productType"
-							+ " WHERE customer = ? AND (product = ?  OR status = ?)"*/
 
 			);
 
@@ -203,7 +195,9 @@ public class DatabaseInnovativeSolutions {
 							" join employee" +
 							" on user.username = employee.IDemployee" +
 							" where team = ?" +
-							" AND ( IDemployee = ? OR name = ? OR surname = ? OR mail = ? OR role = ?); ");
+							" AND ( IDemployee = ? OR name = ? OR surname = ? OR mail = ? OR role = ?); "
+
+			);
 
 			insertUser = myConnection.prepareStatement(
 					"INSERT INTO `User`( username , name , surname , password , mail ) VALUE ( ? , ? , ? , ? , ? );"
@@ -326,7 +320,7 @@ public class DatabaseInnovativeSolutions {
 
 			while(getTeamProductsResult.next()) {
 
-				teamProductList.add(new Product( getTeamProductsResult.getInt( "productId" ), getTeamProductsResult.getInt("productType"),
+				teamProductList.add(new Product( 0, getTeamProductsResult.getInt("productType"),
 						getTeamProductsResult.getString("productName"),
 						getTeamProductsResult.getInt("productPrice"),
 						getTeamProductsResult.getString("productDescription"),
@@ -520,7 +514,7 @@ public class DatabaseInnovativeSolutions {
 
 			while ( teamProductResult.next() ) {
 
-				teamProducts.add(new Product( teamProductResult.getInt("productId") , teamProductResult.getInt( "productType"),
+				teamProducts.add(new Product( 0 , teamProductResult.getInt( "productType"),
 								teamProductResult.getString("productName"),
 								teamProductResult.getInt("productPrice"),
 								teamProductResult.getString( "productDescription" ),
@@ -671,7 +665,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
-	public static List<Employee> searchTeamEmployees(String value, int team) {
+	public static List<Employee> searchTeamEmployees( int team , String value ) {
 
 		List<Employee> list = new ArrayList<>();
 
