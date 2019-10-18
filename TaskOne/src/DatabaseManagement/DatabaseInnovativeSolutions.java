@@ -81,8 +81,9 @@ public class DatabaseInnovativeSolutions {
 			);
 			
 			getAvailableProductsStatement = myConnection.prepareStatement(
-					"SELECT productType , productName, productPrice , productDescription , productAvailability "
-							+ " FROM product "
+					"SELECT IDproduct AS productId , product.productType , productName, productPrice , productDescription , productAvailability "
+							+ " FROM product JOIN product_stock"
+							+ " ON product.productType = product_stock.productType"
 							+ " WHERE productAvailability > 0 ");
 			
 			insertOrderStatement = myConnection.prepareStatement(
@@ -150,9 +151,11 @@ public class DatabaseInnovativeSolutions {
 			);
 
 			searchProducts = myConnection.prepareStatement(
-					"SELECT productType , productName , productPrice , productDescription , productAvailability"
-							+ " FROM Product"
-							+ " WHERE productName = ?;"
+					"SELECT IDproduct AS productId , product.productType, productName, productPrice , productDescription , productAvailability "
+							+ " FROM product JOIN product_stock"
+							+ " ON product.productType = product_stock.productType"
+							+ " WHERE productAvailability > 0 AND"
+							+ " productName = ?;"
 
 			);
 
@@ -294,7 +297,7 @@ public class DatabaseInnovativeSolutions {
 
 			while(getTeamProductsResult.next()) {
 
-				teamProductList.add(new Product(getTeamProductsResult.getInt("productType"),
+				teamProductList.add(new Product( getTeamProductsResult.getInt( "productId" ), getTeamProductsResult.getInt("productType"),
 						getTeamProductsResult.getString("productName"),
 						getTeamProductsResult.getInt("productPrice"),
 						getTeamProductsResult.getString("productDescription"),
@@ -355,7 +358,9 @@ public class DatabaseInnovativeSolutions {
 
 			while (availableProductsResult.next()) {
 
-				productList.add(new Product(availableProductsResult.getInt("productType"),
+				System.out.println("Prodotto");
+				productList.add( new Product( availableProductsResult.getInt( "productId") ,
+								availableProductsResult.getInt( "productType"),
 								availableProductsResult.getString("productName"),
 								availableProductsResult.getInt("productPrice"),
 								availableProductsResult.getString("productDescription"),
@@ -446,7 +451,7 @@ public class DatabaseInnovativeSolutions {
 
 			while ( teamProductResult.next() ) {
 
-				teamProducts.add(new Product(teamProductResult.getInt( "productType"),
+				teamProducts.add(new Product( teamProductResult.getInt("productId") , teamProductResult.getInt( "productType"),
 								teamProductResult.getString("productName"),
 								teamProductResult.getInt("productPrice"),
 								teamProductResult.getString( "productDescription" ),
@@ -556,7 +561,7 @@ public class DatabaseInnovativeSolutions {
 			ResultSet products = searchProducts.getResultSet();
 
 			while (products.next())
-				list.add(new Product(products.getInt("productType"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getInt("productAvailability")));
+				list.add(new Product( products.getInt("productId") , products.getInt("productType"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getInt("productAvailability")));
 
 		} catch (SQLException caughtException) {
 

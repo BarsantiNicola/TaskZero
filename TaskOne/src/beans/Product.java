@@ -12,16 +12,17 @@ public class Product {
 	private final SimpleStringProperty productDescription;
 	private final SimpleIntegerProperty productAvailability;
 	
-	public Product( int id, String name, int cost, String description , int availability ) {
+	public Product( int id, int type , String name, int cost, String description , int availability ) {
 
 		productId = new SimpleIntegerProperty( id );
-		productType = new SimpleIntegerProperty(id);
+		productType = new SimpleIntegerProperty(type);
 		productName = new SimpleStringProperty(name);
 		productPrice = new SimpleIntegerProperty(cost);
 		productDescription = new SimpleStringProperty(description.replaceAll( "#123" , "\n"));
 		productAvailability = new SimpleIntegerProperty( availability );
 
 	}
+
 	
 	public int getProductType() {
 		
