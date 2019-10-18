@@ -17,7 +17,6 @@ import javafx.scene.layout.AnchorPane;
 import java.sql.Timestamp;
 import java.util.Iterator;
 
-import static com.oracle.jrockit.jfr.ContentType.Timestamp;
 
 public class CustomerController extends InterfaceController{
 
@@ -130,10 +129,12 @@ public class CustomerController extends InterfaceController{
             product = productList.next();
             if( product.getProductId() == productID ){
                 newOrder = new Order( productID , product.getProductName() , product.getProductPrice() , new Timestamp(System.currentTimeMillis())  , product.getProductPrice() ,"ordered"  );
-                if( DatabaseInnovativeSolutions.insertOrder(customerId , product.getProductType() , product.getProductPrice())  > 0 ){
+                System.out.println("Customer: " + customerId + " Product: " + productID );
+                if( DatabaseInnovativeSolutions.insertOrder(customerId , productID , product.getProductPrice())  > 0 ){
+
                     ordersTable.add( newOrder );
-                    /*if( product.getProductAvailability() == 1 )
-                        productsTable.remove(product);*/
+                    productsTable.remove( product );
+                    break;
 
                 }
             }

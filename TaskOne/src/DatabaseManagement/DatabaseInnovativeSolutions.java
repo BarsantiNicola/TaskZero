@@ -84,7 +84,10 @@ public class DatabaseInnovativeSolutions {
 					"SELECT IDproduct AS productId , product.productType , productName, productPrice , productDescription , productAvailability "
 							+ " FROM product JOIN product_stock"
 							+ " ON product.productType = product_stock.productType"
-							+ " WHERE productAvailability > 0 ");
+							+ " WHERE productAvailability > 0 AND IDproduct NOT IN (" +
+								" SELECT PS.IDproduct " +
+								" FROM product_stock AS PS JOIN orders" +
+								" ON PS.IDproduct = orders.product)");
 			
 			insertOrderStatement = myConnection.prepareStatement(
 					"INSERT INTO orders VALUES (?,?,?,?,?)");
@@ -155,7 +158,10 @@ public class DatabaseInnovativeSolutions {
 							+ " FROM product JOIN product_stock"
 							+ " ON product.productType = product_stock.productType"
 							+ " WHERE productAvailability > 0 AND"
-							+ " productName = ?;"
+							+ " productName = ? AND IDproduct NOT IN (" +
+								" SELECT IDproduct " +
+							 	" FROM product_stock AS PS JOIN orders " +
+							    " ON PS.IDproduct = orders.product	);"
 
 			);
 
