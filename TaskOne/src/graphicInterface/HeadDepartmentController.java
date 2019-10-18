@@ -32,7 +32,7 @@ public class HeadDepartmentController extends InterfaceController{
     HeadDepartmentController( Scene app , int team ){
 
         //  associations from the field of the table and the identificator of the bean class variable related
-        String[][] productFields = { { "Name" , "productName"} , { "Price" , "productPrice" } , { "Availability" , "productAvailability" } , { "Description" , "productDescription"} };
+        String[][] productFields = { { "productID" , "productId"} , { "Name" , "productName"} , { "Price" , "productPrice" } , { "Description" , "productDescription"} };
         String[][] employeeFields = { { "ID" , "IDemployee" }  , { "Name" , "name" }  , { "Surname" , "surname" } , { "Email" , "mail" } , {"Role" , "role"} };
         TableColumn column;
 

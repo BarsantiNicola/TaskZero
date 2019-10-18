@@ -153,10 +153,10 @@
                     <Text fill="WHITE" font="$x1" layoutX="7.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Order" />
                   </children>
                 </Pane>
-                <TextField layoutX="127.0" layoutY="29.0" prefHeight="16.0" prefWidth="145.0" promptText="ProductId" style="-fx-font-size: 8pt ;" />
+                <TextField layoutX="127.0" layoutY="29.0" prefHeight="16.0" prefWidth="145.0" promptText="ProductName" style="-fx-font-size: 8pt ;" />
                 <Button font="$x3" layoutX="287.0" layoutY="21.0" minHeight="15.9609375" mnemonicParsing="false" onAction="#insertElement" prefHeight="31.0" prefWidth="73.0" text="Add Order" />
                 <Button font="$x3" layoutX="381.0" layoutY="21.0" minHeight="7.0" mnemonicParsing="false" onAction="#closePopup" prefHeight="31.0" prefWidth="72.0" text="Exit" />
-                <Text fill="WHITE" font="$x1" layoutX="34.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Id" />
+                <Text fill="WHITE" font="$x1" layoutX="34.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name" />
               </children>
             </AnchorPane>
           </children>

@@ -36,7 +36,7 @@ public class CustomerController extends InterfaceController{
     CustomerController( Scene app , String cId ){
 
 
-        String[][] productFields = { { "productID" , "productId"} , { "Name" , "productName"} , { "Price" , "productPrice" } , { "Description" , "productDescription"} };
+        String[][] productFields = { { "Name" , "productName"} , { "Price" , "productPrice" } , { "Description" , "productDescription"} };
         String[][] orderFields = { { "productID" , "productId" } ,  { "ProductName" , "productName" } , { "ProductPrice" , "productPrice" } , { "Purchase Date" , "purchaseDate" } ,  { "Purchased Price" , "purchasedPrice" }  , { "Status" , "orderStatus" }};
         TableColumn column;
 
@@ -113,30 +113,38 @@ public class CustomerController extends InterfaceController{
         Product product;
         Order newOrder;
 
-        int productID = -1;
+        String productName = "";
         while( it.hasNext()){
             app = it.next();
             if( app instanceof TextField ) {
 
-                productID = Integer.parseInt(((TextField) app).getText());
+                productName = ((TextField) app).getText();
+                ((TextField) app).setText("");
                 break;
 
             }
         }
 
+        int myProductType = DatabaseInnovativeSolutions.getProductType( productName );
+        int myProductId = DatabaseInnovativeSolutions.getMinIDProduct( myProductType );
+
+
         while( productList.hasNext() ) {
 
             product = productList.next();
-            if( product.getProductId() == productID ){
-                newOrder = new Order( productID , product.getProductName() , product.getProductPrice() , new Timestamp(System.currentTimeMillis())  , product.getProductPrice() ,"ordered"  );
-                System.out.println("Customer: " + customerId + " Product: " + productID );
-                if( DatabaseInnovativeSolutions.insertOrder(customerId , productID , product.getProductPrice())  > 0 ){
+            if( product.getProductType() == myProductType ){
+                newOrder = new Order( myProductId , product.getProductName() , product.getProductPrice() , new Timestamp(System.currentTimeMillis())  , product.getProductPrice() ,"ordered"  );
+
+                if( DatabaseInnovativeSolutions.insertOrder(customerId , myProductId , product.getProductPrice())  > 0 ){
 
                     ordersTable.add( newOrder );
-                    productsTable.remove( product );
+                    product.setProductAvailability( product.getProductAvailability()-1);
+                    if( product.getProductAvailability() < 0 )
+                        productsTable.remove( product );
                     break;
 
                 }
+
             }
         }
         closePopups();
@@ -146,7 +154,7 @@ public class CustomerController extends InterfaceController{
 
         String value = searchInput.getText();
 
-        if( currentSection ){
+        if( !currentSection ){
 
             productsTable.removeAll( productsTable );
             productsTable.addAll( DatabaseInnovativeSolutions.searchProducts( value ));

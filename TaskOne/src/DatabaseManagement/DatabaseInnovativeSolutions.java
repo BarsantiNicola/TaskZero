@@ -38,7 +38,9 @@ public class DatabaseInnovativeSolutions {
 	private static PreparedStatement rollback;
 	private static PreparedStatement isTeamLeader;
 	private static PreparedStatement getOrders;
+	private static PreparedStatement getMinIDProduct;
 	private static PreparedStatement updateProductAvailability;
+	private static PreparedStatement getProductType;
 
 	//initialize connection and statements
 	static {
@@ -66,8 +68,10 @@ public class DatabaseInnovativeSolutions {
 							+ " WHERE IDemployee=?");
 			
 			getTeamProductsStatement = myConnection.prepareStatement(
-					"SELECT P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability "
-						+ " FROM product P INNER JOIN assembles A ON P.productType = A.product WHERE team = ?;");
+
+					"SELECT IDproduct AS productId , P.productType,P.productName,P.productPrice,P.productDescription,P.productAvailability "
+						+ " FROM product P INNER JOIN assembles A ON P.productType = A.product " +
+							"JOIN product_stock ON product_stock.productType = P.productType WHERE team = ?;");
 			
 			getTeamEmployeeStatement = myConnection.prepareStatement(
 					"select IDemployee , name , surname , mail , role" +
@@ -79,16 +83,35 @@ public class DatabaseInnovativeSolutions {
 			insertProductStatement = myConnection.prepareStatement(
 					"INSERT INTO product VALUES (?,?,?,?,?);"
 			);
-			
+
+			getMinIDProduct = myConnection.prepareStatement(
+					"SELECT IDProduct" +
+							" FROM product_stock WHERE productType = ? " +
+							" AND IDproduct NOT IN(SELECT IDproduct" +
+							" FROM product_stock INNER JOIN orders" +
+							" ON IDproduct = product " +
+							" WHERE productType = ?)" +
+							" ORDER BY IDProduct"
+			);
+
 			getAvailableProductsStatement = myConnection.prepareStatement(
-					"SELECT IDproduct AS productId , product.productType , productName, productPrice , productDescription , productAvailability "
-							+ " FROM product JOIN product_stock"
+					      "SELECT product.productType , productName, productPrice , productDescription , productAvailability "
+							+ " FROM product"
+							+ " WHERE productAvailability > 0");
+					/*"SELECT IDproduct AS productId , product.productType , productName, productPrice , productDescription , productAvailability "
+							+ " FROM product JOIN order"
 							+ " ON product.productType = product_stock.productType"
 							+ " WHERE productAvailability > 0 AND IDproduct NOT IN (" +
 								" SELECT PS.IDproduct " +
 								" FROM product_stock AS PS JOIN orders" +
-								" ON PS.IDproduct = orders.product)");
-			
+								" ON PS.IDproduct = orders.product)");*/
+
+			getProductType = myConnection.prepareStatement(
+							"SELECT productType" +
+									" FROM product " +
+									" WHERE productName = ? "
+			);
+
 			insertOrderStatement = myConnection.prepareStatement(
 					"INSERT INTO orders VALUES (?,?,?,?,?)");
 			
@@ -154,23 +177,23 @@ public class DatabaseInnovativeSolutions {
 			);
 
 			searchProducts = myConnection.prepareStatement(
-					"SELECT IDproduct AS productId , product.productType, productName, productPrice , productDescription , productAvailability "
-							+ " FROM product JOIN product_stock"
-							+ " ON product.productType = product_stock.productType"
-							+ " WHERE productAvailability > 0 AND"
-							+ " productName = ? AND IDproduct NOT IN (" +
-								" SELECT IDproduct " +
-							 	" FROM product_stock AS PS JOIN orders " +
-							    " ON PS.IDproduct = orders.product	);"
+					"SELECT productType , productName, productPrice , productDescription , productAvailability "
+							+ " FROM product"
+							+ " WHERE productAvailability > 0 AND productName = ?"
 
 			);
 
 			searchOrders = myConnection.prepareStatement(
-					"SELECT product , productType , productName , price , productDescription , productAvailability"
+					"SELECT product , productName , productPrice ,purchaseDate, price , status"
+							+ " FROM orders JOIN product_stock"
+							+ " ON  orders.product = product_stock.IDproduct"
+							+ " JOIN product ON product_stock.productType = product.productType"
+							+ " WHERE orders.customer=? AND product.productName = ?"
+					/*"SELECT product , productType , productName , price , productDescription , productAvailability"
 							+ " FROM Order JOIN product_stock"
 							+  " ON Order.product = product_stock.IDproduct"
 							+  " JOIN product ON product_stock.productType = product.productType"
-							+ " WHERE customer = ? AND (product = ?  OR status = ?)"
+							+ " WHERE customer = ? AND (product = ?  OR status = ?)"*/
 
 			);
 
@@ -364,8 +387,7 @@ public class DatabaseInnovativeSolutions {
 
 			while (availableProductsResult.next()) {
 
-				System.out.println("Prodotto");
-				productList.add( new Product( availableProductsResult.getInt( "productId") ,
+				productList.add( new Product( 0 ,
 								availableProductsResult.getInt( "productType"),
 								availableProductsResult.getString("productName"),
 								availableProductsResult.getInt("productPrice"),
@@ -382,11 +404,52 @@ public class DatabaseInnovativeSolutions {
 
 		return productList;
 	}
-	
+
+	public static int getProductType( String productName ){
+
+		ResultSet productType;
+
+		try {
+			getProductType.setString(1, productName);
+			getProductType.execute();
+			productType = getProductType.getResultSet();
+			productType.next();
+			return productType.getInt( "productType" );
+
+		}catch( SQLException e ){
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+			return -1;
+		}
+	}
+	public static int getMinIDProduct( int productType ){
+
+		ResultSet result;
+		try{
+
+			getMinIDProduct.setInt( 1 , productType );
+			getMinIDProduct.setInt( 2 , productType );
+			getMinIDProduct.execute();
+			result = getMinIDProduct.getResultSet();
+			result.next();
+			return result.getInt( "IDproduct" );
+
+		}catch( SQLException caughtException ){
+			System.out.println("SQLException: " + caughtException.getMessage());
+			System.out.println("SQLState: " + caughtException.getSQLState());
+			System.out.println("VendorError: " + caughtException.getErrorCode());
+			return -1;
+
+		}
+
+	}
 	//insert a new order 
 	public static int insertOrder( String customer, int productId , int price ) {
 		
 		int insertedRows = 0;
+
+		if( productId < 0 ) return -1;
 
 		try {
 
@@ -567,7 +630,7 @@ public class DatabaseInnovativeSolutions {
 			ResultSet products = searchProducts.getResultSet();
 
 			while (products.next())
-				list.add(new Product( products.getInt("productId") , products.getInt("productType"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getInt("productAvailability")));
+				list.add(new Product(0 , products.getInt("productType"), products.getString("productName"), products.getInt("productPrice"), products.getString("productDescription"), products.getInt("productAvailability")));
 
 		} catch (SQLException caughtException) {
 
@@ -587,14 +650,14 @@ public class DatabaseInnovativeSolutions {
 
 		try {
 
-			searchOrders.setString(1, customerID);
-			searchOrders.setString(2, value);
-			searchOrders.setString(3, value);
+			searchOrders.setString(1, customerID );
+			searchOrders.setString(2, value );
 
 			searchOrders.execute();
 			ResultSet orders = searchOrders.getResultSet();
+
 			while (orders.next())
-				list.add(new Order( orders.getInt( "product" ) , orders.getString("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getInt( "price" ) , orders.getString("status")));
+				list.add(new Order( orders.getInt( "product" ) , orders.getString( "productName" ), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getInt( "price" ) , orders.getString("status")));
 
 		} catch (SQLException caughtException) {
 
@@ -603,7 +666,7 @@ public class DatabaseInnovativeSolutions {
 			System.out.println("VendorError: " + caughtException.getErrorCode());
 
 		}
-
+		System.out.println("ORDERS: "+list.size());
 		return list;
 
 	}
