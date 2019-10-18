@@ -89,9 +89,10 @@ public class DatabaseInnovativeSolutions {
 					"INSERT INTO orders VALUES (?,?,?,?,?)");
 			
 			getOrders = myConnection.prepareStatement(
-					"SELECT productName , productPrice ,purchaseDate, price , status"
-					+ " FROM orders JOIN product"
-					+ " ON  orders.product = product.productType"
+					"SELECT product , productName , productPrice ,purchaseDate, price , status"
+					+ " FROM orders JOIN product_stock"
+					+ " ON  orders.product = product_stock.IDproduct"
+					+ " JOIN product ON product_stock.productType = product.productType"
 					+ " WHERE customer=?");
 			
 			//OTHER STATEMENTS
@@ -156,8 +157,10 @@ public class DatabaseInnovativeSolutions {
 			);
 
 			searchOrders = myConnection.prepareStatement(
-					"SELECT productType , productName , price , productDescription , productAvailability"
-							+ " FROM Order"
+					"SELECT product , productType , productName , price , productDescription , productAvailability"
+							+ " FROM Order JOIN product_stock"
+							+  " ON Order.product = product_stock.IDproduct"
+							+  " JOIN product ON product_stock.productType = product.productType"
 							+ " WHERE customer = ? AND (product = ?  OR status = ?)"
 
 			);
@@ -370,16 +373,16 @@ public class DatabaseInnovativeSolutions {
 	}
 	
 	//insert a new order 
-	public static int insertOrder( String customer, int product, int price) {
+	public static int insertOrder( String customer, int productId , int price ) {
 		
 		int insertedRows = 0;
 
 		try {
 
 			insertOrderStatement.setString(1, customer);
-			insertOrderStatement.setString(2, Integer.toString(product));
+			insertOrderStatement.setInt(2, productId );
 			insertOrderStatement.setObject( 3 , new Timestamp(System.currentTimeMillis()));
-			insertOrderStatement.setString(4, Integer.toString(price));
+			insertOrderStatement.setInt(4, price );
 			insertOrderStatement.setString(5, "received");
 
 			insertedRows = insertOrderStatement.executeUpdate();
@@ -407,7 +410,7 @@ public class DatabaseInnovativeSolutions {
 
 			while ( orderStatusResult.next() ) {
 
-				ordersList.add(new Order(orderStatusResult.getString( "productName"),
+				ordersList.add(new Order( orderStatusResult.getInt("product"), orderStatusResult.getString( "productName"),
 								orderStatusResult.getInt("productPrice"),
 								orderStatusResult.getTimestamp("purchaseDate"),
 								orderStatusResult.getInt( "price" ),
@@ -567,7 +570,7 @@ public class DatabaseInnovativeSolutions {
 
 	}
 
-	public static List<Order> searchOrders(String value, String customerID) {
+	public static List<Order> searchOrders( String value, String customerID ) {
 
 		List<Order> list = new ArrayList<>();
 
@@ -580,7 +583,7 @@ public class DatabaseInnovativeSolutions {
 			searchOrders.execute();
 			ResultSet orders = searchOrders.getResultSet();
 			while (orders.next())
-				list.add(new Order(orders.getString("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getInt( "price" ) , orders.getString("status")));
+				list.add(new Order( orders.getInt( "product" ) , orders.getString("customer"), orders.getInt("product"), orders.getTimestamp("purchaseDate"), orders.getInt( "price" ) , orders.getString("status")));
 
 		} catch (SQLException caughtException) {
 

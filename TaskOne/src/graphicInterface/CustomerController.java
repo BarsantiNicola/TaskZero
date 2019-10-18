@@ -37,7 +37,7 @@ public class CustomerController extends InterfaceController{
     CustomerController( Scene app , String cId ){
 
 
-        String[][] productFields = { { "Name" , "productName"} , { "Price" , "productPrice" } , { "Availability" , "productAvailability" } , { "Description" , "productDescription"} };
+        String[][] productFields = { { "productID" , "productId"} , { "Name" , "productName"} , { "Price" , "productPrice" } , { "Description" , "productDescription"} };
         String[][] orderFields = { { "ProductName" , "productName" } , { "ProductPrice" , "productPrice" } , { "Purchase Date" , "purchaseDate" } ,  { "Purchased Price" , "purchasedPrice" }  , { "Status" , "orderStatus" }};
         TableColumn column;
 
@@ -114,24 +114,26 @@ public class CustomerController extends InterfaceController{
         Product product;
         Order newOrder;
 
-        String productName = "";
+        int productID = -1;
         while( it.hasNext()){
             app = it.next();
             if( app instanceof TextField ) {
-                productName = ((TextField) app).getText();
+
+                productID = Integer.parseInt(((TextField) app).getText());
                 break;
+
             }
         }
 
         while( productList.hasNext() ) {
 
             product = productList.next();
-            if( product.getProductName().compareTo(productName) == 0 ){
-                newOrder = new Order( productName , product.getProductPrice() , new Timestamp(System.currentTimeMillis())  , product.getProductPrice() ,"ordered"  );
+            if( product.getProductId() == productID ){
+                newOrder = new Order( productID , product.getProductName() , product.getProductPrice() , new Timestamp(System.currentTimeMillis())  , product.getProductPrice() ,"ordered"  );
                 if( DatabaseInnovativeSolutions.insertOrder(customerId , product.getProductType() , product.getProductPrice())  > 0 ){
                     ordersTable.add( newOrder );
-                    if( product.getProductAvailability() == 1 )
-                        productsTable.remove(product);
+                    /*if( product.getProductAvailability() == 1 )
+                        productsTable.remove(product);*/
 
                 }
             }

@@ -6,14 +6,16 @@ import javafx.beans.property.*;
 
 public class Order{
 
+	private final SimpleIntegerProperty productId;
 	private final SimpleStringProperty productName;
 	private final SimpleIntegerProperty productPrice;
 	private final SimpleObjectProperty<Timestamp> purchaseDate;
 	private final SimpleIntegerProperty purchasedPrice;
 	private final SimpleStringProperty orderStatus;
 	
-	public Order( String name , int price , Timestamp date, int cost , String status ) {
+	public Order( int Id , String name , int price , Timestamp date, int cost , String status ) {
 
+		productId = new SimpleIntegerProperty(Id);
 		productName = new SimpleStringProperty( name );
 		productPrice = new SimpleIntegerProperty( price );
 		purchaseDate = new SimpleObjectProperty(date);
@@ -21,7 +23,12 @@ public class Order{
 		orderStatus = new SimpleStringProperty( status );
 
 	}
-	
+
+	public int getProductId(){
+
+		return  productId.get();
+	}
+
 	public String getProductName() {
 
 		return productName.get();

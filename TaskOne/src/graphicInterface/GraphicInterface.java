@@ -41,7 +41,7 @@ public class GraphicInterface extends Application implements Initializable {
 
         myApplication = new Scene( root , 590 , 390 );
 
-        primaryStage.setTitle( "Innovation Solutions" );
+        primaryStage.setTitle( "Innovative Solutions" );
         primaryStage.setScene( myApplication );
         primaryStage.setResizable( false );
         LOG.println( "Starting graphic interface" );
