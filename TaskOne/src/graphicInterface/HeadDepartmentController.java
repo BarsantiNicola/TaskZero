@@ -117,7 +117,8 @@ public class HeadDepartmentController extends InterfaceController{
             if( app instanceof TextField ) {
                 value = (TextField) app;
                 values.put( value.getPromptText(), value.getText());
-                continue;
+                value.setText("");
+                break;
             }
 
         }
