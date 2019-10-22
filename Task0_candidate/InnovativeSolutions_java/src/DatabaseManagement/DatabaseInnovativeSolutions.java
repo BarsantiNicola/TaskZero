@@ -47,7 +47,7 @@ public class DatabaseInnovativeSolutions {
 	//initialize connection and statements
 	static {
 
-		connectionString = "jdbc:mysql://localhost:3306/innovativesolutionsdb?user=root&password=root&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+		connectionString = "jdbc:mysql://localhost:3306/exercise1?user=root&password=root&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 		myConnection = null;
 
 		try {

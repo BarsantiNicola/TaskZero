@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class CustomerController extends InterfaceController{
@@ -83,8 +84,15 @@ public class CustomerController extends InterfaceController{
 
         }
 
-        ordersTable.addAll( DatabaseInnovativeSolutions.getOrder( customerId ));
-        productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
+        long startTime = System.currentTimeMillis();
+        List<Order> orders =  DatabaseInnovativeSolutions.getOrder( customerId );
+        LOG.println( "QUERY: getCustomerOrder;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+        startTime = System.currentTimeMillis();
+        List<Product> products = DatabaseInnovativeSolutions.getAvailableProducts();
+        LOG.println( "QUERY: getAvailableProduct;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+        ordersTable.addAll( orders );
+        productsTable.addAll( products );
 
         ((AnchorPane)app.lookup( "#CUSTOMEROrdersTable" )).getChildren().add( ordersTableView );
         ((AnchorPane)app.lookup( "#CUSTOMERProductsTable" )).getChildren().add( productsTableView );
@@ -123,9 +131,12 @@ public class CustomerController extends InterfaceController{
             }
         }
 
+        long startTime = System.currentTimeMillis();
         int myProductType = DatabaseInnovativeSolutions.getProductType( productName );
+        LOG.println( "QUERY: getProductType;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+        startTime = System.currentTimeMillis();
         int myProductId = DatabaseInnovativeSolutions.getMinIDProduct( myProductType );
-
+        LOG.println( "QUERY: getProductId;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
 
         while( productList.hasNext() ) {
 
@@ -133,7 +144,11 @@ public class CustomerController extends InterfaceController{
             if( product.getProductType() == myProductType ){
                 newOrder = new Order( myProductId , product.getProductName() , product.getProductPrice() , new Timestamp(System.currentTimeMillis())  , product.getProductPrice() ,"ordered"  );
 
-                if( DatabaseInnovativeSolutions.insertOrder(customerId , myProductId , product.getProductPrice())  > 0 ){
+                startTime = System.currentTimeMillis();
+                boolean result = DatabaseInnovativeSolutions.insertOrder(customerId , myProductId , product.getProductPrice())  > 0;
+                LOG.println( "QUERY: insertNewOrder;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+                if( result ){
 
                     ordersTable.add( newOrder );
                     product.setProductAvailability( product.getProductAvailability()-1);
@@ -155,13 +170,23 @@ public class CustomerController extends InterfaceController{
         if( !currentSection ){
 
             productsTable.removeAll( productsTable );
-            productsTable.addAll( DatabaseInnovativeSolutions.searchProducts( value ));
+
+            long startTime = System.currentTimeMillis();
+            List<Product> products = DatabaseInnovativeSolutions.searchProducts( value );
+            LOG.println( "QUERY: searchForProducts;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+            productsTable.addAll( products) ;
             undoButton.setVisible( true );
 
         }else{
 
             ordersTable.removeAll(ordersTable);
-            ordersTable.addAll( DatabaseInnovativeSolutions.searchOrders( value , customerId ));
+
+            long startTime = System.currentTimeMillis();
+            List<Order> products =  DatabaseInnovativeSolutions.searchOrders( value , customerId );
+            LOG.println( "QUERY: searchForOrders;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+            ordersTable.addAll( products );
             undoButton.setVisible( true );
 
         }
@@ -178,7 +203,10 @@ public class CustomerController extends InterfaceController{
 
             if( undoButton.isVisible()){
                 ordersTable.removeAll( ordersTable );
-                ordersTable.addAll( DatabaseInnovativeSolutions.getOrder( customerId ));
+                long startTime = System.currentTimeMillis();
+                List<Order> orders =  DatabaseInnovativeSolutions.getOrder( customerId );
+                LOG.println( "QUERY: getUserOrders;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+                ordersTable.addAll( orders );
             }
 
             productsSection.setVisible( true );
@@ -192,7 +220,10 @@ public class CustomerController extends InterfaceController{
 
             if( undoButton.isVisible()){
                 productsTable.removeAll( productsTable );
-                productsTable.addAll( DatabaseInnovativeSolutions.getAvailableProducts());
+                long startTime = System.currentTimeMillis();
+                List<Product> products =  DatabaseInnovativeSolutions.getAvailableProducts();
+                LOG.println( "QUERY: getAvailableProducts;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+                productsTable.addAll( products );
             }
 
             ordersSection.setVisible( true );
@@ -206,10 +237,16 @@ public class CustomerController extends InterfaceController{
         undoButton.setVisible( false );
         if( currentSection == true ) {
             ordersTable.removeAll(ordersTable);
-            ordersTable.addAll(DatabaseInnovativeSolutions.getOrder(customerId));
+            long startTime = System.currentTimeMillis();
+            List<Order> orders =  DatabaseInnovativeSolutions.getOrder(customerId);
+            LOG.println( "QUERY: getUserOrders;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+            ordersTable.addAll(orders);
         }else{
             productsTable.removeAll(productsTable);
-            productsTable.addAll(DatabaseInnovativeSolutions.getAvailableProducts());
+            long startTime = System.currentTimeMillis();
+            List<Product> products =  DatabaseInnovativeSolutions.getAvailableProducts();
+            LOG.println( "QUERY: getAvailableProducts;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+            productsTable.addAll( products );
         }
 
     }

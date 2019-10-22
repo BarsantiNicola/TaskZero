@@ -26,7 +26,7 @@ public class GraphicInterface extends Application implements Initializable {
     private static Scene myApplication;  //  used to locate the elements in the interface
     private static UserType userType = UserType.NOUSER;  //  define the type of interface the user will access
     private static InterfaceController myInterface;   //  module of management of the current interface
-    private static PrintWriter LOG = new PrintWriter( System.out , true );
+    private static PrintWriter LOG = new PrintWriter( System.out );
 
     //  STARTING POINT
     //  load the interface using the 'interface.fxml' file located in src/graphicInterface
@@ -35,8 +35,8 @@ public class GraphicInterface extends Application implements Initializable {
 
 
         Parent root = FXMLLoader.load(getClass().getResource( "interface.fxml" ));
-        LOG.println( "Loading graphic interface by FXML file" );
-        LOG.println( "Establishing Database Connection" );
+        System.out.println( "Loading graphic interface by FXML file" );
+        System.out.println( "Establishing Database Connection" );
         new DatabaseInnovativeSolutions();  //  static class for database management, need to be initialized
 
         myApplication = new Scene( root , 590 , 390 );
@@ -44,7 +44,11 @@ public class GraphicInterface extends Application implements Initializable {
         primaryStage.setTitle( "Innovative Solutions" );
         primaryStage.setScene( myApplication );
         primaryStage.setResizable( false );
-        LOG.println( "Starting graphic interface" );
+        System.out.println( "Starting graphic interface" );
+        primaryStage.setOnCloseRequest(event -> {
+            myInterface.LOG.flush();
+            // Save file
+        });
         primaryStage.show();
 
     }
@@ -137,7 +141,7 @@ public class GraphicInterface extends Application implements Initializable {
         userType = DatabaseInnovativeSolutions.login( name , password );
         myApplication.lookup("#AlertMessage" ).setVisible( false );
 
-        LOG.println( "User: " + name + " trying to obtain access with grant-type: " + userType );
+        System.out.println( "User: " + name + " trying to obtain access with grant-type: " + userType );
 
         switch( userType ) {
             case CUSTOMER:
@@ -165,9 +169,11 @@ public class GraphicInterface extends Application implements Initializable {
 
         }
 
-        LOG.println( "Loading of user interface completed" );
+        System.out.println( "Loading of user interface completed" );
         myApplication.lookup( "#AccessPage" ).setVisible( false );
 
     }
+
+
 
 }

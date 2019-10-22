@@ -10,10 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
-
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 
 //  class for manage the administrator interface, the interface has one table for show the user
@@ -33,10 +32,11 @@ class AdminController extends InterfaceController{
         //  it links the fields to the class variable associated
         String[][] userFields = { { "Username" , "username" } , { "Password" ,"password" } , { "Name" , "name" } , { "Surname" ,"surname" } , { "Email" , "mail"} , { "Role" , "role"} , { "Salary" , "salary"} , { "Team" , "team"} };  //  FIELDS OF TABLE EMPLOYEE
         TableColumn column;
+        List<User> values;
 
+        System.out.print( "Starting creating interface for ADMIN....." );
         searchInput = (TextField)app.lookup( "#ADMINSearch" );  //  TEXT INPUT FOR SEARCH INFORMATION
         undoButton = (ImageView)app.lookup( "#ADMINUndo" );     //  BUTTON FOR CLOSE THE SEARCHING TABLE
-
 
         insertPopup = (AnchorPane)app.lookup( "#ADMINInsertPopUp" );  // POPUP FOR INSERT USERS
         updatePopup = (AnchorPane)app.lookup( "#ADMINUpdatePopUp" );  // POPUP FOR UPDATE USERS
@@ -64,9 +64,13 @@ class AdminController extends InterfaceController{
 
         }
 
-         userTable.addAll(DatabaseInnovativeSolutions.getUsers());
-         ((AnchorPane)app.lookup( "#ADMINUsersTable" )).getChildren().add( userTableView );
+         long startTime = System.currentTimeMillis();
+         values = DatabaseInnovativeSolutions.getUsers();
+         LOG.println( "QUERY: getUsers;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
 
+         userTable.addAll( values );
+         ((AnchorPane)app.lookup( "#ADMINUsersTable" )).getChildren().add( userTableView );
+         System.out.println( "Admin interface created;" );
     }
 
 
@@ -95,9 +99,15 @@ class AdminController extends InterfaceController{
     void searchValue() {
 
         String value = searchInput.getText();
+        List<User> values;
 
         userTable.removeAll(userTable);
-        userTable.addAll( DatabaseInnovativeSolutions.searchUsers( value ));
+
+        long startTime = System.currentTimeMillis();
+        values = DatabaseInnovativeSolutions.searchUsers( value );
+        LOG.println( "QUERY: searchingForUsers;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+        userTable.addAll( values );
+
         undoButton.setVisible( true );
 
     }
@@ -108,7 +118,11 @@ class AdminController extends InterfaceController{
 
         undoButton.setVisible( false );
         userTable.removeAll( userTable );
-        userTable.addAll( DatabaseInnovativeSolutions.getUsers());
+
+        long startTime = System.currentTimeMillis();
+        List<User> values = DatabaseInnovativeSolutions.getUsers();
+        LOG.println( "QUERY: getUsers;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+        userTable.addAll( values );
 
     }
 
@@ -150,7 +164,10 @@ class AdminController extends InterfaceController{
                     values.get("Role"), 0,
                     0);
 
-        if(DatabaseInnovativeSolutions.insertUser(newUser))
+        long startTime = System.currentTimeMillis();
+        boolean result = DatabaseInnovativeSolutions.insertUser( newUser );
+        LOG.println( "QUERY: insertNewUser;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+        if( result )
             userTable.add(newUser);
 
         closePopups();
@@ -174,11 +191,15 @@ class AdminController extends InterfaceController{
                 else
                     salary = Integer.parseInt(((TextField) app).getText());
         }
-
-        DatabaseInnovativeSolutions.updateSalary(salary, username);
-
+        long startTime = System.currentTimeMillis();
+        boolean result = DatabaseInnovativeSolutions.updateSalary(salary, username);
+        LOG.println( "QUERY: updateAnEmployeeSalary;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
         userTable.removeAll(userTable);
-        userTable.addAll(DatabaseInnovativeSolutions.getUsers());
+
+        startTime = System.currentTimeMillis();
+        List<User> values = DatabaseInnovativeSolutions.getUsers();
+        LOG.println( "QUERY: getUsers;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+        userTable.addAll( values );
         closePopups();
 
 
@@ -206,8 +227,11 @@ class AdminController extends InterfaceController{
 
             }
         }
+        long startTime = System.currentTimeMillis();
+        boolean result = DatabaseInnovativeSolutions.deleteUser( username );
+        LOG.println( "QUERY: deleteAnUser\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
 
-        if( username != null && DatabaseInnovativeSolutions.deleteUser( username )){
+        if( username != null && result ){
 
             users = userTable.iterator();
 

@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFxApplication/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFxApplication/DatabaseManagement/DatabaseInnovativeSolutions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFxApplication/DatabaseManagement/DatabaseInnovativeSolutions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFxApplication/DatabaseManagement/UserType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFxApplication/DatabaseManagement/UserType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphicInterface/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphicInterface/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphicInterface/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphicInterface/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaFxApplication/graphicInterface/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFxApplication/graphicInterface/AdminController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaFxApplication/graphicInterface/CustomerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFxApplication/graphicInterface/CustomerController.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +93,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../example/FirstExampleJPA copia" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -235,6 +229,8 @@
       <workItem from="1571418645507" duration="8072000" />
       <workItem from="1571437171786" duration="942000" />
       <workItem from="1571473918488" duration="2228000" />
+      <workItem from="1571655571374" duration="273000" />
+      <workItem from="1571689950860" duration="1233000" />
     </task>
     <servers />
   </component>

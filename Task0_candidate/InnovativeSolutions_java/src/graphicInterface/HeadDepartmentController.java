@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class HeadDepartmentController extends InterfaceController{
 
@@ -85,8 +86,16 @@ public class HeadDepartmentController extends InterfaceController{
 
         }
 
-        productsTable.addAll(DatabaseInnovativeSolutions.getTeamProducts( managedTeam ));
-        employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees( managedTeam ));
+        long startTime = System.currentTimeMillis();
+        List<Product> products =  DatabaseInnovativeSolutions.getTeamProducts( managedTeam );
+        LOG.println( "QUERY: getProductOfTheTeam;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+        startTime = System.currentTimeMillis();
+        List<Employee> employees =  DatabaseInnovativeSolutions.getTeamEmployees( managedTeam );
+        LOG.println( "QUERY: getTeamEmployees;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+        productsTable.addAll( products );
+        employeesTable.addAll(employees);
 
         ((AnchorPane)app.lookup( "#DEP_HEADProductsTable" )).getChildren().add( productsTableView );
         ((AnchorPane)app.lookup( "#DEP_HEADEmployeesTable" )).getChildren().add( employeesTableView );
@@ -130,7 +139,10 @@ public class HeadDepartmentController extends InterfaceController{
             p = product.next();
             if( p.getProductName().compareTo(name) == 0 ) {
 
-                if (DatabaseInnovativeSolutions.updateProductAvailability(p.getProductType(), p.getProductAvailability() + 1)) {
+                long startTime = System.currentTimeMillis();
+                boolean result =  DatabaseInnovativeSolutions.updateProductAvailability(p.getProductType(), p.getProductAvailability() + 1);
+                LOG.println( "QUERY: updateProductAvailability;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+                if ( result ) {
                     productsTable.removeAll( p );
                     p.setProductAvailability( p.getProductAvailability() + 1 );
                     productsTable.add( p );
@@ -153,13 +165,21 @@ public class HeadDepartmentController extends InterfaceController{
         if( currentSection == false){
 
             employeesTable.removeAll( employeesTable );
-            employeesTable.addAll( DatabaseInnovativeSolutions.searchTeamEmployees( managedTeam , value ));
+            long startTime = System.currentTimeMillis();
+            List<Employee> employees =  DatabaseInnovativeSolutions.searchTeamEmployees( managedTeam , value );
+            LOG.println( "QUERY: searchingForEmployees;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+            employeesTable.addAll( employees );
             undoButton.setVisible( true );
 
         }else{
 
             productsTable.removeAll(productsTable);
-            productsTable.addAll( DatabaseInnovativeSolutions.searchTeamProducts( managedTeam , value ));
+            long startTime = System.currentTimeMillis();
+            List<Product> products =  DatabaseInnovativeSolutions.searchTeamProducts( managedTeam , value );
+            LOG.println( "QUERY: searchingForTeamProducts;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+            productsTable.addAll( products );
             undoButton.setVisible( true );
 
         }
@@ -175,8 +195,12 @@ public class HeadDepartmentController extends InterfaceController{
             productsSection.setVisible( false );
 
             if( undoButton.isVisible()){
+
                 productsTable.removeAll( employeesTable );
-                productsTable.addAll( DatabaseInnovativeSolutions.getTeamProducts(managedTeam));
+                long startTime = System.currentTimeMillis();
+                List<Product> products =  DatabaseInnovativeSolutions.getTeamProducts(managedTeam);
+                LOG.println( "QUERY: getTeamProduct;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+                productsTable.addAll( products );
             }
 
             employeesSection.setVisible( true );
@@ -190,7 +214,10 @@ public class HeadDepartmentController extends InterfaceController{
 
             if( undoButton.isVisible()){
                 employeesTable.removeAll( productsTable );
-                employeesTable.addAll( DatabaseInnovativeSolutions.getTeamEmployees(managedTeam));
+                long startTime = System.currentTimeMillis();
+                List<Employee> employees =  DatabaseInnovativeSolutions.getTeamEmployees(managedTeam);
+                LOG.println( "QUERY: getTeamEmployees;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+                employeesTable.addAll(employees );
             }
 
             productsSection.setVisible( true );
@@ -204,10 +231,19 @@ public class HeadDepartmentController extends InterfaceController{
         undoButton.setVisible( false );
         if( currentSection == true ) {
             productsTable.removeAll(productsTable);
-            productsTable.addAll(DatabaseInnovativeSolutions.getTeamProducts( managedTeam ));
+
+            long startTime = System.currentTimeMillis();
+            List<Product> products =  DatabaseInnovativeSolutions.getTeamProducts( managedTeam );
+            LOG.println( "QUERY: getTeamProducts;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+
+            productsTable.addAll( products );
+
         }else{
             employeesTable.removeAll(employeesTable);
-            employeesTable.addAll(DatabaseInnovativeSolutions.getTeamEmployees( managedTeam ));
+            long startTime = System.currentTimeMillis();
+            List<Employee> employees =  DatabaseInnovativeSolutions.getTeamEmployees( managedTeam );
+            LOG.println( "QUERY: getTeamEmployees;\t TIME: " + (System.currentTimeMillis() - startTime) + "ms");
+            employeesTable.addAll( employees );
         }
 
     }
